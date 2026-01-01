@@ -17,9 +17,8 @@ client.urgent           #bf616a #bf616a #ffffff #bf616a #bf616a
 
 ### i3 专用 / i3-specific
 # exec_always --no-startup-id setxkbmap -layout jp
-# If you need per-output scaling, uncomment and adjust output names.
-exec_always --no-startup-id xrandr \
-  --output eDP-1 --scale 0.75x0.75
+# Per-output scaling (generated). Run i3/scripts/setup-xrandr-scale.sh
+include ~/.config/TWM/i3/local.conf
 exec_always --no-startup-id xrdb -merge "$HOME/.config/TWM/xterm/Xresources"
 
 # Polybar (default)

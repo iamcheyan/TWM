@@ -58,6 +58,9 @@ build/
 # Local agent instructions
 AGENTS.md
 
+# Local i3 overrides
+i3/local.conf
+
 # Package manager lock files (uncomment if needed)
 # package-lock.json
 # yarn.lock
