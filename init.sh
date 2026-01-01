@@ -32,11 +32,19 @@ CONFIG_DIRS=(
     "$TWM_DIR/sway:$HOME/.config/sway"           # Sway 配置
 )
 
+# 配置文件列表（需要单独链接的文件）
+CONFIG_FILES=(
+    "$TWM_DIR/background.png:$HOME/.config/niri/background.png"
+    "$TWM_DIR/background.png:$HOME/.config/sway/background.png"
+)
+
 # 函数：创建软链接（如果存在则备份）
 create_symlink() {
     local target="$1"
     local link_name="$2"
     local config_name="$3"
+
+    mkdir -p "$(dirname "$link_name")"
     
     if [ -e "$link_name" ] && [ ! -L "$link_name" ]; then
         # 存在但不是软链接，进行备份
@@ -56,6 +64,13 @@ create_symlink() {
 # 遍历配置列表创建软链接
 for config in "${CONFIG_DIRS[@]}"; do
     # 分割源路径和目标路径
+    IFS=':' read -r src tgt <<< "$config"
+    name=$(basename "$tgt")
+    create_symlink "$src" "$tgt" "$name"
+done
+
+# 遍历文件列表创建软链接
+for config in "${CONFIG_FILES[@]}"; do
     IFS=':' read -r src tgt <<< "$config"
     name=$(basename "$tgt")
     create_symlink "$src" "$tgt" "$name"
@@ -155,6 +170,8 @@ echo ""
 echo "配置说明："
 echo "  - Waybar 配置: ~/.config/waybar -> $TWM_DIR/waybar"
 echo "  - Kitty 配置:  ~/.config/kitty -> $TWM_DIR/kitty"
+echo "  - 壁纸链接:    ~/.config/niri/background.png -> $TWM_DIR/background.png"
+echo "  - 壁纸链接:    ~/.config/sway/background.png -> $TWM_DIR/background.png"
 echo "  - 字体已安装: MesloLGS Nerd Font"
 echo ""
 echo "提示："

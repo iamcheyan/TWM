@@ -28,11 +28,11 @@ client.urgent           #bf616a #bf616a #ffffff #bf616a #bf616a
 ### 自动启动 / Autostart
 exec_always --no-startup-id waybar -c ~/.config/waybar/sway/config.jsonc -s ~/.config/waybar/style.css
 
-exec_always --no-startup-id swaybg -i ~/.config/niri/background.png -m fill
+exec_always --no-startup-id swaybg -i "$HOME/.config/sway/background.png" -m fill
 exec_always --no-startup-id fcitx5 -d
 # exec_always --no-startup-id mako
 
-bindsym $mod+w exec /home/tetsuya/.config/niri/sway/scripts/window_switcher.sh
+bindsym $mod+w exec "$HOME/.config/sway/scripts/window_switcher.sh"
 
 ### 快捷键 - 应用启动 / Bindings - Applications
 bindsym $mod+Return exec kitty
@@ -286,4 +286,3 @@ bindsym Print exec bash -c 'grim - | wl-copy && notify-send "Screenshot" "Full s
 bindsym Alt+Print exec bash -c 'filename=~/Downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && grim "$filename" && notify-send "Screenshot" "Saved to Downloads" -t 3000'
 bindsym Shift+Print exec bash -c 'filename=~/Downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && grim -g "$(slurp)" "$filename" && notify-send "Area Screenshot" "Saved to Downloads" -t 3000'
 bindsym Alt+a exec bash -c 'grim -g "$(slurp)" - | wl-copy && notify-send "Area Screenshot" "Copied to clipboard" -t 2000'
-

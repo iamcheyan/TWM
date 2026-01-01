@@ -25,7 +25,7 @@ spawn-at-startup "sh" "-c" "waybar -c ~/.config/waybar/niri/config.jsonc -s ~/.c
 
 // 壁纸
 spawn-at-startup "swaybg" "-i" "~/.config/niri/background.png" "-m" "fill"
-// pkill swaybg && swaybg -i /home/tetsuya/.config/niri/background.png -m fill &
+// pkill swaybg && swaybg -i ~/.config/niri/background.png -m fill &
 
 // 输入法S
 spawn-at-startup "fcitx5"
