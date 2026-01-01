@@ -2,6 +2,58 @@
 
 这是一套同时支持 **Niri** 和 **Sway** 的配置。两者共享同一套模块（Waybar/Kitty/Mako/Wofi/壁纸/脚本），只在窗口管理器配置上分开。
 
+## 依赖安装（按 WM 分开）
+
+Wayland（Niri/Sway）使用 `mako`，i3（X11）使用 `dunst`。
+
+### Sway
+
+Debian/Ubuntu：
+
+```bash
+sudo apt update
+sudo apt install -y sway waybar kitty swaybg mako wofi fcitx5 \
+  brightnessctl grim slurp wl-clipboard libnotify-bin
+```
+
+Fedora：
+
+```bash
+sudo dnf install -y sway waybar kitty swaybg mako wofi fcitx5 \
+  brightnessctl grim slurp wl-clipboard libnotify
+```
+
+Arch：
+
+```bash
+sudo pacman -S --needed sway waybar kitty swaybg mako wofi fcitx5 \
+  brightnessctl grim slurp wl-clipboard libnotify
+```
+
+### i3
+
+Debian/Ubuntu：
+
+```bash
+sudo apt update
+sudo apt install -y i3 polybar rofi feh xterm dunst fcitx5 \
+  maim xclip libnotify-bin x11-xserver-utils x11-xkb-utils
+```
+
+Fedora：
+
+```bash
+sudo dnf install -y i3 rofi feh xterm dunst fcitx5 \
+  maim xclip libnotify polybar xrandr xorg-x11-xkb-utils
+```
+
+Arch：
+
+```bash
+sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
+  maim xclip libnotify polybar xorg-xrandr xorg-setxkbmap
+```
+
 ## 界面截图
 
 ![TWM Desktop Screenshot 1](https://pbs.twimg.com/media/G9fnjRUaEAEIPwl?format=png&name=4096x4096)
@@ -152,7 +204,7 @@ Waybar 会根据 WM 自动加载配置：
 - polybar（替代 i3bar）
 - feh（壁纸）
 - fcitx5
-- mako
+- dunst
 注：i3 使用 xrandr 做缩放，数值是对 sway fractional scale 的近似，可按需微调。
 
 ### i3 快捷键（与 Sway 尽量一致）
@@ -188,65 +240,4 @@ polybar -c ~/.config/TWM/polybar/config.ini main
 
 ---
 
-## 依赖安装（按 WM 分开）
-
-### Sway
-
-Debian/Ubuntu：
-
-```bash
-sudo apt update
-sudo apt install -y sway waybar kitty swaybg mako wofi fcitx5 \
-  brightnessctl grim slurp wl-clipboard libnotify-bin
-```
-
-Fedora：
-
-```bash
-sudo dnf install -y sway waybar kitty swaybg mako wofi fcitx5 \
-  brightnessctl grim slurp wl-clipboard libnotify
-```
-
-Arch：
-
-```bash
-sudo pacman -S --needed sway waybar kitty swaybg mako wofi fcitx5 \
-  brightnessctl grim slurp wl-clipboard libnotify
-```
-
-### i3
-
-Debian/Ubuntu：
-
-```bash
-sudo apt update
-sudo apt install -y i3 i3status polybar rofi feh xterm mako fcitx5 \
-  maim xclip libnotify-bin x11-xserver-utils x11-xkb-utils
-```
-
-Fedora：
-
-```bash
-sudo dnf install -y i3 i3status rofi feh xterm mako fcitx5 \
-  maim xclip libnotify polybar xrandr xorg-x11-xkb-utils
-```
-
-Arch：
-
-```bash
-sudo pacman -S --needed i3 i3status rofi feh xterm mako fcitx5 \
-  maim xclip libnotify polybar xorg-xrandr xorg-setxkbmap
-```
-
 ---
-
-## 依赖软件（共用）
-
-- `niri` / `sway`
-- `waybar`
-- `kitty`
-- `swaybg`
-- `mako`
-- `wofi`
-- `fcitx5`
-- `grim` / `slurp` / `wl-clipboard` / `libnotify`（截图）
