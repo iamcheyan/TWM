@@ -1,6 +1,20 @@
-# TWM：同时兼容 Niri 与 Sway 的桌面配置
+# TWM：Niri / Sway / i3 三套窗口管理器配置
 
-这是一套同时支持 **Niri** 和 **Sway** 的配置。两者共享同一套模块（Waybar/Kitty/Mako/Wofi/壁纸/脚本），只在窗口管理器配置上分开。
+这是一套支持 **Niri / Sway / i3** 的桌面配置。Niri 与 Sway 共享同一套模块（Waybar/Kitty/Mako/Wofi/壁纸/脚本），只在窗口管理器配置上分开；加入 i3 是为了让用户在 X11 下也能有一个可用的兼容环境。项目提供一键初始化脚本，完成软链接与字体准备，省去繁琐的逐项拷贝与排查。
+
+## 一键配置
+
+首次使用只需执行一次脚本，即可创建软链接并安装字体：
+
+```bash
+cd ~/.config/TWM
+chmod +x init.sh
+./init.sh
+```
+
+脚本会自动备份已有配置并创建链接，Waybar 会根据 WM 自动加载对应配置：
+- `~/.config/waybar/niri/config.jsonc`
+- `~/.config/waybar/sway/config.jsonc`
 
 ## 依赖安装（按 WM 分开）
 
@@ -96,15 +110,7 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 - 背景图片 `background.png`
 - 初始化脚本 `init.sh`
 
-## 快速开始
-
-首次使用时执行脚本创建软链接并安装字体：
-
-```bash
-cd ~/.config/TWM
-chmod +x init.sh
-./init.sh
-```
+## 软链接清单
 
 脚本会在目标目录已有文件时自动备份，然后创建链接：
 - `~/.config/niri` → `~/.config/TWM/niri`
@@ -114,10 +120,6 @@ chmod +x init.sh
 - `~/.config/kitty` → `~/.config/TWM/kitty`
 - `~/.config/mako` → `~/.config/TWM/mako`
 - `~/.config/wofi` → `~/.config/TWM/wofi`
-
-Waybar 会根据 WM 自动加载配置：
-- Niri 使用 `~/.config/waybar/niri/config.jsonc`
-- Sway 使用 `~/.config/waybar/sway/config.jsonc`
 
 ---
 
@@ -237,7 +239,3 @@ Waybar 会根据 WM 自动加载配置：
 ```bash
 polybar -c ~/.config/TWM/polybar/config.ini main
 ```
-
----
-
----
