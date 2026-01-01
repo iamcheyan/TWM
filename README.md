@@ -208,6 +208,11 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 - fcitx5
 - dunst
 注：i3 使用 xrandr 做缩放，数值是对 sway fractional scale 的近似，可按需微调。
+首次使用可运行脚本自动选择输出与缩放，并写入本地配置：
+
+```bash
+~/.config/TWM/i3/scripts/setup-xrandr-scale.sh
+```
 
 ### i3 快捷键（与 Sway 尽量一致）
 
