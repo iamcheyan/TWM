@@ -1,0 +1,12 @@
+[config] # 配置起始标签
+allow_images=true # 允许显示图标
+width=600 # 窗口宽度
+show=drun # 默认显示模式（drun 为应用程序列表）
+prompt=Search # 搜索框提示词
+height=600 # 窗口高度
+term=kitty # 使用的终端程序
+hide_scroll=false # 隐藏滚动条
+print_command=true # 打印选中的命令
+insensitive=true # 搜索不区分大小写
+columns=1 # 显示列数
+no_actions=true # 不显示应用程序的操作菜单

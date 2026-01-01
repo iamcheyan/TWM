@@ -1,0 +1,137 @@
+// niri 25.11 config (Fedora COPR)
+
+input {
+    keyboard {
+        xkb {
+            layout "jp"
+            // 你如果要中英切换，例如 Win+Space：
+            // layout "us,cn"
+            // options "grp:win_space_toggle"
+        }
+
+        // 可选：开机自动 NumLock
+        // numlock
+    }
+
+    // 触摸板示例（可删）
+    // touchpad {
+    //     tap
+    //     natural-scroll
+    // }
+}
+
+// 顶栏
+spawn-at-startup "sh" "-c" "waybar -c ~/.config/waybar/niri/config.jsonc -s ~/.config/waybar/style.css"
+
+// 壁纸
+spawn-at-startup "swaybg" "-i" "~/.config/niri/background.png" "-m" "fill"
+// pkill swaybg && swaybg -i /home/tetsuya/.config/niri/background.png -m fill &
+
+// 输入法S
+spawn-at-startup "fcitx5"
+
+// 通知守护进程
+spawn-at-startup "mako"
+
+// 布局（按官方结构：layout 负责 gaps / focus-ring / border 等）
+layout {
+    gaps 2
+
+    // 如果你只想要简单边框，建议用 border（默认配置也在 layout 里配置）
+    border {
+        on
+        width 2
+        active-color "#88c0d0"
+        inactive-color "#3b4252"
+    }
+}
+
+// Overview 模式配置
+overview {
+    zoom 0.5
+    backdrop-color "#1e1e2e"
+}
+
+// Recent Windows Switcher 配置（Alt+Tab 风格）
+recent-windows {
+    debounce-ms 100
+    open-delay-ms 200
+    
+    // 预览窗口大小配置
+    previews {
+        max-height 320      // 降低预览高度，让更多窗口能显示在屏幕上
+        max-scale 0.5       // 最大缩放比例
+    }
+    
+    binds {
+        // Alt+Tab 切换窗口（只显示当前显示器的窗口）
+        Alt+Tab { next-window scope="workspace"; }
+        Alt+Shift+Tab { previous-window scope="workspace"; }
+        
+        // Alt+` 只切换当前显示器上当前应用的窗口
+        Alt+Grave { next-window scope="workspace" filter="app-id"; }
+    }
+}
+
+// 快捷键（已验证通过的 action 名）
+binds {
+    Mod+Return { spawn "kitty"; }
+    Mod+D { spawn "wofi" "--show" "drun"; }
+
+    Mod+Q { close-window; }
+    Mod+Ctrl+Alt+Shift+Q { quit; }
+
+    // 窗口导航
+    Mod+Left { focus-column-left; }        // 焦点移到左侧列
+    Mod+Right { focus-column-right; }      // 焦点移到右侧列
+
+    // 移动窗口/列
+    Mod+Shift+Left { move-column-left-or-to-monitor-left; }    // 将列移到左侧或左侧显示器
+    Mod+Shift+Right { move-column-right-or-to-monitor-right; }  // 将列移到右侧或右侧显示器
+
+    // 窗口管理
+    Mod+F { fullscreen-window; }     // 全屏切换
+    Mod+A { toggle-overview; }           // 打开 Overview 模式（网格视图）
+
+    // 系统
+    // Mod+Shift+L { spawn "loginctl" "lock-session"; }  // 锁定会话
+
+    // 窗口大小调整（Vim 风格）
+    Mod+Shift+H { set-column-width "-10%"; }
+    Mod+Shift+L { set-column-width "+10%"; }
+    Mod+Shift+K { set-window-height "-10%"; }
+    Mod+Shift+J { set-window-height "+10%"; }
+    
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+
+    Mod+Tab { focus-workspace-down; }
+    Mod+Shift+Tab { focus-workspace-up; }
+
+    // 截图依赖软件：grim slurp wl-clipboard mako libnotify
+    Print { spawn "bash" "-c" "grim - | wl-copy && notify-send '截图' '全屏已复制到剪贴板' -t 2000"; }  // PrtSc: 全屏截图到剪贴板
+    Alt+Print { spawn "bash" "-c" "filename=~/Downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && grim \"$filename\" && notify-send '截图' \"已保存到 Downloads\" -t 3000"; }  // Alt+PrtSc: 全屏保存到 Downloads
+    Shift+Print { spawn "bash" "-c" "filename=~/Downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && grim -g \"$(slurp)\" \"$filename\" && notify-send '区域截图' \"已保存到 Downloads\" -t 3000"; }  // Shift+PrtSc: 区域截图保存到文件
+    Alt+A { spawn "bash" "-c" "grim -g \"$(slurp)\" - | wl-copy && notify-send '区域截图' '已复制到剪贴板' -t 2000"; }  // Alt+A: 区域截图到剪贴板
+    
+}
+
+// 关闭动画（官方支持）
+animations {
+    off
+}
+
+// 外接显示器（DP-1）在上方
+output "DP-1" {
+    scale 2
+    position x=0 y=0
+}
+
+// 笔记本显示器（eDP-1）在下方
+output "eDP-1" {
+    scale 1.5
+    position x=0 y=1080  // 放在外接显示器下方（外接显示器高度1440px）
+}

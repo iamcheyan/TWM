@@ -1,0 +1,111 @@
+/* Wofi Style - Flat design with green border (terminal-inspired) */
+
+@define-color green #50fa7b;
+@define-color text #ffffff;
+@define-color background rgba(0, 0, 0, 0.9);
+
+* {
+    /* 全局通用设置 */
+    all: unset;
+    font-family: 'MesloLGS Nerd Font Mono', 'CodeNewRoman Nerd Font Mono', monospace;
+    font-size: 16px;
+    outline: none;
+    text-shadow: none;
+    background-color: transparent;
+}
+
+window {
+    /* Wofi 窗口容器 */
+    all: unset;
+    padding: 0px;
+    border-radius: 0px;
+    background-color: @background;
+    border: 1px solid @green;
+}
+
+#inner-box {
+    /* 内层盒子容器 */
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+#outer-box {
+    /* 外层盒子容器 */
+    border: none;
+    padding: 5px;
+}
+
+#scroll {
+    /* 列表滚动区域 */
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+#input {
+    /* 搜索输入框 */
+    all: unset;
+    margin: 5px 5px;
+    padding: 5px 5px;
+    /* border: 1px solid @green; */
+    border-radius: 0px;
+    outline: none;
+    color: @text;
+    background-color: #333;
+}
+
+#input image {
+    /* 输入框内的图标/Logo */
+    border: none;
+    color: @green;
+    padding-right: 10px;
+}
+
+#input * {
+    border: none;
+    outline: none;
+}
+
+#input:focus {
+    outline: none;
+    /* border: 1px solid @green; */
+    border-radius: 0px;
+}
+
+#text {
+    /* 列表项的文本内容 */
+    margin: 5px;
+    border: none;
+    color: @text;
+    outline: none;
+}
+
+#entry {
+    /* 列表中的每一个选项 */
+    border: none;
+    margin: 2px 5px;
+    padding: 5px;
+    border-radius: 0px;
+}
+
+#entry arrow {
+    border: none;
+    color: @green;
+}
+
+#entry:selected {
+    /* 被选中时的样式 */
+    /* border: 1px solid @green; */
+    border-radius: 0px;
+    background-color: #333;
+}
+
+#entry:selected #text {
+    color: @green;
+}
+
+#entry:drop(active) {
+    background-color: @background !important;
+    border: 1px solid @green;
+}
