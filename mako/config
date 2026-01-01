@@ -1,0 +1,14 @@
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#89b4fa
+border-size=2
+border-radius=8
+
+font=MesloLGS Nerd Font 11
+padding=12
+margin=10
+width=420
+height=200
+
+default-timeout=5000
+
