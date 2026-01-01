@@ -55,6 +55,9 @@ build/
 *.cache
 .cache/
 
+# Local agent instructions
+AGENTS.md
+
 # Package manager lock files (uncomment if needed)
 # package-lock.json
 # yarn.lock

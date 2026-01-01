@@ -27,7 +27,7 @@ spawn-at-startup "sh" "-c" "waybar -c ~/.config/waybar/niri/config.jsonc -s ~/.c
 spawn-at-startup "swaybg" "-i" "~/.config/niri/background.png" "-m" "fill"
 // pkill swaybg && swaybg -i ~/.config/niri/background.png -m fill &
 
-// 输入法S
+// 输入法
 spawn-at-startup "fcitx5"
 
 // 通知守护进程
@@ -90,7 +90,7 @@ binds {
     Mod+Shift+Right { move-column-right-or-to-monitor-right; }  // 将列移到右侧或右侧显示器
 
     // 窗口管理
-    Mod+F { fullscreen-window; }     // 全屏切换
+    Mod+Shift+F { fullscreen-window; }     // 全屏切换
     Mod+A { toggle-overview; }           // 打开 Overview 模式（网格视图）
 
     // 系统

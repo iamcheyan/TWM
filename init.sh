@@ -27,9 +27,11 @@ CONFIG_DIRS=(
     "$TWM_DIR/niri:$HOME/.config/niri"
     "$TWM_DIR/waybar:$HOME/.config/waybar"
     "$TWM_DIR/kitty:$HOME/.config/kitty"
+    "$TWM_DIR/xterm:$HOME/.config/xterm"
     "$TWM_DIR/mako:$HOME/.config/mako"           # 通知守护进程
     "$TWM_DIR/wofi:$HOME/.config/wofi"           # Wayland 应用启动器
     "$TWM_DIR/sway:$HOME/.config/sway"           # Sway 配置
+    "$TWM_DIR/i3:$HOME/.config/i3"               # i3 配置
 )
 
 # 配置文件列表（需要单独链接的文件）
@@ -126,11 +128,18 @@ echo "=== 检查依赖软件 ==="
 # 必需软件列表
 REQUIRED_DEPS=(
     "niri:窗口管理器"
+    "i3:窗口管理器"
     "waybar:状态栏"
+    "i3status:i3bar 状态程序"
+    "polybar:状态栏"
     "kitty:终端模拟器"
     "swaybg:壁纸管理器"
+    "feh:X11 壁纸管理器"
     "mako:通知守护进程"
     "wofi:应用启动器"
+    "rofi:X11 应用启动器"
+    "xrandr:显示器配置 (X11)"
+    "setxkbmap:键盘布局 (X11)"
 )
 
 # 截图相关软件
@@ -138,6 +147,8 @@ SCREENSHOT_DEPS=(
     "grim:截图工具"
     "slurp:区域选择工具"
     "wl-copy:剪贴板工具 (wl-clipboard)"
+    "maim:截图工具 (X11)"
+    "xclip:剪贴板工具 (X11)"
     "notify-send:通知工具 (libnotify)"
 )
 
@@ -170,8 +181,10 @@ echo ""
 echo "配置说明："
 echo "  - Waybar 配置: ~/.config/waybar -> $TWM_DIR/waybar"
 echo "  - Kitty 配置:  ~/.config/kitty -> $TWM_DIR/kitty"
+echo "  - Xterm 配置:  ~/.config/xterm -> $TWM_DIR/xterm"
 echo "  - 壁纸链接:    ~/.config/niri/background.png -> $TWM_DIR/background.png"
 echo "  - 壁纸链接:    ~/.config/sway/background.png -> $TWM_DIR/background.png"
+echo "  - i3 配置:     ~/.config/i3 -> $TWM_DIR/i3"
 echo "  - 字体已安装: MesloLGS Nerd Font"
 echo ""
 echo "提示："

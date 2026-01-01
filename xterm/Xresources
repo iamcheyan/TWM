@@ -1,0 +1,37 @@
+! Xterm config based on kitty settings
+XTerm*termName: xterm-256color
+XTerm*utf8: 1
+XTerm*locale: true
+XTerm*renderFont: true
+XTerm*faceName: MesloLGS Nerd Font Mono
+XTerm*faceSize: 16
+XTerm*scrollBar: false
+XTerm*saveLines: 5000
+XTerm*selectToClipboard: true
+
+! Colors (Catppuccin-like)
+XTerm*background: #1e1e2e
+XTerm*foreground: #cdd6f4
+XTerm*cursorColor: #f5e0dc
+XTerm*color0: #45475a
+XTerm*color1: #f38ba8
+XTerm*color2: #a6e3a1
+XTerm*color3: #f9e2af
+XTerm*color4: #89b4fa
+XTerm*color5: #f5c2e7
+XTerm*color6: #94e2d5
+XTerm*color7: #bac2de
+XTerm*color8: #585b70
+XTerm*color9: #f38ba8
+XTerm*color10: #a6e3a1
+XTerm*color11: #f9e2af
+XTerm*color12: #89b4fa
+XTerm*color13: #f5c2e7
+XTerm*color14: #94e2d5
+XTerm*color15: #a6adc8
+
+! Keybindings (kitty-like)
+XTerm*VT100.Translations: #override \
+    Ctrl <Key>C: copy-selection(CLIPBOARD) \n\
+    Ctrl <Key>V: insert-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key>C: string(0x03)
