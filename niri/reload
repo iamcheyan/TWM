@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+niri msg action load-config-file >/dev/null
+
+pkill waybar || true
+nohup waybar -c "$HOME/.config/waybar/niri/config.jsonc" -s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &
+
+pkill swaybg || true
+nohup swaybg -i "$HOME/.config/niri/background.png" -m fill >/dev/null 2>&1 &

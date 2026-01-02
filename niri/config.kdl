@@ -24,7 +24,7 @@ input {
 spawn-at-startup "sh" "-c" "waybar -c ~/.config/waybar/niri/config.jsonc -s ~/.config/waybar/style.css"
 
 // 壁纸
-spawn-at-startup "swaybg" "-i" "~/.config/niri/background.png" "-m" "fill"
+spawn-at-startup "sh" "-c" "swaybg -i \"$HOME/.config/niri/background.png\" -m fill"
 // pkill swaybg && swaybg -i ~/.config/niri/background.png -m fill &
 
 // 输入法
@@ -37,12 +37,12 @@ spawn-at-startup "mako"
 layout {
     gaps 2
 
-    // 如果你只想要简单边框，建议用 border（默认配置也在 layout 里配置）
+    // 边框
     border {
-        on
-        width 2
-        active-color "#88c0d0"
-        inactive-color "#3b4252"
+        off
+        //width 2
+        //active-color "#88c0d0"
+        //inactive-color "#3b4252"
     }
 }
 
@@ -73,7 +73,7 @@ recent-windows {
     }
 }
 
-// 快捷键（已验证通过的 action 名）
+// 快捷键
 binds {
     Mod+Return { spawn "kitty"; }
     Mod+D { spawn "wofi" "--show" "drun"; }
@@ -116,10 +116,13 @@ binds {
     Alt+Print { spawn "bash" "-c" "filename=~/Downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && grim \"$filename\" && notify-send '截图' \"已保存到 Downloads\" -t 3000"; }  // Alt+PrtSc: 全屏保存到 Downloads
     Shift+Print { spawn "bash" "-c" "filename=~/Downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && grim -g \"$(slurp)\" \"$filename\" && notify-send '区域截图' \"已保存到 Downloads\" -t 3000"; }  // Shift+PrtSc: 区域截图保存到文件
     Alt+A { spawn "bash" "-c" "grim -g \"$(slurp)\" - | wl-copy && notify-send '区域截图' '已复制到剪贴板' -t 2000"; }  // Alt+A: 区域截图到剪贴板
+
+    XF86MonBrightnessUp { spawn "brightnessctl" "set" "+10%"; }
+    XF86MonBrightnessDown { spawn "brightnessctl" "set" "10%-"; }
     
 }
 
-// 关闭动画（官方支持）
+// 关闭动画
 animations {
     off
 }
