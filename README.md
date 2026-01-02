@@ -7,6 +7,8 @@
 首次使用只需执行一次脚本，即可创建软链接并安装字体：
 
 ```bash
+mkdir -p ~/.config/TWM
+git clone https://github.com/iamcheyan/TWM.git ~/.config/TWM
 cd ~/.config/TWM
 chmod +x init.sh
 ./init.sh
