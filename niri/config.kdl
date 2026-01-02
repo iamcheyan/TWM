@@ -82,15 +82,22 @@ binds {
     Mod+Ctrl+Alt+Shift+Q { quit; }
 
     // 窗口导航
-    Mod+Left { focus-column-left; }        // 焦点移到左侧列
-    Mod+Right { focus-column-right; }      // 焦点移到右侧列
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-workspace-down; }
+    Mod+Up    { focus-workspace-up; }
+    Mod+Right { focus-column-right; }
+
+    Mod+H { focus-column-left; }
+    Mod+J { focus-workspace-down; }
+    Mod+K { focus-workspace-up; }
+    Mod+L { focus-column-right; }
 
     // 移动窗口/列
     Mod+Shift+Left { move-column-left-or-to-monitor-left; }    // 将列移到左侧或左侧显示器
     Mod+Shift+Right { move-column-right-or-to-monitor-right; }  // 将列移到右侧或右侧显示器
 
     // 窗口管理
-    Mod+Shift+F { fullscreen-window; }     // 全屏切换
+    Mod+F { fullscreen-window; }     // 全屏切换
     Mod+A { toggle-overview; }           // 打开 Overview 模式（网格视图）
 
     // 系统
