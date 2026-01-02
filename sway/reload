@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+swaymsg reload >/dev/null
+pkill waybar || true
+nohup waybar -c "$HOME/.config/waybar/sway/config.jsonc" -s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &

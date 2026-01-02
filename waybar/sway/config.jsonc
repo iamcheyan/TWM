@@ -7,9 +7,10 @@
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        // "sway/workspaces",
         "tray",
-        "sway/window"
+        // "sway/window",
+        "sway/workspaces",
+        "sway/mode"
     ],
     "modules-center": [
         "clock",
@@ -39,15 +40,16 @@
     // },
     "sway/workspaces": {
         "disable-scroll": true,
-        "all-outputs": true,
+        "all-outputs": false,
         "warp-on-scroll": false,
-        "format": "{name}: {icon}",
+        "format": "{name} {icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-            "5": "",
+            "1:Code": "",
+            "2:Web": "",
+            "3:Docs": "",
+            "4:Chat": "",
+            "5:Temp": "",
+            "6:Extra": "",
             "urgent": "",
             "focused": "",
             "default": ""
@@ -144,11 +146,9 @@
         // "device": "acpi_video1",
         "format": "{percent}% {icon}",
         "format-icons": [
-            "🌑",
-            "🌘",
-            "🌗",
-            "🌖",
-            "🌕"
+            "󰃞",
+            "󰃝",
+            "󰃠"
         ]
     },
     "battery": {

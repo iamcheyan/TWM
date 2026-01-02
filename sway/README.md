@@ -67,12 +67,12 @@ This Sway configuration is designed with a **modal workflow** philosophy, heavil
 - `Shift + n/m`: 移动窗口到上一个/下一个工作区。
 
 **其他:**
-- `a`: 将窗口移至新创建的工作区并跳转。
-- `Shift + a`: 将窗口移至 0 号工作区（作为暂存区）。
+- `a`: 将窗口移至下一个工作区并跳转。
+- `Shift + a`: 将窗口移至下一个工作区但不跳转。
 - `x`, `f`: 模式内也支持关闭和全屏操作。
 
 ---
 
 ## 维护与自定义 / Maintenance
-- 配置文件路径: `~/.config/niri/sway/config`
-- 窗口切换脚本: `~/.config/niri/sway/scripts/window_switcher.sh` (Python)
+- 配置文件路径: `~/.config/sway/config`
+- 窗口切换脚本: `~/.config/sway/scripts/window_switcher.sh` (Python)
