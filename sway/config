@@ -1,7 +1,7 @@
 # Basic Variables
 set $mod Mod4
 set $terminal i3-sensible-terminal
-font pango:monospace 10
+font pango:Ubuntu 10
 
 # Brightness (intel_backlight)
 bindsym XF86MonBrightnessUp exec brightnessctl set +10%
@@ -9,23 +9,24 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
 
 # Input Configuration
 input type:keyboard {
-    xkb_layout jp
+    xkb_layout us
 }
 
 # Output Configuration
-output DP-1 scale 2 position 0 0
-output eDP-1 scale 1.5 position 0 1080
+output * scale 1.75
 
 # Autostart
-exec_always --no-startup-id waybar -c ~/.config/waybar/sway/config.jsonc -s ~/.config/waybar/style.css
+exec /usr/libexec/polkit-mate-authentication-agent-1
+exec_always --no-startup-id pkill waybar; waybar -c ~/.config/waybar/sway/config.jsonc -s ~/.config/waybar/style.css
 exec_always --no-startup-id swaybg -i "$HOME/.config/sway/background.png" -m fill
-exec_always --no-startup-id fcitx5 -d
+exec --no-startup-id fcitx5 -d
 exec_always --no-startup-id mako
+# exec_always --no-startup-id pkill -f workspaces.py; /home/tetsuya/.config/sway/scripts/workspaces.py
 
 # Appearance
-gaps inner 4
-gaps outer 4
-default_border pixel 2
+gaps inner 0
+gaps outer 0
+default_border none
 
 client.focused          #88c0d0 #88c0d0 #2e3440 #88c0d0 #88c0d0
 client.unfocused        #3b4252 #3b4252 #d8dee9 #3b4252 #3b4252
@@ -33,33 +34,47 @@ client.focused_inactive #3b4252 #3b4252 #d8dee9 #3b4252 #3b4252
 client.urgent           #bf616a #bf616a #ffffff #bf616a #bf616a
 
 # Workspace Definition
-set $ws1 "1:Terminal"
-set $ws2 "2:Web"
-set $ws3 "3:Code"
-set $ws4 "4:Web"
-set $ws5 "5:Chat"
-set $ws0 "0:Extra"
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
 
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+0 workspace $ws0
+bindsym $mod+q workspace number $ws1
+bindsym $mod+w workspace number $ws2
+bindsym $mod+e workspace number $ws3
+bindsym $mod+r workspace number $ws4
+bindsym $mod+t workspace number $ws5
+bindsym $mod+y workspace number $ws6
+bindsym $mod+u workspace number $ws7
+bindsym $mod+i workspace number $ws8
+bindsym $mod+o workspace number $ws9
+bindsym $mod+p workspace number $ws10
 
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+0 move container to workspace $ws0
+bindsym $mod+Shift+q move container to workspace number $ws1
+bindsym $mod+Shift+w move container to workspace number $ws2
+bindsym $mod+Shift+e move container to workspace number $ws3
+bindsym $mod+Shift+r move container to workspace number $ws4
+bindsym $mod+Shift+t move container to workspace number $ws5
+bindsym $mod+Shift+y move container to workspace number $ws6
+bindsym $mod+Shift+u move container to workspace number $ws7
+bindsym $mod+Shift+i move container to workspace number $ws8
+bindsym $mod+Shift+o move container to workspace number $ws9
+bindsym $mod+Shift+p move container to workspace number $ws10
 
 # Applications
 bindsym $mod+Return exec kitty
 
 # Window Management
-bindsym $mod+q kill                         # 关闭当前窗口
+bindsym $mod+x kill                         # 替换 $mod+q
 bindsym $mod+f floating toggle
+bindsym $mod+s mode "resize"                 # 替换 $mod+r, 放在 home row (S for Size)
+bindsym $mod+g layout tabbed, mode "tab"     # 替换 $mod+t, 放在 home row (G for Group)
 
 # Alt+Tab：当前工作区窗口切换
 bindsym Mod1+Tab focus next
@@ -128,7 +143,6 @@ mode "move-output" {
 }
 
 # Resize mode
-bindsym $mod+r mode "resize"
 mode "resize" {
     bindsym h resize shrink width 10 px
     bindsym l resize grow width 10 px
@@ -145,7 +159,7 @@ mode "resize" {
 }
 
 # Panel mode
-bindsym Mod4+p mode "Panel"
+bindsym $mod+a mode "Panel"                # 替换 Mod4+p
 mode "Panel" {
     # 循环切换（可选，像 Alt+Tab）
     bindsym a focus next
@@ -162,7 +176,6 @@ mode "Panel" {
 }
 
 # Tab mode
-bindsym $mod+t layout tabbed, mode "tab"
 mode "tab" {
     # 移动 / 切换 tab（zellij 风格）
     bindsym h focus left
@@ -193,27 +206,31 @@ mode "tab" {
 }
 
 # Workspace mode
-bindsym Mod4+a mode "workspace"
+bindsym $mod+z mode "workspace"            # 替换 Mod4+a
 mode "workspace" {
-    # 切换 workspace（数字）
-    bindsym 1 workspace number 1
-    bindsym 2 workspace number 2
-    bindsym 3 workspace number 3
-    bindsym 4 workspace number 4
-    bindsym 5 workspace number 5
-    bindsym 0 workspace number 0
+    # 切换 workspace
+    bindsym q workspace number $ws1
+    bindsym w workspace number $ws2
+    bindsym e workspace number $ws3
+    bindsym r workspace number $ws4
+    bindsym t workspace number $ws5
+    bindsym y workspace number $ws6
+    bindsym u workspace number $ws7
+    bindsym i workspace number $ws8
+    bindsym o workspace number $ws9
+    bindsym p workspace number $ws10
 
-    # 移动窗口到 workspace（Shift）
-    bindsym Shift+1 move container to workspace number 1
-    bindsym Shift+2 move container to workspace number 2
-    bindsym Shift+3 move container to workspace number 3
-    bindsym Shift+4 move container to workspace number 4
-    bindsym Shift+5 move container to workspace number 5
-    bindsym Shift+0 move container to workspace number 0
-
-    # 移动到0号workspace
-    bindsym a move container to workspace number 0
-    bindsym Shift+a workspace number 0
+    # 移动窗口到 workspace
+    bindsym Shift+q move container to workspace number $ws1
+    bindsym Shift+w move container to workspace number $ws2
+    bindsym Shift+e move container to workspace number $ws3
+    bindsym Shift+r move container to workspace number $ws4
+    bindsym Shift+t move container to workspace number $ws5
+    bindsym Shift+y move container to workspace number $ws6
+    bindsym Shift+u move container to workspace number $ws7
+    bindsym Shift+i move container to workspace number $ws8
+    bindsym Shift+o move container to workspace number $ws9
+    bindsym Shift+p move container to workspace number $ws10
 
     bindsym n workspace prev
     bindsym m workspace next
