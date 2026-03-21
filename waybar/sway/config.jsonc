@@ -7,52 +7,51 @@
     "spacing": 0, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "tray",
-        // "sway/window",
         "sway/workspaces",
-        "sway/mode"
+        "sway/mode",
+        "sway/window"
     ],
+    "sway/window": {
+        "format": "{}",
+        "max-length": 50,
+        "separate-outputs": true
+    },
     "modules-center": [
         "clock",
         "idle_inhibitor"
     ],
     "modules-right": [
+        "tray",
         "network",
         "power-profiles-daemon",
         "cpu",
-        "memory",
-        "temperature",
-        "backlight",
-        "sway/language",
-        "battery"
+        "memory"
     ],
-    // // Modules configuration
-    // "niri/workspaces": {
-    //     "format": "{icon}",
-    //     "format-icons": {
-    //         "1": "1",
-    //         "2": "2",
-    //         "3": "3",
-    //         "4": "4",
-    //         "5": "5",
-    //         "default": ""
-    //     }
-    // },
     "sway/workspaces": {
         "disable-scroll": true,
-        "all-outputs": false,
-        "warp-on-scroll": false,
-        "format": "{name} {icon}",
+        "all-outputs": true,
+        "format": "{icon}",
         "format-icons": {
-            "1:Code": "",
-            "2:Web": "",
-            "3:Docs": "",
-            "4:Chat": "",
-            "5:Temp": "",
-            "6:Extra": "",
-            "urgent": "",
-            "focused": "",
-            "default": ""
+            "focused": "",
+            "default": "",
+            "urgent": ""
+        }
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "icon-theme": "Numix-Circle",
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": [
+        ],
+        "app_ids-mapping": {
+            "firefox-esr": "firefox"
+        },
+        "rewrite": {
+            "Firefox Web Browser": "Firefox",
+            "Foot": "Terminal"
         }
     },
     "keyboard-state": {
@@ -120,6 +119,7 @@
     },
     "clock": {
         // "timezone": "America/New_York",
+        "format": "{:%Y-%m-%d %H:%M}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },

@@ -2,7 +2,7 @@
  * Global
  * ========================= */
 * {
-    font-family: 'Noto Sans Mono', 'Font Awesome 6 Free', 'Font Awesome 6 Brands', monospace;
+    font-family: 'Ubuntu', 'Ubuntu Nerd Font', 'Noto Sans Mono', sans-serif;
     font-size: 13px;
     min-height: 0;
 }
@@ -11,7 +11,7 @@
  * Waybar Window
  * ========================= */
 window#waybar {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     color: #ffffff;
 }
 
@@ -33,21 +33,46 @@ button:hover {
 }
 
 /* =========================
- * Workspace
+ * Workspace (Solid Circles with Opacity)
  * ========================= */
 #workspaces button {
-    padding: 0 5px;
-    margin: 0 2px;
+    padding: 0 2px;
+    margin: 0;
+    background: transparent;
+    color: #ffffff;
+    opacity: 0.3;
+    font-size: 8px;
+    /* margin: 5px ; */
+    /* transform: scale(0.8); */
+}
+
+#workspaces button.focused {
+    color: #ffffff;
+    opacity: 1; /* 激活圆点完全显示 */
+    font-weight: bold;
+    /* min-width:25px; */
+}
+
+#workspaces button.urgent {
+    color: #eb4d4b;
+    opacity: 1;
+}
+
+#workspaces button:hover {
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+#taskbar button {
+    /* padding: 0 4px; */
+    margin: 0;
     background: transparent;
     color: #ffffff;
 }
 
-#workspaces button.focused {
-    background-color: #64727D;
-}
-
-#workspaces button.urgent {
-    background-color: #eb4d4b;
+#taskbar button.active {
+    background: rgba(255, 255, 255, 0.1);
+    /* border-bottom: 2px solid #88c0d0; */
 }
 
 /* =========================
@@ -200,7 +225,7 @@ button:hover {
 }
 
 /* =========================
- * Window Title (if used)
+ * Window Title
  * ========================= */
 #window {
     margin: 0 4px;

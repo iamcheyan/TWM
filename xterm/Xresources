@@ -1,3 +1,6 @@
+! Xft.dpi for 4K monitors (200% scale)
+Xft.dpi: 192
+
 ! Xterm config based on kitty settings
 XTerm*termName: xterm-256color
 XTerm*utf8: 1

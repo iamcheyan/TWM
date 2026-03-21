@@ -170,7 +170,7 @@ install_package() {
     case "$cmd" in
         wl-copy) pkg="wl-clipboard" ;;
         notify-send)
-            if [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
+            if [[ "$OS" == "ubuntu" || "$OS" == "debian" || "$OS" == "linuxmint" ]]; then
                 pkg="libnotify-bin"
             elif [[ "$OS" == "opensuse" || "$OS" == "suse" ]]; then
                 pkg="libnotify-tools"
@@ -221,7 +221,7 @@ install_package() {
     elif [[ "$OS" == "arch" || "$OS" == "manjaro" ]]; then
         sudo pacman -S --noconfirm --needed "$pkg"
         install_status=$?
-    elif [[ "$OS" == "ubuntu" || "$OS" == "debian" ]]; then
+    elif [[ "$OS" == "ubuntu" || "$OS" == "debian" || "$OS" == "linuxmint" ]]; then
         # Debian/Ubuntu 可能会有交互，尝试使用 DEBIAN_FRONTEND=noninteractive
         sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "$pkg"
         install_status=$?
