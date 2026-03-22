@@ -24,10 +24,6 @@ exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG
 # 允许本地 root 用户访问 XWayland (修复 mintsysadm/pkexec 无法打开 GUI 的问题)
 exec_always xhost +si:localuser:root
 
-
-# 允许本地 root 用户访问 XWayland (修复 mintsysadm/pkexec 无法打开 GUI 的问题)
-exec_always xhost +si:localuser:root
-
 # --- 启动鉴权代理 (MATE 版本) ---
 # 在 Sway 下，polkit-mate 经常需要伪装成 GNOME 环境才能正常注册并弹出密码框
 exec_always sh -c "pkill -f polkit-mate-authentication-agent-1; XDG_CURRENT_DESKTOP=GNOME /usr/libexec/polkit-mate-authentication-agent-1"
@@ -95,13 +91,16 @@ bindsym $mod+Return exec kitty
 # Window Management
 bindsym $mod+Shift+c reload
 bindsym $mod+x kill                         # 替换 $mod+q
-bindsym $mod+f floating toggle
-bindsym $mod+s mode "resize"                 # 替换 $mod+r, 放在 home row (S for Size)
-bindsym $mod+g layout tabbed, mode "tab"     # 替换 $mod+t, 放在 home row (G for Group)
+bindsym $mod+f floating toggle              # 切换 浮动 / 平铺
+bindsym $mod+g layout toggle tabbed split   # 切换 标签 / 平铺
+# Window Search (Zellij Search Style)
+bindsym $mod+s exec swaymsg -t get_tree | jq -r '.. | select(.type? == "con" and .name? != null and .shell? != null) | .name' | wofi --show dmenu -p "Search Windows" | xargs -I{} swaymsg [title="{}"] focus
+bindsym $mod+Escape mode "default"          # 强制退出特殊模式
 
 # Alt+Tab：当前工作区窗口切换
 bindsym Mod1+Tab focus next
 bindsym Mod1+Shift+Tab focus prev
+
 
 # Win+Tab：工作区切换
 bindsym Mod4+Tab workspace next
@@ -134,6 +133,9 @@ bindsym Control+Mod1+BackSpace exec swaynag \
   -b "Exit Sway" "swaymsg exit"
 
 # Window Rules
+for_window [app_id="(?i)keepassxc"] floating enable
+for_window [class="(?i)keepassxc"] floating enable
+for_window [title="(?i)KeePassXC"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [window_type="dialog"] floating enable
@@ -154,9 +156,9 @@ bindsym Alt+a exec bash -c 'grim -g "$(slurp)" - | wl-copy && notify-send "Area 
 #############################################################
 # Modes
 
-# Move mode
-bindsym $mod+m mode "move"
-mode "move" {
+# Move mode (Zellij Style)
+bindsym $mod+h mode "[ MOVE ] h/j/k/l: Switch Location  ENTER: When done"
+mode "[ MOVE ] h/j/k/l: Switch Location  ENTER: When done" {
     bindsym h move left
     bindsym l move right
     bindsym k move up
@@ -167,13 +169,14 @@ mode "move" {
     bindsym Up    move up
     bindsym Down  move down
 
+    # 退出模式
     bindsym Escape mode "default"
     bindsym Return mode "default"
 }
 
 # Move output mode
-bindsym $mod+Shift+m mode "move-output"
-mode "move-output" {
+bindsym $mod+Shift+m mode "[ OUTPUT ] h/j/k/l:screen"
+mode "[ OUTPUT ] h/j/k/l:screen" {
     bindsym h move container to output left
     bindsym l move container to output right
     bindsym k move container to output up
@@ -188,72 +191,57 @@ mode "move-output" {
     bindsym Return mode "default"
 }
 
-# Resize mode
-mode "resize" {
-    bindsym h resize shrink width 10 px
-    bindsym l resize grow width 10 px
-    bindsym k resize shrink height 10 px
-    bindsym j resize grow height 10 px
+# Resize mode (Zellij Style)
+bindsym $mod+n mode "[ RESIZE ] h/j/k/l: Resize  +/-: Large Resize"
+mode "[ RESIZE ] h/j/k/l: Resize  +/-: Large Resize" {
+    # 基础调整
+    bindsym h resize shrink width 20 px
+    bindsym l resize grow width 20 px
+    bindsym k resize shrink height 20 px
+    bindsym j resize grow height 20 px
 
-    bindsym Shift+h resize shrink width 100 px
-    bindsym Shift+l resize grow width 100 px
-    bindsym Shift+k resize shrink height 100 px
-    bindsym Shift+j resize grow height 100 px
+    # 大步长调整 (对应 Zellij 的 +/-)
+    bindsym plus  resize grow width 50 px; resize grow height 50 px
+    bindsym minus resize shrink width 50 px; resize shrink height 50 px
+    bindsym Equal resize grow width 50 px; resize grow height 50 px
+    bindsym underscore resize shrink width 50 px; resize shrink height 50 px
 
+    # 退出模式
     bindsym Escape mode "default"
     bindsym Return mode "default"
 }
 
 # Panel mode
-bindsym $mod+a mode "Panel"                # 替换 Mod4+p
-mode "Panel" {
-    # 循环切换（可选，像 Alt+Tab）
-    bindsym a focus next
-    bindsym s focus prev
+bindsym $mod+a mode "[ PANEL ] f:float t:tab s:split h/l:focus H/L:ws n:new x:kill"
+mode "[ PANEL ] f:float t:tab s:split h/l:focus H/L:ws n:new x:kill" {
+    # 切换焦点
+    bindsym h focus left
+    bindsym l focus right
+    bindsym k focus up
+    bindsym j focus down
 
-    # 关闭当前窗口
+    # 切换工作区
+    bindsym Shift+h workspace prev
+    bindsym Shift+l workspace next
+
+    # 窗口操作
     bindsym x kill
-    bindsym f fullscreen toggle
-    bindsym Shift+f floating toggle
+    bindsym f floating toggle
+    bindsym t layout tabbed
+    bindsym s layout toggle split
+    bindsym Shift+f fullscreen toggle
+
+    # 新建工作区 (自动跳转到下一个空编号)
+    bindsym n exec swaymsg workspace $(swaymsg -t get_workspaces | jq '.[].num' | sort -n | awk '$1!=p+1{print p+1;exit}{p=$1} END{print p+1}'), mode "default"
 
     # 退出 Panel 模式
     bindsym Escape mode "default"
     bindsym Return mode "default"
 }
 
-# Tab mode
-mode "tab" {
-    # 移动 / 切换 tab（zellij 风格）
-    bindsym h focus left
-    bindsym l focus right
-    bindsym k focus up
-    bindsym j focus down
-
-    # 备用（直觉一点）
-    bindsym Left  focus left
-    bindsym Right focus right
-
-    # 新 terminal 进入当前 tab 容器
-    bindsym n exec $terminal
-
-    # 关闭
-    bindsym x kill
-
-    # Break out（打散当前 tab）
-    # 把当前窗口移出 tab 容器
-    bindsym b move container to workspace current
-
-    # 切换 tab / stacked / split
-    bindsym Tab layout toggle tabbed stacked splith
-
-    # 退出 tab 模式
-    bindsym Escape mode "default"
-    bindsym Return mode "default"
-}
-
 # Workspace mode
-bindsym $mod+z mode "workspace"            # 替换 Mod4+a
-mode "workspace" {
+bindsym $mod+z mode "[ WORKSPACE ] q-p:goto Shift:move"
+mode "[ WORKSPACE ] q-p:goto Shift:move" {
     # 切换 workspace
     bindsym q workspace number $ws1
     bindsym w workspace number $ws2
