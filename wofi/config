@@ -10,3 +10,4 @@ print_command=true # 打印选中的命令
 insensitive=true # 搜索不区分大小写
 columns=1 # 显示列数
 no_actions=true # 不显示应用程序的操作菜单
+cache_file=$HOME/.cache/wofi-history # 记录搜索历史和频率

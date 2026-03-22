@@ -9,7 +9,8 @@
     "modules-left": [
         "sway/workspaces",
         "sway/mode",
-        "sway/window"
+        "sway/window",
+        "tray"
     ],
     "sway/window": {
         "format": "{}",
@@ -21,12 +22,23 @@
         "idle_inhibitor"
     ],
     "modules-right": [
-        "tray",
+        "custom/zmk-studio",
+        "custom/settings",
         "network",
         "power-profiles-daemon",
         "cpu",
         "memory"
     ],
+    "custom/zmk-studio": {
+        "format": "󰌌",
+        "on-click": "$HOME/Applications/ZMK/ZMK.Studio_0.3.1_amd64.AppImage",
+        "tooltip-format": "ZMK Studio"
+    },
+    "custom/settings": {
+        "format": "",
+        "on-click": "cinnamon-settings",
+        "tooltip-format": "System Settings"
+    },
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
@@ -189,12 +201,13 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-wifi": "{essid} ({signalStrength}%)   󰇚 {bandwidthDownBytes} 󰕒 {bandwidthUpBytes}",
+        "format-ethernet": "{ipaddr}/{cidr}   󰇚 {bandwidthDownBytes} 󰕒 {bandwidthUpBytes}",
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "interval": 5
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float

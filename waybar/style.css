@@ -2,7 +2,7 @@
  * Global
  * ========================= */
 * {
-    font-family: 'Ubuntu', 'Ubuntu Nerd Font', 'Noto Sans Mono', sans-serif;
+    font-family: 'MesloLGS NF', 'Ubuntu Nerd Font', 'Ubuntu', 'Noto Sans Mono', sans-serif;
     font-size: 13px;
     min-height: 0;
 }
@@ -63,18 +63,6 @@ button:hover {
     opacity: 0.8;
 }
 
-#taskbar button {
-    /* padding: 0 4px; */
-    margin: 0;
-    background: transparent;
-    color: #ffffff;
-}
-
-#taskbar button.active {
-    background: rgba(255, 255, 255, 0.1);
-    /* border-bottom: 2px solid #88c0d0; */
-}
-
 /* =========================
  * Common Modules (Compact)
  * ========================= */
@@ -93,6 +81,8 @@ button:hover {
 #idle_inhibitor,
 #scratchpad,
 #power-profiles-daemon,
+#custom-zmk-studio,
+#custom-settings,
 #mpd,
 #privacy {
     padding: 0 4px;
@@ -101,17 +91,35 @@ button:hover {
     color: #ffffff;
 }
 
+#custom-zmk-studio {
+    color: #ffffff;
+}
+
+#custom-zmk-studio:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+#custom-settings {
+    color: #ffffff; /* White color for the gear icon */
+}
+
+#custom-settings:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
 /* .modules-left label { */
 /*     font-variant: small-caps; */
 /* } */
 
 
 /* =========================
- * Right Side Tightening
+ * Right Side Spacing
  * ========================= */
 #modules-right>widget>* {
-    padding: 0 4px;
-    margin: 0 2px;
+    padding: 0 6px;
+    margin: 0 4px;
 }
 
 /* =========================
@@ -232,4 +240,5 @@ button:hover {
  * ========================= */
 #window {
     margin: 0 4px;
+    padding-left: 8px;
 }
