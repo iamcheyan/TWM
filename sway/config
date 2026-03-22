@@ -85,6 +85,10 @@ bindsym $mod+Shift+i move container to workspace number $ws8
 bindsym $mod+Shift+o move container to workspace number $ws9
 bindsym $mod+Shift+p move container to workspace number $ws10
 
+# 快速拨动窗口到工作区 (Zellij Style, 支持自动创建)
+bindsym $mod+Mod1+l exec $HOME/.config/sway/scripts/move_ws.sh next
+bindsym $mod+Mod1+h exec $HOME/.config/sway/scripts/move_ws.sh prev
+
 # Applications
 bindsym $mod+Return exec kitty
 
@@ -240,8 +244,12 @@ mode "[ PANEL ] f:float t:tab s:split h/l:focus H/L:ws n:new x:kill" {
 }
 
 # Workspace mode
-bindsym $mod+z mode "[ WORKSPACE ] q-p:goto Shift:move"
-mode "[ WORKSPACE ] q-p:goto Shift:move" {
+bindsym $mod+z mode "[ WORKSPACE ] q-p:goto h/l:move_ws Shift:move"
+mode "[ WORKSPACE ] q-p:goto h/l:move_ws Shift:move" {
+    # 移动窗口并跟随到 上一个/下一个 编号的工作区 (支持自动创建)
+    bindsym l exec $HOME/.config/sway/scripts/move_ws.sh next
+    bindsym h exec $HOME/.config/sway/scripts/move_ws.sh prev
+
     # 切换 workspace
     bindsym q workspace number $ws1
     bindsym w workspace number $ws2
