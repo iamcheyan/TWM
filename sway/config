@@ -16,16 +16,33 @@ input type:keyboard {
 output * scale 1.75
 
 # Autostart
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-exec /usr/libexec/polkit-mate-authentication-agent-1
-exec_always --no-startup-id pkill waybar; waybar -c ~/.config/waybar/sway/config.jsonc -s ~/.config/waybar/style.css
+# --- 环境变量同步 (非常重要) ---
+# 确保在启动任何 GUI 代理前，DBus 知道这是 Wayland 会话
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway:GNOME XDG_SESSION_TYPE=wayland XAUTHORITY
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XAUTHORITY
+
+# 允许本地 root 用户访问 XWayland (修复 mintsysadm/pkexec 无法打开 GUI 的问题)
+exec_always xhost +si:localuser:root
+
+
+# 允许本地 root 用户访问 XWayland (修复 mintsysadm/pkexec 无法打开 GUI 的问题)
+exec_always xhost +si:localuser:root
+
+# --- 启动鉴权代理 (MATE 版本) ---
+# 在 Sway 下，polkit-mate 经常需要伪装成 GNOME 环境才能正常注册并弹出密码框
+exec_always sh -c "pkill -f polkit-mate-authentication-agent-1; XDG_CURRENT_DESKTOP=GNOME /usr/libexec/polkit-mate-authentication-agent-1"
+
+# --- 启动 Portal 支持 ---
+# 确保 GTK 应用能通过 Portal 找到鉴权对话框。使用 systemctl 确保环境变量正确。
+exec sh -c "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk"
+
+exec_always --no-startup-id sh -c "pkill waybar; waybar -c ~/.config/waybar/sway/config.jsonc -s ~/.config/waybar/style.css"
 exec_always --no-startup-id swaybg -i "$HOME/.config/sway/background.png" -m fill
 exec --no-startup-id fcitx5 -d
 exec_always --no-startup-id mako
 exec --no-startup-id wl-paste --type text --watch cliphist store
 exec --no-startup-id wl-paste --type image --watch cliphist store
-# exec_always --no-startup-id pkill -f workspaces.py; $HOME/.config/sway/scripts/workspaces.py
+# exec_always --no-startup-id sh -c "pkill -f workspaces.py; $HOME/.config/sway/scripts/workspaces.py"
 
 # Appearance
 gaps inner 0
