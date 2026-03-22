@@ -16,17 +16,22 @@ input type:keyboard {
 output * scale 1.75
 
 # Autostart
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec /usr/libexec/polkit-mate-authentication-agent-1
 exec_always --no-startup-id pkill waybar; waybar -c ~/.config/waybar/sway/config.jsonc -s ~/.config/waybar/style.css
 exec_always --no-startup-id swaybg -i "$HOME/.config/sway/background.png" -m fill
 exec --no-startup-id fcitx5 -d
 exec_always --no-startup-id mako
-# exec_always --no-startup-id pkill -f workspaces.py; /home/tetsuya/.config/sway/scripts/workspaces.py
+exec --no-startup-id wl-paste --type text --watch cliphist store
+exec --no-startup-id wl-paste --type image --watch cliphist store
+# exec_always --no-startup-id pkill -f workspaces.py; $HOME/.config/sway/scripts/workspaces.py
 
 # Appearance
 gaps inner 0
 gaps outer 0
-default_border none
+default_border pixel 2
+smart_borders on
 
 client.focused          #88c0d0 #88c0d0 #2e3440 #88c0d0 #88c0d0
 client.unfocused        #3b4252 #3b4252 #d8dee9 #3b4252 #3b4252
@@ -71,6 +76,7 @@ bindsym $mod+Shift+p move container to workspace number $ws10
 bindsym $mod+Return exec kitty
 
 # Window Management
+bindsym $mod+Shift+c reload
 bindsym $mod+x kill                         # 替换 $mod+q
 bindsym $mod+f floating toggle
 bindsym $mod+s mode "resize"                 # 替换 $mod+r, 放在 home row (S for Size)
@@ -93,11 +99,34 @@ bindsym $mod+Shift+h resize shrink width 100 px
 
 # 应用启动
 bindsym $mod+d exec wofi --show drun
+bindsym $mod+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy && wtype -M ctrl v
 bindsym $mod+Ctrl+Alt+Shift+q exec swaynag \
   -t warning \
   -m "Are you sure you want to exit Sway?" \
   -b "Exit" "swaymsg exit" \
   -b "Cancel" ""
+
+# System Power Menu (Visual)
+bindsym Control+Mod1+BackSpace exec swaynag \
+  -t warning \
+  -m "Power Management: Choose an action" \
+  -b "Hibernate" "systemctl hibernate" \
+  -b "Suspend" "systemctl suspend" \
+  -b "Reboot" "systemctl reboot" \
+  -b "Shutdown" "systemctl poweroff" \
+  -b "Exit Sway" "swaymsg exit"
+
+# Window Rules
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [app_id="org.keepassxc.KeePassXC"] floating enable
+for_window [app_id="keepassxc"] floating enable
+for_window [class="KeePassXC"] floating enable
+for_window [class="keepassxc"] floating enable
+for_window [title="Unlock Database - KeePassXC"] floating enable
+for_window [title="KeePassXC - Browser Access Request"] floating enable
 
 # Bindings - Screenshot
 bindsym Print exec bash -c 'grim - | wl-copy && notify-send "Screenshot" "Full screen copied to clipboard" -t 2000'

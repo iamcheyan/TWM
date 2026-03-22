@@ -11,7 +11,7 @@
  * Waybar Window
  * ========================= */
 window#waybar {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 1);
     color: #ffffff;
 }
 
@@ -124,6 +124,8 @@ button:hover {
 }
 
 #tray>.item {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
     padding: 0 2px;
     margin: 0 1px;
 }
@@ -144,6 +146,7 @@ button:hover {
     padding: 0 4px;
     margin: 0 2px;
     min-width: unset;
+    border-radius: 4px;
 }
 
 #language {
