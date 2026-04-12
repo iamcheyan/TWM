@@ -1,78 +1,85 @@
 # Sway Configuration: Zellij-inspired Modal Workflow
 
-This Sway configuration is designed with a **modal workflow** philosophy, heavily inspired by the [Zellij](https://zellij.dev/) terminal multiplexer. The goal is to minimize complex modifier combinations and provide a structured, discoverable, and keyboard-centric experience.
+本文档详细介绍了当前 Sway 的快捷键配置。本配置采用了类似 **Zellij** 的“模式化操作”理念，旨在通过减少复杂的组合键来提高效率。
 
-## 核心设计理念 / Design Philosophy
+## 1. 全局快捷键 (常用)
 
-- **模式化操作 (Modal Design)**: 减少对长按组合键的依赖。进入特定模式后，可以使用单键执行复杂操作。
-- **直觉导航 (Intuitive Navigation)**: 统一使用 `h`, `j`, `k`, `l` (Vim-style) 或方向键进行导航和管理。
-- **单键掌控 (One-key Control)**: 在特定模式下，最常用的功能（如关闭窗口、切换全屏）触手可及。
-
----
-
-## 常用全局快捷键 / Global Shortcuts
+这些快捷键在任何时候都可以直接触发：
 
 | 快捷键 | 功能 |
 | :--- | :--- |
 | `Win + Return` | 启动终端 (Kitty) |
 | `Win + d` | 启动应用启动器 (Wofi) |
-| `Win + w` | **窗口切换器 (带图标)** - 跨工作区显示所有窗口 |
-| `Win + q` | 关闭当前窗口 |
-| `Win + f` | 切换全屏 |
-| `Win + h/j/k/l` | 切换焦点 (左/下/上/右) |
-| `Win + Tab` | 切换到上一个/下一个工作区 |
-| `Alt + Tab` | 在当前工作区的窗口间循环 |
+| `Win + x` | **关闭当前窗口** |
+| `Win + f` | 切换 浮动 / 平铺 状态 |
+| `Win + g` | 切换 标签 (Tabbed) / 平铺 布局 |
+| `Win + s` | **搜索窗口** (使用 Wofi 搜索并跳转到指定窗口) |
+| `Win + v` | 剪贴板历史 (Cliphist + Wofi) |
+| `Alt + Tab` | 当前工作区内：切换下一个窗口焦点 |
+| `Alt + Shift + Tab` | 当前工作区内：切换上一个窗口焦点 |
+| `Win + Tab` | 切换到下一个工作区 |
+| `Win + Shift + Tab` | 切换到上一个工作区 |
+| `Win + Shift + c` | 重新加载 Sway 配置 |
 
 ---
 
-## 操作模式 / Operation Modes
+## 2. 核心：移动窗口 (How to Move Windows)
 
-按 `Win + Key` 进入对应模式，按 `Esc` 或 `Enter` 返回默认模式。
+移动窗口在本项目中有多种方式，取决于你是想在“工作区内”移动，还是“跨工作区”移动。
 
-### 1. 移动模式 / Move Mode (`Win + m`)
-用于在工作区内移动当前窗口。
-- `h`, `j`, `k`, `l` 或 `方向键`: 向对应方向移动窗口。
+### A. 工作区内移动 (Move Mode)
+按下 **`Win + h`** 进入 **MOVE** 模式：
+- `h`, `j`, `k`, `l` 或 `方向键`: 向左、下、上、右移动当前窗口。
+- `Enter` 或 `Esc`: 退出模式。
 
-### 2. 调整大小模式 / Resize Mode (`Win + r`)
-- `h`, `j`, `k`, `l`: 调整窗口尺寸（普通）。
-- `Shift + h/j/k/l`: 大幅度调整尺寸。
+### B. 跨工作区移动 (Workspace Mode)
+按下 **`Win + z`** 进入 **WORKSPACE** 模式：
+- **移动并跳转**: `Shift + q/w/e/r/t/y/u/i/o/p` 将窗口移至对应工作区并**跟随**过去。
+- **快速拨动**: `h` 或 `l` 键将窗口快速移动到上一个/下一个编号的工作区。
 
-### 3. 面板模式 / Panel Mode (`Win + p`)
-类似于 Zellij 的 Pane 模式，专注于当前窗口和焦点的快速管理。
-- `a`: 切换到下一个焦点 | `s`: 切换到上一个焦点
-- `x`: 关闭窗口 (Kill)
-- `f`: 切换全屏
-- `Shift + f`: 切换浮动状态
-
-### 4. 标签模式 / Tab Mode (`Win + t`)
-管理 Tabbed/Stacked 布局。
-- `h`, `l`: 在 Tab 间切换。
-- `n`: 在当前 Tab 容器中新建终端。
-- `x`: 关闭当前 Tab。
-- `b`: (Break out) 将当前窗口移出 Tab 容器。
-- `Tab`: 循环切换 Tabbed / Stacked / Split 布局。
-
-### 5. 工作区模式 / Workspace Mode (`Win + a`)
-最强大的模式，灵感来自 Zellij 的 Workspace 管理。支持数字和字母行双映射。
-
-**切换工作区 (Jump):**
-- `1` - `0`: 跳转到工作区 1 - 0。
-- `q` - `p`: 对应键盘第一行，跳转到工作区 1 - 0。
-
-**移动并跳转 (Move & Jump):**
-- `Shift + (1-0)` 或 `Shift + (q-p)`: 将当前窗口移至目标工作区并跟随跳转。
-
-**快速切换 (Cycle):**
-- `n`: 上一个工作区 | `m`: 下一个工作区。
-- `Shift + n/m`: 移动窗口到上一个/下一个工作区。
-
-**其他:**
-- `a`: 将窗口移至下一个工作区并跳转。
-- `Shift + a`: 将窗口移至下一个工作区但不跳转。
-- `x`, `f`: 模式内也支持关闭和全屏操作。
+### C. 跨显示器移动 (Output Mode)
+按下 **`Win + Shift + m`** 进入 **OUTPUT** 模式：
+- `h`, `j`, `k`, `l`: 将当前窗口移动到左、下、上、右侧的显示器。
 
 ---
 
-## 维护与自定义 / Maintenance
-- 配置文件路径: `~/.config/sway/config`
-- 窗口切换脚本: `~/.config/sway/scripts/window_switcher.sh` (Python)
+## 3. 操作模式详解
+
+进入模式后，顶部状态栏（通常）会显示当前模式提示，按 `Esc` 或 `Enter` 返回默认。
+
+### 调整大小模式 / Resize Mode (`Win + n`)
+- `h`, `j`, `k`, `l`: 基础调整（20px）。
+- `+` / `-` 或 `=` / `_`: **大幅度**调整尺寸（50px）。
+
+### 面板模式 / Panel Mode (`Win + a`)
+类似于 Zellij 的 Pane 管理，侧重于当前布局控制：
+- `h`, `j`, `k`, `l`: 切换窗口焦点。
+- `Shift + h` / `Shift + l`: 切换工作区。
+- `x`: 关闭窗口 | `f`: 切换浮动 | `Shift + f`: 切换全屏。
+- `t`: 切换标签布局 | `s`: 切换平铺布局。
+- `n`: **新建工作区** (自动寻找下一个可用的空编号)。
+
+### 工作区模式 / Workspace Mode (`Win + z`)
+- `q, w, e, r, t, y, u, i, o, p`: 分别对应工作区 1 - 10 的快速跳转。
+- `n` / `m`: 跳转到上一个/下一个工作区。
+
+---
+
+## 4. 系统与截图
+
+### 截图 (Screenshot)
+- `Print`: 全屏截图并存入剪贴板。
+- `Alt + Print`: 全屏截图并保存到 `~/Downloads`。
+- `Shift + Print`: **区域截图**并保存到 `~/Downloads`。
+- `Alt + a`: **区域截图**并存入剪贴板。
+
+### 电源管理
+- `Ctrl + Alt + BackSpace`: 弹出电源菜单（关机、重启、挂起、退出 Sway）。
+- `Win + Ctrl + Alt + Shift + q`: 直接退出 Sway 确认确认。
+
+---
+
+## 5. 维护信息
+- 配置文件: `~/.config/sway/config`
+- 自定义脚本:
+    - `~/.config/sway/scripts/move_ws.sh`: 处理跨工作区移动的逻辑。
