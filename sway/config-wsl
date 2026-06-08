@@ -1,33 +1,13 @@
 # Basic Variables
-set $mod Mod4
+set $mod Mod1
 set $terminal i3-sensible-terminal
 font pango:Ubuntu 10
-
-# Brightness (intel_backlight)
-bindsym XF86MonBrightnessUp exec command -v brightnessctl >/dev/null && brightnessctl set +10%
-bindsym XF86MonBrightnessDown exec command -v brightnessctl >/dev/null && brightnessctl set 10%-
 
 # Input Configuration
 # 通用键盘布局
 input type:keyboard {
-    xkb_layout us
+    xkb_layout jp
 }
-
-# 通用触控板配置 (兼容所有笔记本)
-input "type:touchpad" {
-    tap enabled
-    natural_scroll enabled
-    middle_emulation enabled
-    dwt enabled
-}
-
-# # Output Configuration
-# # Default scale (适用于外接显示器)
-# output * scale 1.75
-#
-# # Host-specific overrides (CFSV9: 1.25)
-# # 通过更稳健的 sh -c 逻辑执行，避免环境变量缺失问题
-# exec_always sh -c 'if [ "$(hostname)" = "CFSV9" ]; then swaymsg "output eDP-1 scale 1.25"; fi'
 
 # Autostart
 # --- 环境变量同步 (非常重要) ---
@@ -38,21 +18,7 @@ exec sh -c 'command -v systemctl >/dev/null && systemctl --user import-environme
 # 允许本地 root 用户访问 XWayland (修复 mintsysadm/pkexec 无法打开 GUI 的问题)
 exec_always sh -c 'grep -qi microsoft /proc/version 2>/dev/null && exit 0; [ -n "$DISPLAY" ] && command -v xhost >/dev/null && xhost +si:localuser:root 2>/dev/null || true'
 
-# --- 启动鉴权代理 (Smart Polkit Loader) ---
-# 自动兼容 MATE 和 GNOME 环境，按顺序尝试启动第一个找到的代理
-exec_always sh -c 'for p in \
-    /usr/libexec/polkit-mate-authentication-agent-1 \
-    /usr/lib/polkit-mate/polkit-mate-authentication-agent-1 \
-    /usr/lib/mate-polkit/polkit-mate-authentication-agent-1 \
-    /usr/libexec/polkit-gnome-authentication-agent-1 \
-    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; \
-    do [ -x "$p" ] && exec "$p"; break; done'
-
-# --- 启动 Portal 支持 ---
-# 确保 GTK 应用能通过 Portal 找到鉴权对话框。使用 systemctl 确保环境变量正确。
-exec sh -c "command -v systemctl >/dev/null && systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk 2>/dev/null || true"
-
-exec_always --no-startup-id sh -c 'pkill waybar 2>/dev/null || true; cfg="$HOME/.config/waybar/sway/config.jsonc"; if grep -qi microsoft /proc/version 2>/dev/null && [ -f "$HOME/.config/waybar/sway-wsl/config.jsonc" ]; then cfg="$HOME/.config/waybar/sway-wsl/config.jsonc"; fi; exec waybar -c "$cfg" -s "$HOME/.config/waybar/style.css"'
+exec_always --no-startup-id sh -c 'pkill waybar 2>/dev/null || true; exec waybar -c "$HOME/.config/waybar/sway-wsl/config.jsonc" -s "$HOME/.config/waybar/style.css"'
 # exec_always --no-startup-id swaybg -i "$HOME/.config/TWM/background.png" -m fill
 exec --no-startup-id sh -c 'command -v fcitx5 >/dev/null || exit 0; grep -qi microsoft /proc/version 2>/dev/null && exit 0; fcitx5 -d'
 exec_always --no-startup-id sh -c 'command -v mako >/dev/null || exit 0; grep -qi microsoft /proc/version 2>/dev/null && exit 0; mako'
@@ -66,7 +32,7 @@ gaps outer 0
 default_border pixel 2
 smart_borders on
 
-client.focused          #88c0d0 #88c0d0 #2e3440 #88c0d0 #88c0d0
+client.focused          #00ff00 #00ff00 #2e3440 #00ff00 #00ff00
 client.unfocused        #3b4252 #3b4252 #d8dee9 #3b4252 #3b4252
 client.focused_inactive #3b4252 #3b4252 #d8dee9 #3b4252 #3b4252
 client.urgent           #bf616a #bf616a #ffffff #bf616a #bf616a
@@ -83,31 +49,32 @@ set $ws8 8
 set $ws9 9
 set $ws10 10
 
-bindsym $mod+q workspace number $ws1
-bindsym $mod+w workspace number $ws2
-bindsym $mod+e workspace number $ws3
-bindsym $mod+r workspace number $ws4
-bindsym $mod+t workspace number $ws5
-bindsym $mod+y workspace number $ws6
-bindsym $mod+u workspace number $ws7
-bindsym $mod+i workspace number $ws8
-bindsym $mod+o workspace number $ws9
-bindsym $mod+p workspace number $ws10
 
-bindsym $mod+Shift+q move container to workspace number $ws1
-bindsym $mod+Shift+w move container to workspace number $ws2
-bindsym $mod+Shift+e move container to workspace number $ws3
-bindsym $mod+Shift+r move container to workspace number $ws4
-bindsym $mod+Shift+t move container to workspace number $ws5
-bindsym $mod+Shift+y move container to workspace number $ws6
-bindsym $mod+Shift+u move container to workspace number $ws7
-bindsym $mod+Shift+i move container to workspace number $ws8
-bindsym $mod+Shift+o move container to workspace number $ws9
-bindsym $mod+Shift+p move container to workspace number $ws10
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # 快速拨动窗口到工作区 (Zellij Style, 支持自动创建)
-bindsym $mod+Mod1+l exec $HOME/.config/sway/scripts/move_ws.sh next
-bindsym $mod+Mod1+h exec $HOME/.config/sway/scripts/move_ws.sh prev
+bindsym $mod+Control+l exec $HOME/.config/sway/scripts/move_ws.sh next
+bindsym $mod+Control+h exec $HOME/.config/sway/scripts/move_ws.sh prev
 
 # Applications
 bindsym $mod+Return exec sh -c 'command -v kitty >/dev/null && kitty || i3-sensible-terminal'
@@ -121,14 +88,14 @@ bindsym $mod+g layout toggle tabbed split   # 切换 标签 / 平铺
 bindsym $mod+s exec swaymsg -t get_tree | jq -r '.. | select(.type? == "con" and .name? != null and .shell? != null) | .name' | wofi --show dmenu -p "Search Windows" | xargs -I{} swaymsg [title="{}"] focus
 bindsym $mod+Escape mode "default"          # 强制退出特殊模式
 
-# Alt+Tab：当前工作区窗口切换
-bindsym Mod1+Tab focus next
-bindsym Mod1+Shift+Tab focus prev
+# Ctrl+Tab：当前工作区窗口切换，避免 Windows 抢 Alt+Tab
+bindsym Control+Tab focus next
+bindsym Control+Shift+Tab focus prev
 
 
-# Win+Tab：工作区切换
-bindsym Mod4+Tab workspace next
-bindsym Mod4+Shift+Tab workspace prev
+# Alt+[ / Alt+]：工作区切换，避免 Windows 抢 Win+Tab
+bindsym $mod+bracketright workspace next
+bindsym $mod+bracketleft workspace prev
 
 # 调整大小
 bindsym $mod+Shift+l resize grow width 100 px
@@ -140,14 +107,14 @@ bindsym $mod+Shift+h resize shrink width 100 px
 # 应用启动
 bindsym $mod+d exec wofi --show drun
 bindsym $mod+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy && wtype -M ctrl v
-bindsym $mod+Ctrl+Alt+Shift+q exec swaynag \
+bindsym $mod+Shift+Escape exec swaynag \
   -t warning \
   -m "Are you sure you want to exit Sway?" \
   -b "Exit" "swaymsg exit" \
   -b "Cancel" ""
 
 # System Power Menu (Visual)
-bindsym Control+Mod1+BackSpace exec swaynag \
+bindsym $mod+Control+BackSpace exec swaynag \
   -t warning \
   -m "Power Management: Choose an action" \
   -b "Hibernate" "systemctl hibernate" \
@@ -231,34 +198,6 @@ mode "[ RESIZE ] h/j/k/l: Resize  +/-: Large Resize" {
     bindsym underscore resize shrink width 50 px; resize shrink height 50 px
 
     # 退出模式
-    bindsym Escape mode "default"
-    bindsym Return mode "default"
-}
-
-# Panel mode
-bindsym $mod+a mode "[ PANEL ] f:float t:tab s:split h/l:focus H/L:ws n:new x:kill"
-mode "[ PANEL ] f:float t:tab s:split h/l:focus H/L:ws n:new x:kill" {
-    # 切换焦点
-    bindsym h focus left
-    bindsym l focus right
-    bindsym k focus up
-    bindsym j focus down
-
-    # 切换工作区
-    bindsym Shift+h workspace prev
-    bindsym Shift+l workspace next
-
-    # 窗口操作
-    bindsym x kill
-    bindsym f floating toggle
-    bindsym t layout tabbed
-    bindsym s layout toggle split
-    bindsym Shift+f fullscreen toggle
-
-    # 新建工作区 (自动跳转到下一个空编号)
-    bindsym n exec swaymsg workspace $(swaymsg -t get_workspaces | jq '.[].num' | sort -n | awk '$1!=p+1{print p+1;exit}{p=$1} END{print p+1}'), mode "default"
-
-    # 退出 Panel 模式
     bindsym Escape mode "default"
     bindsym Return mode "default"
 }

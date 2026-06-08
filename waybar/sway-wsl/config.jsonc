@@ -1,0 +1,61 @@
+// -*- mode: jsonc -*-
+{
+    "height": 25,
+    "spacing": 0,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/window"
+    ],
+    "modules-center": [
+        "clock",
+        "idle_inhibitor"
+    ],
+    "modules-right": [
+        "custom/network",
+        "cpu",
+        "memory"
+    ],
+    "sway/window": {
+        "format": "{}",
+        "max-length": 50,
+        "separate-outputs": true
+    },
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{icon}",
+        "format-icons": {
+            "focused": "",
+            "default": "",
+            "urgent": ""
+        }
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "clock": {
+        "format": "{:%Y-%m-%d %H:%M}",
+        "tooltip-format": "{:%Y-%m-%d}"
+    },
+    "custom/network": {
+        "exec": "ip -o -4 addr show scope global | awk '$2 != \"lo\" && $2 !~ /^docker/ {print $2 \" \" $4; exit}'",
+        "format": "{} ",
+        "tooltip": false,
+        "interval": 5
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "{}% "
+    }
+}

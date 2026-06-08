@@ -168,6 +168,20 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 
 窗口切换器脚本：`sway/scripts/window_switcher.sh`（`Super + W`）
 
+### WSL 测试
+
+WSL 下只用于测试配置时，使用专用入口：
+
+```bash
+~/.config/sway/wsl-boot
+```
+
+这个入口单独加载 `~/.config/sway/config-wsl`，不会影响普通 Sway 配置。首次启动会请求 `sudo`，卸载 WSLg 的只读 `/tmp/.X11-unix`，并以 `1777` 权限重新创建，让 Sway 启动自己的 Xwayland。随后会自动使用 `~/.config/waybar/sway-wsl/config.jsonc`，跳过 WSL 中不可用的托盘、电源配置、RFKILL 网络检测和 fcitx/rime 启动。
+
+WSL 配置把主修饰键从 `Super` 改为 `Alt`。为避开 Windows 全局快捷键，窗口切换改为 `Ctrl+Tab` / `Ctrl+Shift+Tab`，工作区前后切换改为 `Alt+]` / `Alt+[`.
+
+Sway 内部窗口会显示标题栏。WSLg 外层窗口由 Windows 管理，可以使用 `Win+Up` 最大化，或使用 `Win+Shift+Left/Right` 移动到其他显示器。
+
 ### Sway 快捷键
 
 | 快捷键 | 功能 |

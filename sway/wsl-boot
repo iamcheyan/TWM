@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+
+export XDG_SESSION_DESKTOP=sway
+export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_TYPE=wayland
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+
+# WSLg mounts its own /tmp/.X11-unix without the sticky bit. Let Sway
+# create its own Xwayland socket, following the sway-wsl2 approach.
+if [ -d /mnt/wslg/runtime-dir ]; then
+    if [ ! -S "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY" ] && [ -S "/mnt/wslg/runtime-dir/wayland-0" ]; then
+        ln -sf /mnt/wslg/runtime-dir/wayland-0 "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY"
+        ln -sf /mnt/wslg/runtime-dir/wayland-0.lock "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY.lock"
+    fi
+
+    if [ "$(stat -c %a /tmp/.X11-unix 2>/dev/null || printf 0)" != "1777" ]; then
+        sudo sh -c 'umount /tmp/.X11-unix 2>/dev/null || true; rm -rf /tmp/.X11-unix; install -d -m 1777 /tmp/.X11-unix'
+    fi
+fi
+
+exec sway -c "$HOME/.config/sway/config-wsl"

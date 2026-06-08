@@ -5,6 +5,7 @@ Waybar 是 Niri 窗口管理器使用的顶部状态栏。
 ## 文件结构
 
 - `config.jsonc` - Waybar 配置文件（模块、位置、行为）
+- `sway-wsl/config.jsonc` - WSL 下测试 Sway 时使用的轻量配置
 - `style.css` - Waybar 样式文件（颜色、字体、间距等）
 
 ## 常用操作
