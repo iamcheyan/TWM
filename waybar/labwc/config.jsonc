@@ -6,7 +6,8 @@
 
     "modules-left": [
         "custom/launcher",
-		"custom/terminal"
+		"custom/terminal",
+        "wlr/taskbar"
     ],
     "modules-center": [
         "clock"

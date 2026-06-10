@@ -26,13 +26,13 @@
       <action name="Execute" command="google-chrome" />
     </item>
     <item label="File Manager">
-      <action name="Execute" command="dolphin" />
+      <action name="Execute" command="nautilus" />
     </item>
     <item label="Text Editor">
-      <action name="Execute" command="mousepad" />
+      <action name="Execute" command="gedit" />
     </item>
     <item label="System Monitor">
-      <action name="Execute" command="kitty btop" />
+      <action name="Execute" command="kitty htop" />
     </item>
   </menu>
 

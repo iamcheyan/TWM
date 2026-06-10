@@ -1,0 +1,43 @@
+#!/bin/sh
+# brightness-control - WSL-aware wrapper for brightnessctl
+# Used by labwc rc.xml keybinds. Safe no-op inside WSL (no real display brightness control).
+set -eu
+
+is_wsl() {
+    # Multiple reliable ways to detect WSL
+    [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
+    [ -n "${WSL_INTEROP:-}" ] && return 0
+    [ -n "${WSLENV:-}" ] && return 0
+    if [ -r /proc/version ]; then
+        grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && return 0
+    fi
+    case "$(uname -r 2>/dev/null)" in
+        *microsoft*|*WSL*|*wsl*) return 0 ;;
+    esac
+    return 1
+}
+
+direction="${1:-up}"
+step="${2:-10%}"
+
+if is_wsl; then
+    # Inside WSL (native or nested labwc), brightness is controlled by the Windows host.
+    # We silently do nothing so keypresses don't spam logs.
+    exit 0
+fi
+
+if ! command -v brightnessctl >/dev/null 2>&1; then
+    exit 0
+fi
+
+case "$direction" in
+    up|+|increase)
+        brightnessctl set "+${step}" >/dev/null 2>&1 || true
+        ;;
+    down|-|decrease)
+        brightnessctl set "${step}-" >/dev/null 2>&1 || true
+        ;;
+    *)
+        brightnessctl set "$direction" >/dev/null 2>&1 || true
+        ;;
+esac
