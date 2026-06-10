@@ -1,0 +1,41 @@
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
+
+@define-color theme_selected_bg_color #5d5d5d;
+@define-color theme_selected_fg_color #ffffff;
+@define-color theme_unfocused_selected_bg_color #484848;
+@define-color theme_unfocused_selected_fg_color #eeeeee;
+@define-color link_color #d0d0d0;
+@define-color visited_link_color #a0a0a0;
+
+*:selected,
+selection {
+  background-color: #5d5d5d;
+  color: #ffffff;
+}
+
+button:checked,
+button:active,
+modelbutton:checked,
+menuitem:hover {
+  background-image: none;
+  background-color: #4a4a4a;
+  color: #ffffff;
+}
+
+switch:checked,
+progressbar progress,
+scale highlight {
+  background-image: none;
+  background-color: #686868;
+  border-color: #777777;
+}
+
+link,
+*:link {
+  color: #d0d0d0;
+}
+
+link:visited,
+*:visited {
+  color: #a0a0a0;
+}

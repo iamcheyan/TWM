@@ -1,5 +1,5 @@
 #!/bin/bash
-# TWM 配置初始化脚本 (支持 i3, Sway, Niri)
+# TWM 配置初始化脚本 (支持 i3, Sway, Niri, labwc)
 
 set -e
 
@@ -28,6 +28,8 @@ CONFIG_DIRS=(
     "$TWM_DIR/mako:$HOME/.config/mako"
     "$TWM_DIR/wofi:$HOME/.config/wofi"
     "$TWM_DIR/sway:$HOME/.config/sway"
+    "$TWM_DIR/labwc:$HOME/.config/labwc"
+    "$TWM_DIR/sfwbar:$HOME/.config/sfwbar"
     "$TWM_DIR/i3:$HOME/.config/i3"
     "$TWM_DIR/polybar:$HOME/.config/polybar"
 )
@@ -66,6 +68,12 @@ for config in "${CONFIG_FILES[@]}"; do
     IFS=':' read -r src tgt <<< "$config"
     name=$(basename "$tgt")
     create_symlink "$src" "$tgt" "$name"
+done
+
+mkdir -p "$HOME/.local/share/themes"
+for theme_dir in "$TWM_DIR/labwc/themes"/*; do
+    [ -d "$theme_dir" ] || continue
+    create_symlink "$theme_dir" "$HOME/.local/share/themes/$(basename "$theme_dir")" "$(basename "$theme_dir") theme"
 done
 
 # ========== 安装 Nerd Font ==========
@@ -155,14 +163,16 @@ echo "选择要安装的窗口管理器:"
 echo "1) i3"
 echo "2) sway"
 echo "3) niri"
-echo "4) 全部"
-read -p "请输入 (1-4): " wm_choice
+echo "4) labwc"
+echo "5) 全部"
+read -p "请输入 (1-5): " wm_choice
 
 case $wm_choice in
     1) DEPS+=("i3:窗口管理器" "polybar:状态栏" "rofi:启动器" "feh:壁纸") ;;
     2) DEPS+=("sway:窗口管理器") ;;
     3) DEPS+=("niri:窗口管理器") ;;
-    4) DEPS+=("i3" "sway" "niri" "polybar" "rofi" "feh") ;;
+    4) DEPS+=("labwc:窗口管理器") ;;
+    5) DEPS+=("i3" "sway" "niri" "labwc" "polybar" "rofi" "feh") ;;
 esac
 
 for dep in "${DEPS[@]}"; do

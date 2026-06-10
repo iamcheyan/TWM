@@ -3,6 +3,9 @@ set $mod Mod1
 set $terminal i3-sensible-terminal
 font pango:Ubuntu 10
 
+# bindsym Ctrl+Tab exec swayr next-window
+# bindsym Ctrl+Shift+Tab exec swayr prev-window
+
 # Input Configuration
 # 通用键盘布局
 input type:keyboard {
@@ -18,6 +21,7 @@ exec sh -c 'command -v systemctl >/dev/null && systemctl --user import-environme
 # 允许本地 root 用户访问 XWayland (修复 mintsysadm/pkexec 无法打开 GUI 的问题)
 exec_always sh -c 'grep -qi microsoft /proc/version 2>/dev/null && exit 0; [ -n "$DISPLAY" ] && command -v xhost >/dev/null && xhost +si:localuser:root 2>/dev/null || true'
 
+# exec lxqt-panel
 exec_always --no-startup-id sh -c 'pkill waybar 2>/dev/null || true; exec waybar -c "$HOME/.config/waybar/sway-wsl/config.jsonc" -s "$HOME/.config/waybar/style.css"'
 # exec_always --no-startup-id swaybg -i "$HOME/.config/TWM/background.png" -m fill
 exec --no-startup-id sh -c 'command -v fcitx5 >/dev/null || exit 0; grep -qi microsoft /proc/version 2>/dev/null && exit 0; fcitx5 -d'

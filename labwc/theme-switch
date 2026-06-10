@@ -1,0 +1,48 @@
+#!/bin/sh
+set -eu
+
+config="$HOME/.config/labwc/rc.xml"
+theme="${1:-}"
+
+theme_exists() {
+    for base in \
+        "${XDG_DATA_HOME:-$HOME/.local/share}/themes" \
+        "$HOME/.themes" \
+        /usr/local/share/themes \
+        /usr/share/themes; do
+        [ -f "$base/$1/openbox-3/themerc" ] && return 0
+    done
+    return 1
+}
+
+if [ -z "$theme" ]; then
+    theme="$(
+        find \
+            "${XDG_DATA_HOME:-$HOME/.local/share}/themes" \
+            "$HOME/.themes" \
+            /usr/local/share/themes \
+            /usr/share/themes \
+            -mindepth 3 -maxdepth 3 \
+            -path '*/openbox-3/themerc' \
+            -printf '%h\n' 2>/dev/null |
+        sed 's#/openbox-3$##; s#^.*/##' |
+        sort -u |
+        wofi --dmenu --prompt "labwc Theme"
+    )"
+fi
+
+[ -n "$theme" ] || exit 0
+
+if ! theme_exists "$theme"; then
+    printf 'Theme not found: %s\n' "$theme" >&2
+    exit 1
+fi
+
+THEME="$theme" perl -0pi -e \
+    's{<name>.*?</name>}{<name>$ENV{THEME}</name>}' "$config"
+
+if [ -n "${LABWC_PID:-}" ]; then
+    labwc -r
+elif pid="$(pgrep -n -x labwc 2>/dev/null)"; then
+    kill -HUP "$pid"
+fi

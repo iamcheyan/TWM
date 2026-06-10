@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<labwc_config>
+  <core>
+    <gap>0</gap>
+  </core>
+
+  <theme>
+    <name>BL-Lithium-dark</name>
+    <cornerRadius>0</cornerRadius>
+    <font name="MesloLGS NF" size="10" />
+    <font place="OnScreenDisplay">
+      <name>MesloLGS NF</name>
+      <size>11</size>
+      <weight>normal</weight>
+    </font>
+  </theme>
+
+  <desktops number="4">
+    <popupTime>800</popupTime>
+  </desktops>
+  <windowSwitcher show="yes" preview="yes" outlines="yes">
+    <fields>
+      <field content="type" width="18%" />
+      <field content="trimmed_identifier" width="32%" />
+      <field content="title" width="50%" />
+    </fields>
+  </windowSwitcher>
+
+  <keyboard>
+    <default />
+
+    <keybind key="A-Return">
+      <action name="Execute" command="kitty" />
+    </keybind>
+    <keybind key="A-d">
+      <action name="Execute" command="env GDK_BACKEND=x11 wofi --show drun --allow-images" />
+    </keybind>
+    <keybind key="A-space">
+      <action name="ShowMenu" menu="root-menu" />
+    </keybind>
+    <keybind key="A-q">
+      <action name="Close" />
+    </keybind>
+    <keybind key="A-f">
+      <action name="ToggleFullscreen" />
+    </keybind>
+    <keybind key="A-m">
+      <action name="ToggleMaximize" />
+    </keybind>
+    <keybind key="C-Tab">
+      <action name="Execute" command="~/.config/labwc/window-switcher forward" />
+    </keybind>
+    <keybind key="C-S-Tab">
+      <action name="Execute" command="~/.config/labwc/window-switcher back" />
+    </keybind>
+
+    <keybind key="A-Left">
+      <action name="GoToDesktop" to="left" wrap="yes" />
+    </keybind>
+    <keybind key="A-Right">
+      <action name="GoToDesktop" to="right" wrap="yes" />
+    </keybind>
+    <keybind key="A-1">
+      <action name="GoToDesktop" to="1" />
+    </keybind>
+    <keybind key="A-2">
+      <action name="GoToDesktop" to="2" />
+    </keybind>
+    <keybind key="A-3">
+      <action name="GoToDesktop" to="3" />
+    </keybind>
+    <keybind key="A-4">
+      <action name="GoToDesktop" to="4" />
+    </keybind>
+    <keybind key="A-S-1">
+      <action name="SendToDesktop" to="1" follow="yes" />
+    </keybind>
+    <keybind key="A-S-2">
+      <action name="SendToDesktop" to="2" follow="yes" />
+    </keybind>
+    <keybind key="A-S-3">
+      <action name="SendToDesktop" to="3" follow="yes" />
+    </keybind>
+    <keybind key="A-S-4">
+      <action name="SendToDesktop" to="4" follow="yes" />
+    </keybind>
+  </keyboard>
+
+  <mouse>
+    <default />
+    <context name="Root">
+      <mousebind button="Right" action="Press">
+        <action name="ShowMenu" menu="root-menu" />
+      </mousebind>
+    </context>
+  </mouse>
+
+  <windowRules>
+    <windowRule identifier="wofi" skipTaskbar="yes" skipWindowSwitcher="yes">
+      <action name="ToggleAlwaysOnTop" />
+      <action name="Raise" />
+      <action name="Focus" />
+    </windowRule>
+  </windowRules>
+</labwc_config>

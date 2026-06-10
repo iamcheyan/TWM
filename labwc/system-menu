@@ -1,0 +1,41 @@
+#!/bin/sh
+set -eu
+
+action="${1:-choose}"
+
+if [ "$action" = "choose" ]; then
+    action="$(printf '%s\n' \
+        "Reload Configuration" \
+        "Exit labwc" \
+        "Suspend" \
+        "Reboot" \
+        "Power Off" |
+        env GDK_BACKEND=x11 wofi --dmenu --prompt "System")"
+
+    case "$action" in
+        "Reload Configuration") exec labwc -r ;;
+        "Exit labwc") exec labwc -e ;;
+        "Suspend") action="suspend" ;;
+        "Reboot") action="reboot" ;;
+        "Power Off") action="poweroff" ;;
+        *) exit 0 ;;
+    esac
+fi
+
+case "$action" in
+    suspend|reboot|poweroff) ;;
+    *) exit 1 ;;
+esac
+
+label="$action"
+case "$action" in
+    suspend) label="Suspend" ;;
+    reboot) label="Reboot" ;;
+    poweroff) label="Power Off" ;;
+esac
+
+answer="$(printf '%s\n' "Cancel" "Confirm $label" |
+    env GDK_BACKEND=x11 wofi --dmenu --prompt "Confirm System Action")"
+
+[ "$answer" = "Confirm $label" ] || exit 0
+exec systemctl "$action"

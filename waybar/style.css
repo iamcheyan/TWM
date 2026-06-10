@@ -92,6 +92,8 @@ button:hover {
 #power-profiles-daemon,
 #custom-zmk-studio,
 #custom-settings,
+#custom-launcher,
+#custom-power,
 #mpd,
 #privacy {
     padding: 0 4px;
@@ -116,6 +118,29 @@ button:hover {
 #custom-settings:hover {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
+}
+
+#custom-launcher,
+#custom-power {
+    padding: 0 8px;
+    margin: 0;
+    color: #ffffff;
+}
+
+#custom-launcher:hover,
+#custom-power:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#taskbar button {
+    /* min-width: 28px; */
+    padding: 0 5px;
+    margin: 0;
+    background: transparent;
+}
+
+#taskbar button.active {
+    background: rgba(255, 255, 255, 0.16);
 }
 
 /* .modules-left label { */

@@ -1,0 +1,55 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 28,
+    "spacing": 0,
+
+    "modules-left": [
+        "custom/launcher",
+		"custom/terminal"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "custom/power"
+    ],
+
+    "custom/launcher": {
+        "format": " ",
+        "tooltip-format": "Applications",
+        "on-click": "env GDK_BACKEND=x11 wofi --show drun --allow-images",
+        "on-click-right": "labwc -r"
+    },
+    "custom/terminal": {
+        "format": "Terminal",
+        "tooltip-format": "Applications",
+        "on-click": "kitty",
+        "on-click-right": "labwc -r"
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close"
+    },
+    "clock": {
+        "format": "{:%Y-%m-%d %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "{}% "
+    },
+    "custom/power": {
+        "format": "⏻",
+        "tooltip-format": "System Actions",
+        "on-click": "$HOME/.config/labwc/system-menu"
+    }
+}

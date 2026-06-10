@@ -12,7 +12,6 @@
         "idle_inhibitor"
     ],
     "modules-right": [
-        "custom/network",
         "cpu",
         "memory"
     ],

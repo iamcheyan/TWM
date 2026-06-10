@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openbox_menu>
+  <menu id="client-menu">
+    <item label="Minimize">
+      <action name="Iconify" />
+    </item>
+    <item label="Maximize">
+      <action name="ToggleMaximize" />
+    </item>
+    <item label="Fullscreen">
+      <action name="ToggleFullscreen" />
+    </item>
+    <separator />
+    <item label="Close">
+      <action name="Close" />
+    </item>
+  </menu>
+
+  <menu id="applications" label="Applications">
+    <item label="All Applications">
+      <action name="Execute" command="wofi --show drun --allow-images" />
+    </item>
+    <separator />
+    <item label="Web Browser">
+      <action name="Execute" command="google-chrome" />
+    </item>
+    <item label="File Manager">
+      <action name="Execute" command="dolphin" />
+    </item>
+    <item label="Text Editor">
+      <action name="Execute" command="mousepad" />
+    </item>
+    <item label="System Monitor">
+      <action name="Execute" command="kitty btop" />
+    </item>
+  </menu>
+
+  <menu id="system-menu" label="System">
+    <item label="Themes...">
+      <action name="Execute" command="$HOME/.config/labwc/theme-switch" />
+    </item>
+    <item label="Reload Configuration">
+      <action name="Reconfigure" />
+    </item>
+    <item label="Exit labwc">
+      <action name="Exit" />
+    </item>
+    <separator />
+    <item label="Suspend">
+      <action name="Execute" command="$HOME/.config/labwc/system-menu suspend" />
+    </item>
+    <item label="Reboot">
+      <action name="Execute" command="$HOME/.config/labwc/system-menu reboot" />
+    </item>
+    <item label="Power Off">
+      <action name="Execute" command="$HOME/.config/labwc/system-menu poweroff" />
+    </item>
+  </menu>
+
+  <menu id="root-menu">
+    <item label="Terminal">
+      <action name="Execute" command="kitty" />
+    </item>
+    <menu id="applications" />
+    <item label="Run Application...">
+      <action name="Execute" command="wofi --show drun --allow-images" />
+    </item>
+    <separator />
+    <menu id="system-menu" />
+    <item label="Reload Configuration">
+      <action name="Reconfigure" />
+    </item>
+  </menu>
+</openbox_menu>

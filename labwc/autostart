@@ -1,0 +1,7 @@
+#!/bin/sh
+
+swaybg -c '#333333' >/dev/null 2>&1 &
+mako >/dev/null 2>&1 &
+waybar \
+	-c "$HOME/.config/waybar/labwc/config.jsonc" \
+	-s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &

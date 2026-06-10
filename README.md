@@ -1,6 +1,6 @@
-# TWM：Niri / Sway / i3 三套窗口管理器配置
+# TWM：Niri / Sway / labwc / i3 窗口管理器配置
 
-这是一套支持 **Niri / Sway / i3** 的桌面配置。Niri 与 Sway 共享同一套模块（Waybar/Kitty/Mako/Wofi/壁纸/脚本），只在窗口管理器配置上分开；加入 i3 是为了让用户在 X11 下也能有一个可用的兼容环境。项目提供一键初始化脚本，完成软链接与字体准备，省去繁琐的逐项拷贝与排查。
+这是一套支持 **Niri / Sway / labwc / i3** 的桌面配置。Wayland 窗口管理器共享 Waybar、Kitty、Mako、Wofi 和壁纸，窗口管理器配置彼此独立；i3 提供 X11 兼容环境。项目提供一键初始化脚本，完成软链接与字体准备。
 
 ## 一键配置
 
@@ -85,6 +85,10 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 ├── sway/                  # Sway 配置
 │   ├── config
 │   └── README.md
+├── labwc/                 # labwc 配置与 WSL 启动脚本
+│   ├── rc.xml
+│   ├── menu.xml
+│   └── wsl-boot
 ├── i3/                    # i3 配置
 │   └── config
 ├── polybar/               # Polybar 配置（i3 可选）
@@ -117,11 +121,28 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 脚本会在目标目录已有文件时自动备份，然后创建链接：
 - `~/.config/niri` → `~/.config/TWM/niri`
 - `~/.config/sway` → `~/.config/TWM/sway`
+- `~/.config/labwc` → `~/.config/TWM/labwc`
 - `~/.config/i3` → `~/.config/TWM/i3`
 - `~/.config/waybar` → `~/.config/TWM/waybar`
 - `~/.config/kitty` → `~/.config/TWM/kitty`
 - `~/.config/mako` → `~/.config/TWM/mako`
 - `~/.config/wofi` → `~/.config/TWM/wofi`
+
+---
+
+## labwc（WSL）
+
+```bash
+~/.config/labwc/wsl-boot
+```
+
+- 桌面右键或 `Alt + Space`：主菜单
+- `Alt + D`：应用启动器
+- `Alt + Return`：终端
+- `Alt + Q`：关闭窗口
+- `Alt + Left/Right`：切换工作区
+- 点击 Waybar 左侧图标：应用启动器
+- 点击 Waybar 右侧电源图标：系统操作
 
 ---
 
