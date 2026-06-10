@@ -62,6 +62,9 @@
     <item label="Terminal">
       <action name="Execute" command="kitty" />
     </item>
+    <item label="Theme...">
+      <action name="Execute" command="$HOME/.config/labwc/theme-switch" />
+    </item>
     <menu id="applications" />
     <item label="Run Application...">
       <action name="Execute" command="wofi --show drun --allow-images" />

@@ -19,14 +19,7 @@
   <desktops number="4">
     <popupTime>800</popupTime>
   </desktops>
-  <windowSwitcher>
-    <osd show="yes" preview="yes" outlines="yes" />
-    <fields>
-      <field content="type" width="18%" />
-      <field content="trimmed_identifier" width="32%" />
-      <field content="title" width="50%" />
-    </fields>
-  </windowSwitcher>
+ 
 
   <keyboard>
     <default />

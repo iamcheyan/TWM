@@ -34,6 +34,7 @@ linux_display_server wayland
 # color15 #a6adc8
 
 # ===== Clipboard & Keybindings (GUI-style) =====
+copy_on_select yes
 map ctrl+c copy_to_clipboard
 map ctrl+v paste_from_clipboard
 
@@ -75,6 +76,6 @@ input_delay 0
 
 
 # BEGIN_KITTY_THEME
-# Argonaut
+# 3024 Night
 include current-theme.conf
 # END_KITTY_THEME
