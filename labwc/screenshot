@@ -1,0 +1,40 @@
+#!/bin/sh
+# screenshot helper for labwc keybinds
+# Usage: screenshot full | full-save | area | area-save
+# Keeps all logic in one place, avoids horrible XML escaping in rc.xml
+set -eu
+
+mode="${1:-full}"
+dir="${SCREENSHOT_DIR:-$HOME/Downloads}"
+mkdir -p "$dir"
+ts="$(date +%Y%m%d-%H%M%S)"
+
+notify() {
+    # Use notify-send if available (mako etc.)
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send "$1" "$2" -t "${3:-2000}"
+    else
+        echo "$1: $2" >&2
+    fi
+}
+
+case "$mode" in
+    full)
+        grim - | wl-copy && notify "截图" "全屏已复制到剪贴板" 2000
+        ;;
+    full-save)
+        file="$dir/screenshot-$ts.png"
+        grim "$file" && notify "截图" "已保存到 Downloads" 3000
+        ;;
+    area)
+        grim -g "$(slurp)" - | wl-copy && notify "区域截图" "已复制到剪贴板" 2000
+        ;;
+    area-save)
+        file="$dir/screenshot-$ts.png"
+        grim -g "$(slurp)" "$file" && notify "区域截图" "已保存到 Downloads" 3000
+        ;;
+    *)
+        echo "screenshot: unknown mode '$mode' (use full|full-save|area|area-save)" >&2
+        exit 1
+        ;;
+esac

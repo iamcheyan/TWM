@@ -1,7 +1,54 @@
 #!/bin/sh
+# labwc autostart
+# WSL detection added so native-only or host-specific daemons can be skipped
+# when running as nested compositor via wsl-boot (or inside WSL distro).
 
-swaybg -c '#333333' >/dev/null 2>&1 &
+is_wsl() {
+    [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
+    [ -n "${WSL_INTEROP:-}" ] && return 0
+    [ -n "${WSLENV:-}" ] && return 0
+    if [ -r /proc/version ]; then
+        grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && return 0
+    fi
+    case "$(uname -r 2>/dev/null)" in
+        *microsoft*|*WSL*|*wsl*) return 0 ;;
+    esac
+    return 1
+}
+
+# Wallpaper, bar, notifications, clipboard history: useful for both native and
+# nested labwc (the inner session still wants its own UI).
+swaybg -i "$HOME/.config/labwc/background.png" -m fill >/dev/null 2>&1 &
 mako >/dev/null 2>&1 &
 waybar \
 	-c "$HOME/.config/waybar/labwc/config.jsonc" \
 	-s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &
+command -v cliphist >/dev/null && {
+	wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
+	wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
+}
+
+# Input method (fcitx5).
+# In WSL/WSLg the host Windows input method or WSLg often handles this.
+# Force start inside WSL by setting LABWC_START_FCITX=1 before launching labwc.
+if ! is_wsl || [ "${LABWC_START_FCITX:-0}" = "1" ]; then
+    fcitx5 >/dev/null 2>&1 &
+fi
+
+# HiDPI / output scaling (run after labwc has started its outputs)
+# First run "wlr-randr" in terminal to see your output name (e.g. eDP-1, DP-1, HDMI-A-1)
+# Then uncomment and adjust the line below. Common scales: 1.25, 1.5, 2
+wlr-randr --output eDP-1 --scale 1.25 2>/dev/null || true
+
+# Example: auto-detect first connected output and set a scale (uncomment if you want)
+# OUTPUT=$(wlr-randr 2>/dev/null | awk '/^[A-Za-z]/ {print $1; exit}')
+# [ -n "$OUTPUT" ] && wlr-randr --output "$OUTPUT" --scale 1.25 2>/dev/null || true
+
+# Apply GTK theme via gsettings for better client consistency (if schema exists)
+if command -v gsettings >/dev/null 2>&1; then
+    gsettings set org.gnome.desktop.interface gtk-theme 'BL-Lithium-dark' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface icon-theme 'Adwaita' 2>/dev/null || true
+fi
+
+
+

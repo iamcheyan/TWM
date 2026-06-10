@@ -68,9 +68,18 @@ find_icon() {
 		return
 	fi
 
+	# Get current icon theme for better lookup (falls back to Adwaita)
+	current_icon_theme=$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | tr -d "'" || echo Adwaita)
+
 	for icon_dir in \
 		"$HOME/.local/share/icons" \
 		/usr/local/share/icons \
+		/usr/share/icons/"$current_icon_theme" \
+		/usr/share/icons/Adwaita \
+		/usr/share/icons/gnome \
+		/usr/share/icons/breeze \
+		/usr/share/icons/breeze-dark \
+		/usr/share/icons/elementary \
 		/usr/share/icons/Papirus \
 		/usr/share/icons/hicolor \
 		/usr/share/pixmaps; do

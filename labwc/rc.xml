@@ -8,10 +8,10 @@
   <theme>
     <name>BL-Lithium-dark</name>
     <cornerRadius>0</cornerRadius>
-    <font name="MesloLGS NF" size="10" />
+    <font name="MesloLGS NF" size="12" />
     <font place="OnScreenDisplay">
       <name>MesloLGS NF</name>
-      <size>11</size>
+      <size>13</size>
       <weight>normal</weight>
     </font>
   </theme>
@@ -19,7 +19,8 @@
   <desktops number="4">
     <popupTime>800</popupTime>
   </desktops>
-  <windowSwitcher show="yes" preview="yes" outlines="yes">
+  <windowSwitcher>
+    <osd show="yes" preview="yes" outlines="yes" />
     <fields>
       <field content="type" width="18%" />
       <field content="trimmed_identifier" width="32%" />
@@ -84,6 +85,28 @@
     </keybind>
     <keybind key="A-S-4">
       <action name="SendToDesktop" to="4" follow="yes" />
+    </keybind>
+
+    <!-- Screenshots (delegated to script to keep rc.xml clean and parse reliably) -->
+    <keybind key="Print">
+      <action name="Execute" command="~/.config/labwc/screenshot full" />
+    </keybind>
+    <keybind key="A-Print">
+      <action name="Execute" command="~/.config/labwc/screenshot full-save" />
+    </keybind>
+    <keybind key="S-Print">
+      <action name="Execute" command="~/.config/labwc/screenshot area-save" />
+    </keybind>
+    <keybind key="A-a">
+      <action name="Execute" command="~/.config/labwc/screenshot area" />
+    </keybind>
+
+    <!-- Brightness (WSL-aware wrapper: no-op inside WSL where there is no real panel brightness) -->
+    <keybind key="XF86MonBrightnessUp">
+      <action name="Execute" command="~/.config/labwc/brightness-control up" />
+    </keybind>
+    <keybind key="XF86MonBrightnessDown">
+      <action name="Execute" command="~/.config/labwc/brightness-control down" />
     </keybind>
   </keyboard>
 

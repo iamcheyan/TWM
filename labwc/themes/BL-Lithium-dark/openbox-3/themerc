@@ -63,12 +63,12 @@ window.inactive.button.*.pressed.image.color: #707070
 window.inactive.button.disabled.image.color: #555555
 
 !! Global width settings
-border.Width: 4
+border.width: 4
 padding.width: 1
 window.handle.width: 0
 window.client.padding.width: 0
 menu.overlap.x: -6
-menu.overlap: -6
+menu.overlap.y: -6
 
 !! Borders
 border.color: #181818
@@ -87,11 +87,17 @@ osd.hilight.bg.color: #5d5d5d
 osd.unhilight.bg: flat solid
 osd.unhilight.bg.color: #242424
 osd.label.text.color: #ffffff
+
+!! Window switcher OSD (for Alt+Tab etc.)
+!! Explicitly enable icon support so it matches default theme behavior.
+!! labwc will show app icons on the left of each entry if available.
 osd.window-switcher.width: 760
 osd.window-switcher.padding: 10
-osd.window-switcher.item.padding.x: 12
-osd.window-switcher.item.padding.y: 7
+osd.window-switcher.item.icon.size: 24
+osd.window-switcher.item.padding.x: 4
+osd.window-switcher.item.padding.y: 4
 osd.window-switcher.item.active.border.width: 2
+
 
 !! Typography
 window.label.text.justify: center

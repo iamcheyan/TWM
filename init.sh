@@ -38,6 +38,7 @@ CONFIG_DIRS=(
 CONFIG_FILES=(
     "$TWM_DIR/background.png:$HOME/.config/niri/background.png"
     "$TWM_DIR/background.png:$HOME/.config/sway/background.png"
+    "$TWM_DIR/background.png:$HOME/.config/labwc/background.png"
 )
 
 # 函数：创建软链接（如果存在则备份）
@@ -70,10 +71,11 @@ for config in "${CONFIG_FILES[@]}"; do
     create_symlink "$src" "$tgt" "$name"
 done
 
-mkdir -p "$HOME/.local/share/themes"
+mkdir -p "$HOME/.local/share/themes" "$HOME/.themes"
 for theme_dir in "$TWM_DIR/labwc/themes"/*; do
     [ -d "$theme_dir" ] || continue
     create_symlink "$theme_dir" "$HOME/.local/share/themes/$(basename "$theme_dir")" "$(basename "$theme_dir") theme"
+    create_symlink "$theme_dir" "$HOME/.themes/$(basename "$theme_dir")" "$(basename "$theme_dir") theme (~/.themes)"
 done
 
 # ========== 安装 Nerd Font ==========
