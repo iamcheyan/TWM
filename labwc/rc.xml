@@ -19,7 +19,20 @@
   <desktops number="4">
     <popupTime>800</popupTime>
   </desktops>
- 
+
+  <windowSwitcher>
+    <osd show="yes" preview="yes" outlines="yes" />
+    <fields>
+      <!-- "icon" field added so the built-in Alt+Tab (labwc's OSD window switcher)
+           displays app icons on the left, matching default theme behavior.
+           Without it, custom <fields> replace the entire layout and omit icons.
+           Widths adjusted to total ~100%. -->
+      <field content="icon" width="5%" />
+      <field content="type" width="25%" />
+      <field content="trimmed_identifier" width="20%" />
+      <field content="title" width="50%" />
+    </fields>
+  </windowSwitcher>
 
   <keyboard>
     <default />
