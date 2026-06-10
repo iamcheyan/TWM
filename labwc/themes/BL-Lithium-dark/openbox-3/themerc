@@ -88,15 +88,14 @@ osd.unhilight.bg: flat solid
 osd.unhilight.bg.color: #242424
 osd.label.text.color: #ffffff
 
-!! Window switcher OSD (for Alt+Tab etc.)
-!! Explicitly enable icon support so it matches default theme behavior.
-!! labwc will show app icons on the left of each entry if available.
-osd.window-switcher.width: 760
-osd.window-switcher.padding: 10
-osd.window-switcher.item.icon.size: 24
-osd.window-switcher.item.padding.x: 4
-osd.window-switcher.item.padding.y: 4
+!! Window switcher OSD (for Alt+Tab etc.) - modeled after Adwaita-Labwc-dark
+!! which shows icons. Explicit icon.size to ensure app icons appear on the left.
+osd.window-switcher.width: 600
+osd.window-switcher.padding: 4
+osd.window-switcher.item.padding.x: 10
+osd.window-switcher.item.padding.y: 1
 osd.window-switcher.item.active.border.width: 2
+osd.window-switcher.item.icon.size: 24
 
 
 !! Typography
