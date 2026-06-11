@@ -21,7 +21,7 @@ exec_always --no-startup-id xrdb -merge "$HOME/.config/TWM/xterm/Xresources"
 # Polybar (default)
 exec_always --no-startup-id "$HOME/.config/TWM/polybar/launch.sh"
 exec --no-startup-id fcitx5 -d
-exec --no-startup-id feh --bg-fill "$HOME/.config/TWM/background.png"
+exec --no-startup-id "$HOME/.config/TWM/set-wallpaper" x11
 exec --no-startup-id dunst
 
 ### 启动器 / Launcher

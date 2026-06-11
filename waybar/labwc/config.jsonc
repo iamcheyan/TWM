@@ -3,10 +3,10 @@
     "position": "top",
     "height": 28,
     "spacing": 0,
+    "fixed-center": true,
 
     "modules-left": [
-        "custom/launcher",
-		"custom/terminal",
+        "ext/workspaces",
         "wlr/taskbar"
     ],
     "modules-center": [
@@ -14,29 +14,42 @@
     ],
     "modules-right": [
  		"tray",
+        "custom/launcher",
         "cpu",
         "memory",
         "custom/power"
     ],
 
     "custom/launcher": {
-        "format": " ",
+        "format": "",
         "tooltip-format": "Applications",
         "on-click": "env GDK_BACKEND=x11 wofi --show drun --allow-images",
-        "on-click-right": "labwc -r"
+        "on-click-right": "$HOME/.local/opt/labwc-0.20/bin/labwc -r"
     },
     "custom/terminal": {
         "format": "Terminal",
         "tooltip-format": "Applications",
         "on-click": "kitty",
-        "on-click-right": "labwc -r"
+        "on-click-right": "$HOME/.local/opt/labwc-0.20/bin/labwc -r"
     },
     "wlr/taskbar": {
-        "format": "{icon}",
-        "icon-size": 18,
-        "tooltip-format": "{title}",
-        "on-click": "activate",
+        "format": "{icon} {title}",
+        "icon-size": 16,
+        "max-length": 32,
+        "tooltip-format": "{app_id}\n{title}",
+        "active-first": true,
+        "active-only": true,
+        "on-click": "minimize-raise",
         "on-click-middle": "close"
+    },
+	"ext/workspaces": {
+        "all-outputs": true,
+        "format": "{icon}",
+        "format-icons": {
+            "active": "",
+            "default": "",
+            "urgent": ""
+        }
     },
     "clock": {
         "format": "{:%Y-%m-%d %H:%M}",

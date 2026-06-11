@@ -63,7 +63,7 @@ window.inactive.button.*.pressed.image.color: #707070
 window.inactive.button.disabled.image.color: #555555
 
 !! Global width settings
-border.width: 4
+border.width: 0
 padding.width: 1
 window.handle.width: 0
 window.client.padding.width: 0

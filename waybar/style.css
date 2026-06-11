@@ -15,6 +15,11 @@ window#waybar {
     color: #ffffff;
 }
 
+/* 全屏时顶栏颜色 */
+window#waybar.fullscreen {
+    background: rgba(0, 0, 0, 1);
+}
+
 window#waybar.hidden {
     opacity: 0.2;
 }
@@ -46,6 +51,7 @@ button:hover {
     /* transform: scale(0.8); */
 }
 
+#workspaces button.active,
 #workspaces button.focused {
     color: #ffffff;
     opacity: 1; /* 激活圆点完全显示 */
@@ -133,14 +139,26 @@ button:hover {
 }
 
 #taskbar button {
-    /* min-width: 28px; */
-    padding: 0 5px;
+    min-width: 0;
+    padding: 0;
     margin: 0;
     background: transparent;
+    font-size: 0;
+    opacity: 0;
 }
 
 #taskbar button.active {
-    background: rgba(255, 255, 255, 0.16);
+    padding: 0 10px;
+    margin-left: 6px;
+    color: #d8dee9;
+    font-size: 13px;
+    opacity: 1;
+    background: transparent;
+}
+
+#taskbar button.active:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 /* .modules-left label { */

@@ -24,8 +24,7 @@ input {
 spawn-at-startup "sh" "-c" "waybar -c ~/.config/waybar/niri/config.jsonc -s ~/.config/waybar/style.css"
 
 // 壁纸
-spawn-at-startup "sh" "-c" "swaybg -i \"$HOME/.config/niri/background.png\" -m fill"
-// pkill swaybg && swaybg -i ~/.config/niri/background.png -m fill &
+spawn-at-startup "sh" "-c" "exec \"$HOME/.config/TWM/set-wallpaper\" wayland"
 
 // 输入法
 spawn-at-startup "fcitx5"

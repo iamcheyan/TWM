@@ -102,7 +102,7 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 ├── kitty/                 # Kitty 终端配置
 ├── mako/                  # Mako 通知配置
 ├── wofi/                  # Wofi 启动器配置
-├── background.png         # 壁纸
+├── background/            # 壁纸（默认 background.png，WSL 使用 windows11.jpg）
 ├── init.sh                # 一键初始化脚本（软链接 + 字体）
 └── push.sh
 ```
@@ -113,7 +113,9 @@ sudo pacman -S --needed i3 rofi feh xterm dunst fcitx5 \
 - Kitty
 - Mako
 - Wofi
-- 背景图片 `background.png`
+- 默认背景图片 `background/background.png`
+- WSL 环境背景图片 `background/windows11.jpg`
+- 通过 `set-wallpaper` 自动选择并启动壁纸
 - 初始化脚本 `init.sh`
 
 ## 软链接清单

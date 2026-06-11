@@ -10,16 +10,22 @@
     <name>BL-Lithium-dark</name>
     <cornerRadius>0</cornerRadius>
     <maximizedDecoration>none</maximizedDecoration>
-    <font name="MesloLGS NF" size="12" />
+    <!-- <font name="MesloLGS NF" size="12" /> -->
+	
+    <font place="ActiveWindow" name="MesloLGS NF" size="9" />
+    <font place="InactiveWindow" name="MesloLGS NF" size="9" />
+    <font place="MenuHeader" name="MesloLGS NF" size="9" />
+    <font place="MenuItem" name="MesloLGS NF" size="9" />
+
     <font place="OnScreenDisplay">
       <name>MesloLGS NF</name>
-      <size>13</size>
+      <size>11</size>
       <weight>normal</weight>
     </font>
   </theme>
 
   <desktops number="4">
-    <popupTime>800</popupTime>
+    <popupTime>0</popupTime>
   </desktops>
 
   <windowSwitcher>

@@ -18,12 +18,13 @@ is_wsl() {
 
 # Wallpaper, bar, notifications, clipboard history: useful for both native and
 # nested labwc (the inner session still wants its own UI).
-swaybg -i "$HOME/.config/labwc/background.png" -m fill >/dev/null 2>&1 &
+"$HOME/.config/TWM/set-wallpaper" wayland >/dev/null 2>&1 &
 mako >/dev/null 2>&1 &
 fcitx5 &
-waybar \
+"$HOME/.local/opt/waybar-0.15/bin/waybar" \
 	-c "$HOME/.config/waybar/labwc/config.jsonc" \
-	-s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &
+	-s "$HOME/.config/waybar/style.css" \
+	>"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &
 command -v cliphist >/dev/null && {
 	wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 	wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
@@ -50,6 +51,4 @@ if command -v gsettings >/dev/null 2>&1; then
     gsettings set org.gnome.desktop.interface gtk-theme 'BL-Lithium-dark' 2>/dev/null || true
     gsettings set org.gnome.desktop.interface icon-theme 'Adwaita' 2>/dev/null || true
 fi
-
-
 
