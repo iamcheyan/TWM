@@ -34,13 +34,6 @@ CONFIG_DIRS=(
     "$TWM_DIR/polybar:$HOME/.config/polybar"
 )
 
-# 配置文件列表
-CONFIG_FILES=(
-    "$TWM_DIR/background.png:$HOME/.config/niri/background.png"
-    "$TWM_DIR/background.png:$HOME/.config/sway/background.png"
-    "$TWM_DIR/background.png:$HOME/.config/labwc/background.png"
-)
-
 # 函数：创建软链接（如果存在则备份）
 create_symlink() {
     local target="$1"
@@ -60,12 +53,6 @@ create_symlink() {
 }
 
 for config in "${CONFIG_DIRS[@]}"; do
-    IFS=':' read -r src tgt <<< "$config"
-    name=$(basename "$tgt")
-    create_symlink "$src" "$tgt" "$name"
-done
-
-for config in "${CONFIG_FILES[@]}"; do
     IFS=':' read -r src tgt <<< "$config"
     name=$(basename "$tgt")
     create_symlink "$src" "$tgt" "$name"

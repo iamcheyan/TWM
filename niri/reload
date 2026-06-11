@@ -7,4 +7,4 @@ pkill waybar || true
 nohup waybar -c "$HOME/.config/waybar/niri/config.jsonc" -s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &
 
 pkill swaybg || true
-nohup swaybg -i "$HOME/.config/niri/background.png" -m fill >/dev/null 2>&1 &
+nohup "$HOME/.config/TWM/set-wallpaper" wayland >/dev/null 2>&1 &

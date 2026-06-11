@@ -23,7 +23,7 @@ exec_always sh -c 'grep -qi microsoft /proc/version 2>/dev/null && exit 0; [ -n 
 
 # exec lxqt-panel
 exec_always --no-startup-id sh -c 'pkill waybar 2>/dev/null || true; exec waybar -c "$HOME/.config/waybar/sway-wsl/config.jsonc" -s "$HOME/.config/waybar/style.css"'
-# exec_always --no-startup-id swaybg -i "$HOME/.config/TWM/background.png" -m fill
+exec_always --no-startup-id sh -c 'pkill swaybg 2>/dev/null || true; exec "$HOME/.config/TWM/set-wallpaper" wayland'
 exec --no-startup-id sh -c 'command -v fcitx5 >/dev/null || exit 0; grep -qi microsoft /proc/version 2>/dev/null && exit 0; fcitx5 -d'
 exec_always --no-startup-id sh -c 'command -v mako >/dev/null || exit 0; grep -qi microsoft /proc/version 2>/dev/null && exit 0; mako'
 exec --no-startup-id command -v cliphist >/dev/null && wl-paste --type text --watch cliphist store

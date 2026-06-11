@@ -1,7 +1,7 @@
 @define-color window_bg #242424;
 @define-color panel_bg #303030;
 @define-color input_bg #202020;
-@define-color selected_bg #5d5d5d;
+@define-color selected_bg #202020;
 @define-color hover_bg #424242;
 @define-color border #3f3f3f;
 @define-color separator #494949;
