@@ -20,6 +20,7 @@ is_wsl() {
 # nested labwc (the inner session still wants its own UI).
 swaybg -i "$HOME/.config/labwc/background.png" -m fill >/dev/null 2>&1 &
 mako >/dev/null 2>&1 &
+fcitx5 &
 waybar \
 	-c "$HOME/.config/waybar/labwc/config.jsonc" \
 	-s "$HOME/.config/waybar/style.css" >/dev/null 2>&1 &

@@ -13,6 +13,7 @@
         "clock"
     ],
     "modules-right": [
+ 		"tray",
         "cpu",
         "memory",
         "custom/power"

@@ -15,12 +15,12 @@ export WLR_LIBINPUT_NO_DEVICES=1
 # WSLg mounts /tmp/.X11-unix read-only with mode 0777. Xwayland requires
 # mode 1777, so replace the mount with a local sticky directory.
 if [ -d /mnt/wslg/runtime-dir ] &&
-    [ "$(stat -c %a /tmp/.X11-unix 2>/dev/null || printf 0)" != "1777" ]; then
-    sudo sh -c '
+	[ "$(stat -c %a /tmp/.X11-unix 2>/dev/null || printf 0)" != "1777" ]; then
+	sudo sh -c '
         umount /tmp/.X11-unix 2>/dev/null || true
         rm -rf /tmp/.X11-unix
         install -d -m 1777 /tmp/.X11-unix
     '
 fi
 
-exec labwc -C "$HOME/.config/labwc"
+exec ~/.local/opt/labwc-0.20/bin/labwc -C ~/.config/TWM/labwc

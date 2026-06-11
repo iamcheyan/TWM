@@ -74,3 +74,6 @@ i3/local.conf
 # System files
 .directory
 .Trash-*
+*.swp
+*.swn
+*.swo

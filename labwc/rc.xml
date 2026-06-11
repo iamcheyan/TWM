@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <labwc_config>
+
   <core>
     <gap>0</gap>
   </core>
@@ -8,6 +9,7 @@
   <theme>
     <name>BL-Lithium-dark</name>
     <cornerRadius>0</cornerRadius>
+    <maximizedDecoration>none</maximizedDecoration>
     <font name="MesloLGS NF" size="12" />
     <font place="OnScreenDisplay">
       <name>MesloLGS NF</name>
@@ -23,10 +25,7 @@
   <windowSwitcher>
     <osd show="yes" preview="yes" outlines="yes" />
     <fields>
-      <!-- "icon" field added so the built-in Alt+Tab (labwc's OSD window switcher)
-           displays app icons on the left, matching default theme behavior.
-           Without it, custom <fields> replace the entire layout and omit icons.
-           Widths adjusted to total ~100%. -->
+      <!-- 显示图标 + 类型 + 程序名 + 标题 -->
       <field content="icon" width="5%" />
       <field content="type" width="25%" />
       <field content="trimmed_identifier" width="20%" />
@@ -37,37 +36,56 @@
   <keyboard>
     <default />
 
+    <!-- 基础启动 -->
     <keybind key="A-Return">
       <action name="Execute" command="kitty" />
     </keybind>
+
     <keybind key="A-d">
       <action name="Execute" command="env GDK_BACKEND=x11 wofi --show drun --allow-images" />
     </keybind>
+
     <keybind key="A-space">
       <action name="ShowMenu" menu="root-menu" />
     </keybind>
+
     <keybind key="A-q">
       <action name="Close" />
     </keybind>
+
     <keybind key="A-f">
       <action name="ToggleFullscreen" />
     </keybind>
+
     <keybind key="A-m">
       <action name="ToggleMaximize" />
     </keybind>
-    <keybind key="C-Tab">
-      <action name="Execute" command="~/.config/labwc/window-switcher forward" />
-    </keybind>
-    <keybind key="C-S-Tab">
-      <action name="Execute" command="~/.config/labwc/window-switcher back" />
-    </keybind>
 
+    <!-- 窗口切换 -->
+	<keybind key="C-Tab">
+		<action name="NextWindow" />
+	</keybind>
+
+	<keybind key="C-S-Tab">
+		<action name="PreviousWindow" />
+	</keybind>
+    <!-- <keybind key="C-Tab"> -->
+    <!--   <action name="Execute" command="~/.config/labwc/window-switcher forward" /> -->
+    <!-- </keybind> -->
+    <!---->
+    <!-- <keybind key="C-S-Tab"> -->
+    <!--   <action name="Execute" command="~/.config/labwc/window-switcher back" /> -->
+    <!-- </keybind> -->
+
+    <!-- 工作区切换 -->
     <keybind key="A-Left">
       <action name="GoToDesktop" to="left" wrap="yes" />
     </keybind>
+
     <keybind key="A-Right">
       <action name="GoToDesktop" to="right" wrap="yes" />
     </keybind>
+
     <keybind key="A-1">
       <action name="GoToDesktop" to="1" />
     </keybind>
@@ -80,6 +98,7 @@
     <keybind key="A-4">
       <action name="GoToDesktop" to="4" />
     </keybind>
+
     <keybind key="A-S-1">
       <action name="SendToDesktop" to="1" follow="yes" />
     </keybind>
@@ -93,31 +112,46 @@
       <action name="SendToDesktop" to="4" follow="yes" />
     </keybind>
 
-    <!-- Screenshots (delegated to script to keep rc.xml clean and parse reliably) -->
+    <!-- 截图 -->
     <keybind key="Print">
       <action name="Execute" command="~/.config/labwc/screenshot full" />
     </keybind>
+
     <keybind key="A-Print">
       <action name="Execute" command="~/.config/labwc/screenshot full-save" />
     </keybind>
+
     <keybind key="S-Print">
       <action name="Execute" command="~/.config/labwc/screenshot area-save" />
     </keybind>
+
     <keybind key="A-a">
       <action name="Execute" command="~/.config/labwc/screenshot area" />
     </keybind>
 
-    <!-- Brightness (WSL-aware wrapper: no-op inside WSL where there is no real panel brightness) -->
+    <!-- 亮度 -->
     <keybind key="XF86MonBrightnessUp">
       <action name="Execute" command="~/.config/labwc/brightness-control up" />
     </keybind>
+
     <keybind key="XF86MonBrightnessDown">
       <action name="Execute" command="~/.config/labwc/brightness-control down" />
     </keybind>
+
+    <!-- 剪贴板 -->
+    <keybind key="A-v">
+      <action name="Execute" command="cliphist-rofi" />
+    </keybind>
+
   </keyboard>
 
   <mouse>
     <default />
+    <context name="Frame">
+      <mousebind button="A-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+    </context>
     <context name="Root">
       <mousebind button="Right" action="Press">
         <action name="ShowMenu" menu="root-menu" />
@@ -132,4 +166,5 @@
       <action name="Focus" />
     </windowRule>
   </windowRules>
+
 </labwc_config>
