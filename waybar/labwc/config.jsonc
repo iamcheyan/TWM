@@ -25,7 +25,7 @@
         "format": "Applicatioons",
         "tooltip-format": "Applications",
         "on-click": "env GDK_BACKEND=x11 wofi --show drun --allow-images",
-        "on-click-right": "$HOME/.local/opt/labwc-0.20/bin/labwc -r"
+        "on-click-right": "labwc -r"
     },
     "custom/workspace": {
         "format": "Workspaces",
@@ -36,7 +36,7 @@
         "format": "Terminal",
         "tooltip-format": "Applications",
         "on-click": "kitty",
-        "on-click-right": "$HOME/.local/opt/labwc-0.20/bin/labwc -r"
+        "on-click-right": "labwc -r"
     },
     "wlr/taskbar": {
         "format": "{icon} {title}",

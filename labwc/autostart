@@ -21,7 +21,7 @@ is_wsl() {
 "$HOME/.config/TWM/set-wallpaper" wayland >/dev/null 2>&1 &
 mako >/dev/null 2>&1 &
 fcitx5 &
-"$HOME/.local/opt/waybar-0.15/bin/waybar" \
+waybar \
 	-c "$HOME/.config/waybar/labwc/config.jsonc" \
 	-s "$HOME/.config/waybar/style.css" \
 	>"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &
@@ -37,14 +37,29 @@ if ! is_wsl || [ "${LABWC_START_FCITX:-0}" = "1" ]; then
     fcitx5 >/dev/null 2>&1 &
 fi
 
-# HiDPI / output scaling (run after labwc has started its outputs)
-# First run "wlr-randr" in terminal to see your output name (e.g. eDP-1, DP-1, HDMI-A-1)
-# Then uncomment and adjust the line below. Common scales: 1.25, 1.5, 2
-wlr-randr --output eDP-1 --scale 1.25 2>/dev/null || true
-
-# Example: auto-detect first connected output and set a scale (uncomment if you want)
-# OUTPUT=$(wlr-randr 2>/dev/null | awk '/^[A-Za-z]/ {print $1; exit}')
-# [ -n "$OUTPUT" ] && wlr-randr --output "$OUTPUT" --scale 1.25 2>/dev/null || true
+# HiDPI / output scaling — auto-detect per output resolution
+# 4K (>=3840) → scale 2, 1440p/retina (>=2560) → scale 1.5, 1080p and below → scale 1
+# Override per-output via env: LABWC_SCALE_HDMI_A_1=1.25 (output name, replace - with _)
+if command -v wlr-randr >/dev/null 2>&1; then
+    _cur_out=""
+    wlr-randr 2>/dev/null | while IFS= read -r _l; do
+        # output name line: starts with letter, contains dash + digit (e.g. HDMI-A-1)
+        if printf '%s' "$_l" | grep -qE '^[A-Za-z].*-[0-9]'; then
+            _cur_out=$(printf '%s' "$_l" | cut -d' ' -f1)
+        elif [ -n "$_cur_out" ] && printf '%s' "$_l" | grep -q 'current'; then
+            _w=$(printf '%s' "$_l" | grep -oE '[0-9]+x[0-9]+' | head -1 | cut -dx -f1)
+            if [ -n "$_w" ]; then
+                _var="LABWC_SCALE_$(echo "$_cur_out" | tr '-' '_')"
+                _s="${!_var:-}"
+                [ -z "$_s" ] && [ "$_w" -ge 3840 ] && _s=2
+                [ -z "$_s" ] && [ "$_w" -ge 2560 ] && _s=1.5
+                [ -z "$_s" ] && _s=1
+                [ "$_s" != "1" ] && wlr-randr --output "$_cur_out" --scale "$_s" 2>/dev/null
+            fi
+            _cur_out=""
+        fi
+    done
+fi
 
 # Apply GTK theme via gsettings for better client consistency (if schema exists)
 if command -v gsettings >/dev/null 2>&1; then

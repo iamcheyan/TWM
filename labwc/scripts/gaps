@@ -1,0 +1,17 @@
+#!/bin/sh
+# Window gap adjuster
+
+RC="$HOME/.config/labwc/rc.xml"
+cur=$(grep -oP '(?<=<gap>)[^<]+' "$RC" 2>/dev/null || echo "0")
+
+opts="0\n5\n10\n15\n20\n25\n30"
+chosen=$(printf '%s\n' $opts | wofi --dmenu \
+    -p "Window Gaps (current: ${cur}px)" \
+    -W 200 -H 280 -l 7 -i)
+
+[ -z "$chosen" ] && exit 0
+
+# Update rc.xml
+sed -i "s|<gap>[^<]*</gap>|<gap>${chosen}</gap>|" "$RC"
+
+labwc -r

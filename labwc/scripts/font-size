@@ -1,0 +1,17 @@
+#!/bin/sh
+# Font size adjuster for window titles and menus
+
+RC="$HOME/.config/labwc/rc.xml"
+cur=$(grep -oP '(?<=<font place="ActiveWindow">[^<]*<size>)[^<]+' "$RC" 2>/dev/null || echo "9")
+
+opts="8\n9\n10\n11\n12\n14\n16"
+chosen=$(printf '%s\n' $opts | wofi --dmenu \
+    -p "Font Size (current: ${cur})" \
+    -W 200 -H 280 -l 7 -i)
+
+[ -z "$chosen" ] && exit 0
+
+# Update all font size entries
+sed -i "s|\(<font place=\"[^\"]*\">\s*<name>[^<]*</name>\s*<size>\)[^<]*|\1${chosen}|" "$RC"
+
+labwc -r

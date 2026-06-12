@@ -1,0 +1,25 @@
+#!/bin/sh
+# Wallpaper picker — list images from background/ and apply
+
+BG_DIR="$HOME/.config/TWM/background"
+[ -d "$BG_DIR" ] || { echo "No background dir" >&2; exit 1; }
+
+# Build file list
+files=""
+for f in "$BG_DIR"/*; do
+    case "$f" in
+        *.png|*.jpg|*.jpeg|*.webp|*.bmp) files="${files}$(basename "$f")\n" ;;
+    esac
+done
+
+[ -z "$files" ] && { echo "No wallpapers found" >&2; exit 1; }
+
+chosen=$(printf '%b' "$files" | wofi --dmenu \
+    -p "Wallpaper" -W 300 -H 300 -l 8 -i)
+
+[ -z "$chosen" ] && exit 0
+
+# Kill old swaybg, apply new
+pkill -x swaybg 2>/dev/null || true
+swaybg -i "$BG_DIR/$chosen" -m fill &
+disown

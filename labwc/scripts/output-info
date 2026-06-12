@@ -1,0 +1,6 @@
+#!/bin/sh
+# Show current output info via wofi
+
+info=$(wlr-randr 2>/dev/null)
+printf '%s' "$info" | wofi --dmenu \
+    -p "Display Info" -W 600 -H 400 -l 1 -i -M pattern="" || true
