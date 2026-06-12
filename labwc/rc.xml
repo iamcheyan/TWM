@@ -146,7 +146,7 @@
 
     <!-- 剪贴板 -->
     <keybind key="A-v">
-      <action name="Execute" command="/home/hkaku/.config/cliphist/cliphist-wofi" />
+      <action name="Execute" command="$HOME/.config/cliphist/cliphist-wofi" />
     </keybind>
 
   </keyboard>

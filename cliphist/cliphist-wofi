@@ -18,7 +18,7 @@ else
 fi
 
 cliphist list | wofi --dmenu \
-	-s /home/hkaku/.config/TWM/wofi/style-menu.css \
+	-s "$HOME/.config/TWM/wofi/menu.css" \
 	-c /dev/null \
 	$geom \
 	-W 360 \

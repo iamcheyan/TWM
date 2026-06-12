@@ -4,7 +4,7 @@
 
 SELECTED=$(printf "Desktop 1\nDesktop 2\nDesktop 3\nDesktop 4\n───\nMove to Desktop 1\nMove to Desktop 2\nMove to Desktop 3\nMove to Desktop 4" \
     | wofi --dmenu \
-        -s /home/hkaku/.config/TWM/wofi/style-menu.css \
+        -s "$HOME/.config/TWM/wofi/menu.css" \
         -c /dev/null \
         -l 8 \
         -W 220 \

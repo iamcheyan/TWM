@@ -36,10 +36,49 @@
     </item>
   </menu>
 
-  <menu id="system-menu" label="System">
-    <item label="Themes...">
-      <action name="Execute" command="$HOME/.config/labwc/theme-switch" />
+  <menu id="scale-menu" label="Scale">
+    <item label="1.0">
+      <action name="Execute" command="~/.config/labwc/scripts/scale 1.0" />
     </item>
+    <item label="1.25">
+      <action name="Execute" command="~/.config/labwc/scripts/scale 1.25" />
+    </item>
+    <item label="1.5">
+      <action name="Execute" command="~/.config/labwc/scripts/scale 1.5" />
+    </item>
+    <item label="2.0">
+      <action name="Execute" command="~/.config/labwc/scripts/scale 2.0" />
+    </item>
+    <item label="2.5">
+      <action name="Execute" command="~/.config/labwc/scripts/scale 2.5" />
+    </item>
+    <item label="3.0">
+      <action name="Execute" command="~/.config/labwc/scripts/scale 3.0" />
+    </item>
+  </menu>
+
+  <menu id="settings-menu" label="Settings">
+    <menu id="scale-menu" />
+    <item label="Wallpaper...">
+      <action name="Execute" command="~/.config/labwc/scripts/wallpaper" />
+    </item>
+    <item label="Window Gaps...">
+      <action name="Execute" command="~/.config/labwc/scripts/gaps" />
+    </item>
+    <item label="Font Size...">
+      <action name="Execute" command="~/.config/labwc/scripts/font-size" />
+    </item>
+    <separator />
+    <item label="Display Info">
+      <action name="Execute" command="~/.config/labwc/scripts/output-info" />
+    </item>
+    <item label="Theme...">
+      <action name="Execute" command="~/.config/labwc/theme-switch" />
+    </item>
+  </menu>
+
+  <menu id="system-menu" label="System">
+    <menu id="settings-menu" />
     <item label="Reload Configuration">
       <action name="Reconfigure" />
     </item>
@@ -48,13 +87,13 @@
     </item>
     <separator />
     <item label="Suspend">
-      <action name="Execute" command="$HOME/.config/labwc/system-menu suspend" />
+      <action name="Execute" command="~/.config/labwc/system-menu suspend" />
     </item>
     <item label="Reboot">
-      <action name="Execute" command="$HOME/.config/labwc/system-menu reboot" />
+      <action name="Execute" command="~/.config/labwc/system-menu reboot" />
     </item>
     <item label="Power Off">
-      <action name="Execute" command="$HOME/.config/labwc/system-menu poweroff" />
+      <action name="Execute" command="~/.config/labwc/system-menu poweroff" />
     </item>
   </menu>
 
@@ -62,9 +101,7 @@
     <item label="Terminal">
       <action name="Execute" command="kitty" />
     </item>
-    <item label="Theme...">
-      <action name="Execute" command="$HOME/.config/labwc/theme-switch" />
-    </item>
+    <menu id="settings-menu" />
     <menu id="applications" />
     <item label="Run Application...">
       <action name="Execute" command="wofi --show drun --allow-images" />

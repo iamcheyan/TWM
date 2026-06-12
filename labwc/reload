@@ -1,0 +1,18 @@
+#!/bin/sh
+# labwc reload — reconfigure + post-reload actions
+
+# Reconfigure the running compositor (re-reads rc.xml, menu.xml, theme).
+if [ -n "${LABWC_PID:-}" ] && kill -0 "$LABWC_PID" 2>/dev/null; then
+    kill -HUP "$LABWC_PID"
+elif pid="$(pgrep -n -x labwc 2>/dev/null)"; then
+    kill -HUP "$pid"
+else
+    printf 'No running labwc process found\n' >&2
+    exit 1
+fi
+
+# Restart wallpaper
+pkill -x swaybg 2>/dev/null || true
+"$HOME/.config/TWM/set-wallpaper" wayland &
+
+# --- add more reload actions below ---

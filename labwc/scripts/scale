@@ -1,0 +1,51 @@
+#!/bin/sh
+# Usage: scale [value]  - apply directly
+#        scale          - pick via wofi
+
+log="${XDG_RUNTIME_DIR:-/tmp}/labwc-scale.log"
+
+fail() {
+    printf '%s\n' "$*" >"$log"
+    command -v notify-send >/dev/null 2>&1 &&
+        notify-send "Display scale failed" "$*" >/dev/null 2>&1
+    exit 1
+}
+
+command -v wlr-randr >/dev/null 2>&1 || fail "wlr-randr is not installed"
+
+if ! info=$(wlr-randr 2>"$log"); then
+    fail "$(cat "$log")"
+fi
+
+# Output headers are the only non-indented lines in wlr-randr output.
+cur_out=$(printf '%s\n' "$info" | awk '/^[^[:space:]]/{print $1; exit}')
+[ -n "$cur_out" ] || fail "No active output found"
+
+cur_scale=$(printf '%s\n' "$info" | awk '/^[[:space:]]*Scale:/{print $2; exit}')
+cur_res=$(printf '%s\n' "$info" | grep -oE '[0-9]+x[0-9]+ px' | head -1 | sed 's/ px//')
+
+if [ -n "$1" ]; then
+    scale="$1"
+else
+    scale=$(printf '%s\n' 1.0 1.25 1.5 2.0 2.5 3.0 | wofi --dmenu \
+        -p "Scale  ${cur_out}  ${cur_res}  (current: ${cur_scale})" \
+        -W 260 -H 260 -l 6 -i)
+    [ -z "$scale" ] && exit 0
+    scale=$(printf '%s' "$scale" | grep -oE '^[0-9.]+')
+fi
+
+case "$scale" in
+    1.0|1.25|1.5|2.0|2.5|3.0) ;;
+    *) fail "Unsupported scale: $scale" ;;
+esac
+
+if ! wlr-randr --output "$cur_out" --scale "$scale" 2>"$log"; then
+    fail "$(cat "$log")"
+fi
+
+sed -i \
+    -e "s/^GDK_SCALE=.*/GDK_SCALE=${scale}/" \
+    -e "s/^QT_SCALE_FACTOR=.*/QT_SCALE_FACTOR=${scale}/" \
+    "$HOME/.config/labwc/environment"
+
+: >"$log"
