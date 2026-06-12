@@ -20,18 +20,18 @@ notify() {
 
 case "$mode" in
     full)
-        grim - | wl-copy && notify "截图" "全屏已复制到剪贴板" 2000
+        grim - | wl-copy && notify "Screenshot" "Fullscreen copied to clipboard" 2000
         ;;
     full-save)
         file="$dir/screenshot-$ts.png"
-        grim "$file" && notify "截图" "已保存到 Downloads" 3000
+        grim "$file" && notify "Screenshot" "Saved to Downloads" 3000
         ;;
     area)
-        grim -g "$(slurp)" - | wl-copy && notify "区域截图" "已复制到剪贴板" 2000
+        grim -g "$(slurp)" - | wl-copy && notify "Screenshot" "Area copied to clipboard" 2000
         ;;
     area-save)
         file="$dir/screenshot-$ts.png"
-        grim -g "$(slurp)" "$file" && notify "区域截图" "已保存到 Downloads" 3000
+        grim -g "$(slurp)" "$file" && notify "Screenshot" "Area saved to Downloads" 3000
         ;;
     *)
         echo "screenshot: unknown mode '$mode' (use full|full-save|area|area-save)" >&2

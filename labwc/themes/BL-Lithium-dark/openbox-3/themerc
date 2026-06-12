@@ -63,7 +63,7 @@ window.inactive.button.*.pressed.image.color: #707070
 window.inactive.button.disabled.image.color: #555555
 
 !! Global width settings
-border.width: 0
+border.width: 3
 padding.width: 1
 window.handle.width: 0
 window.client.padding.width: 0
@@ -71,9 +71,9 @@ menu.overlap.x: -6
 menu.overlap.y: -6
 
 !! Borders
-border.color: #181818
-window.active.border.color: #3f3f3f
-window.inactive.border.color: #242424
+border.color: #000000
+window.active.border.color: #49b9c7
+window.inactive.border.color: #000000
 
 !! OSD
 osd.bg: flat solid

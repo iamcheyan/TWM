@@ -1,6 +1,8 @@
 MOZ_ENABLE_WAYLAND=1
 XCURSOR_SIZE=24
 GTK_THEME=BL-Lithium-dark
+QT_QPA_PLATFORMTHEME=qt5ct
+QT_STYLE_OVERRIDE=kvantum-dark
 XKB_DEFAULT_LAYOUT=jp
 
 # HiDPI / scaling hints for clients (adjust GDK_SCALE / QT_SCALE_FACTOR together with wlr-randr scale)

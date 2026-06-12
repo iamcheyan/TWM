@@ -1,0 +1,108 @@
+@define-color menu_bg #242424;
+@define-color menu_border #3f3f3f;
+@define-color menu_hover #3a3a3a;
+@define-color menu_selected #2d2d2d;
+@define-color menu_text #ffffff;
+@define-color menu_muted #a0a0a0;
+
+* {
+    all: unset;
+    font-family: "MesloLGS NF", "Ubuntu Nerd Font", sans-serif;
+    font-size: 12px;
+    color: @menu_text;
+    background-color: transparent;
+}
+
+#window {
+    background-color: @menu_bg;
+    border: 1px solid @menu_border;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#outer-box {
+    padding: 4px;
+    background-color: @menu_bg;
+}
+
+#input {
+    margin: 4px;
+    padding: 4px;
+    background-color: @menu_bg;
+    border: 1px solid @menu_border;
+    border-radius: 3px;
+    caret-color: @menu_text;
+    font-size: 12px;
+    min-height: 14px;
+}
+
+#input:focus {
+    border-color: #606060;
+}
+
+#input image {
+    min-width: 14px;
+    min-height: 14px;
+    margin-right: 6px;
+    color: @menu_muted;
+}
+
+#scroll {
+    margin: 2px 0;
+    border: none;
+}
+
+#inner-box {
+    padding: 2px 0;
+}
+
+#entry {
+    min-height: 16px;
+    margin: 1px 2px;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+#entry:hover {
+    background-color: @menu_hover;
+}
+
+#entry:selected {
+    background-color: @menu_selected;
+    border: none;
+}
+
+#entry image {
+    min-width: 16px;
+    min-height: 16px;
+    margin-right: 8px;
+}
+
+#text {
+    color: @menu_text;
+}
+
+#entry #text {
+    padding: 0 2px;
+}
+
+#entry:selected #text {
+    color: @menu_text;
+}
+
+scrollbar {
+    background-color: transparent;
+    border: none;
+    min-width: 4px;
+}
+
+scrollbar slider {
+    min-width: 4px;
+    min-height: 24px;
+    background-color: #555555;
+    border-radius: 2px;
+}
+
+scrollbar slider:hover {
+    background-color: #707070;
+}
