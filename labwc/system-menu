@@ -21,7 +21,7 @@ is_wsl() {
 wsl_notice() {
     # Show a non-fatal notice. Prefer wofi (consistent with the rest of the UI).
     msg="Power actions (suspend/reboot/shutdown) are handled by the Windows host.\n\nInside WSL use:\n  - Windows Start menu / power button for the PC\n  - wsl --terminate $WSL_DISTRO_NAME (from Windows cmd/pwsh) for this distro\n  - labwc -e or the Exit item to leave labwc"
-    printf '%s\n' "$msg" | env GDK_BACKEND=x11 wofi --dmenu --prompt "WSL Power Notice" --width 520 --height 220 || true
+    printf '%s\n' "$msg" | wofi --dmenu --prompt "WSL Power Notice" --width 520 --height 220 || true
 }
 
 action="${1:-choose}"
@@ -32,7 +32,7 @@ if [ "$action" = "choose" ]; then
         action="$(printf '%s\n' \
             "Reload Configuration" \
             "Exit labwc" |
-            env GDK_BACKEND=x11 wofi --dmenu --prompt "System (WSL)")"
+            wofi --dmenu --prompt "System (WSL)")"
     else
         action="$(printf '%s\n' \
             "Reload Configuration" \
@@ -41,7 +41,7 @@ if [ "$action" = "choose" ]; then
             "Hibernate" \
             "Reboot" \
             "Power Off" |
-            env GDK_BACKEND=x11 wofi --dmenu --prompt "System")"
+            wofi --dmenu --prompt "System")"
     fi
 
     case "$action" in
@@ -77,7 +77,7 @@ case "$action" in
 esac
 
 answer="$(printf '%s\n' "Cancel" "Confirm $label" |
-    env GDK_BACKEND=x11 wofi --dmenu --prompt "Confirm System Action")"
+    wofi --dmenu --prompt "Confirm System Action")"
 
 [ "$answer" = "Confirm $label" ] || exit 0
 exec systemctl "$action"

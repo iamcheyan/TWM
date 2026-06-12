@@ -48,7 +48,7 @@
     </keybind>
 
     <keybind key="A-d">
-      <action name="Execute" command="env GDK_BACKEND=x11 wofi --show drun --allow-images" />
+      <action name="Execute" command="wofi --conf /home/tetsuya/.config/wofi/config-launcher --show drun --allow-images" />
     </keybind>
 
     <keybind key="A-space">

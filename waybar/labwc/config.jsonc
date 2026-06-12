@@ -24,7 +24,7 @@
     "custom/launcher": {
         "format": "Applicatioons",
         "tooltip-format": "Applications",
-        "on-click": "env GDK_BACKEND=x11 wofi --show drun --allow-images",
+        "on-click": "wofi --conf /home/tetsuya/.config/wofi/config-launcher --show drun --allow-images",
         "on-click-right": "labwc -r"
     },
     "custom/workspace": {

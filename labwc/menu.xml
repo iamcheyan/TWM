@@ -106,7 +106,7 @@
     <separator />
     <menu id="session-menu" />
     <item label="Reload Configuration">
-      <action name="Reconfigure" />
+      <action name="Execute" command="/home/tetsuya/.config/labwc/reload" />
     </item>
   </menu>
 </openbox_menu>

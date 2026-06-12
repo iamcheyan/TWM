@@ -15,4 +15,9 @@ fi
 pkill -x swaybg 2>/dev/null || true
 "$HOME/.config/TWM/set-wallpaper" wayland &
 
-# --- add more reload actions below ---
+# Restart Waybar with the same configuration used by autostart.
+pkill -x waybar 2>/dev/null || true
+waybar \
+    -c "$HOME/.config/waybar/labwc/config.jsonc" \
+    -s "$HOME/.config/waybar/style.css" \
+    >"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &
