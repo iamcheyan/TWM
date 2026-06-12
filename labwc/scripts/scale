@@ -1,11 +1,14 @@
 #!/bin/sh
-# Usage: scale [value]  - apply directly
-#        scale          - pick via wofi
+# Usage: scale [value] [output]  - apply directly
+#        scale                   - pick a value for the first output via wofi
 
 log="${XDG_RUNTIME_DIR:-/tmp}/labwc-scale.log"
+if ! (: >"$log") 2>/dev/null; then
+    log="/tmp/labwc-scale-${UID:-$(id -u)}.log"
+fi
 
 fail() {
-    printf '%s\n' "$*" >"$log"
+    printf '%s failed: %s\n' "$(date '+%F %T')" "$*" >>"$log"
     command -v notify-send >/dev/null 2>&1 &&
         notify-send "Display scale failed" "$*" >/dev/null 2>&1
     exit 1
@@ -18,11 +21,32 @@ if ! info=$(wlr-randr 2>"$log"); then
 fi
 
 # Output headers are the only non-indented lines in wlr-randr output.
-cur_out=$(printf '%s\n' "$info" | awk '/^[^[:space:]]/{print $1; exit}')
+cur_out="${2:-$(printf '%s\n' "$info" | awk '/^[^[:space:]]/{print $1; exit}')}"
 [ -n "$cur_out" ] || fail "No active output found"
 
-cur_scale=$(printf '%s\n' "$info" | awk '/^[[:space:]]*Scale:/{print $2; exit}')
-cur_res=$(printf '%s\n' "$info" | grep -oE '[0-9]+x[0-9]+ px' | head -1 | sed 's/ px//')
+if ! printf '%s\n' "$info" | awk -v output="$cur_out" '
+    /^[^[:space:]]/ { found = ($1 == output) }
+    found { seen = 1 }
+    END { exit !seen }
+'; then
+    fail "Output not found: $cur_out"
+fi
+
+cur_scale=$(printf '%s\n' "$info" | awk -v output="$cur_out" '
+    /^[^[:space:]]/ { found = ($1 == output) }
+    found && /^[[:space:]]*Scale:/ { print $2; exit }
+')
+cur_res=$(printf '%s\n' "$info" | awk -v output="$cur_out" '
+    /^[^[:space:]]/ { found = ($1 == output) }
+    found && / px/ {
+        if (match($0, /[0-9]+x[0-9]+ px/)) {
+            value = substr($0, RSTART, RLENGTH)
+            sub(/ px$/, "", value)
+            print value
+            exit
+        }
+    }
+')
 
 if [ -n "$1" ]; then
     scale="$1"
@@ -43,9 +67,5 @@ if ! wlr-randr --output "$cur_out" --scale "$scale" 2>"$log"; then
     fail "$(cat "$log")"
 fi
 
-sed -i \
-    -e "s/^GDK_SCALE=.*/GDK_SCALE=${scale}/" \
-    -e "s/^QT_SCALE_FACTOR=.*/QT_SCALE_FACTOR=${scale}/" \
-    "$HOME/.config/labwc/environment"
-
-: >"$log"
+printf '%s applied: output=%s scale=%s\n' \
+    "$(date '+%F %T')" "$cur_out" "$scale" >>"$log"

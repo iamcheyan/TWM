@@ -1,0 +1,68 @@
+#!/bin/sh
+
+log="${XDG_RUNTIME_DIR:-/tmp}/labwc-scale.log"
+if ! (: >"$log") 2>/dev/null; then
+    log="/tmp/labwc-scale-${UID:-$(id -u)}.log"
+fi
+
+printf '%s\n' '<openbox_pipe_menu>'
+
+if ! info=$(wlr-randr 2>"$log"); then
+    message=$(sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g' "$log")
+    printf '  <separator label="wlr-randr: %s" />\n' "$message"
+    printf '%s\n' '</openbox_pipe_menu>'
+    exit 0
+fi
+
+printf '%s\n' "$info" | awk -v scale_command="$HOME/.config/labwc/scripts/scale" '
+function xml(value) {
+    gsub(/&/, "\\&amp;", value)
+    gsub(/</, "\\&lt;", value)
+    gsub(/>/, "\\&gt;", value)
+    gsub(/"/, "\\&quot;", value)
+    return value
+}
+function add_output(    label, i, value) {
+    if (output == "") {
+        return
+    }
+
+    label = output
+    if (resolution != "") {
+        label = label "  " resolution
+    }
+    if (scale != "") {
+        label = label "  (current: " scale ")"
+    }
+
+    printf "  <separator label=\"%s\" />\n", xml(label)
+    split("1.0 1.25 1.5 2.0 2.5 3.0", values, " ")
+    for (i = 1; i <= 6; i++) {
+        value = values[i]
+        printf "  <item label=\"%s\"><action name=\"Execute\" command=\"%s %s %s\" /></item>\n",
+            value, xml(scale_command), value, xml(output)
+    }
+}
+/^[^[:space:]]/ {
+    add_output()
+    output = $1
+    resolution = ""
+    scale = ""
+    count++
+    next
+}
+output != "" && resolution == "" && / px/ {
+    if (match($0, /[0-9]+x[0-9]+ px/)) {
+        resolution = substr($0, RSTART, RLENGTH)
+        sub(/ px$/, "", resolution)
+    }
+}
+output != "" && /^[[:space:]]*Scale:/ {
+    scale = $2
+}
+END {
+    add_output()
+}
+'
+
+printf '%s\n' '</openbox_pipe_menu>'

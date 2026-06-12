@@ -44,7 +44,7 @@
 
     <!-- 基础启动 -->
     <keybind key="A-Return">
-      <action name="Execute" command="kitty" />
+      <action name="Execute" command="alacritty" />
     </keybind>
 
     <keybind key="A-d">
