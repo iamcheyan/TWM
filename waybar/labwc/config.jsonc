@@ -6,25 +6,31 @@
     "fixed-center": true,
 
     "modules-left": [
-        "ext/workspaces",
-        "wlr/taskbar"
+        "custom/launcher",
+        "custom/workspace"
     ],
     "modules-center": [
         "clock"
     ],
     "modules-right": [
  		"tray",
-        "custom/launcher",
+        "custom/cliphist",
+        "custom/screenshot",
         "cpu",
         "memory",
         "custom/power"
     ],
 
     "custom/launcher": {
-        "format": "",
+        "format": "Applicatioons",
         "tooltip-format": "Applications",
         "on-click": "env GDK_BACKEND=x11 wofi --show drun --allow-images",
         "on-click-right": "$HOME/.local/opt/labwc-0.20/bin/labwc -r"
+    },
+    "custom/workspace": {
+        "format": "Workspaces",
+        "tooltip-format": "Workspaces",
+        "on-click": "$HOME/.config/labwc/workspace-menu"
     },
     "custom/terminal": {
         "format": "Terminal",
@@ -61,6 +67,16 @@
     },
     "memory": {
         "format": "{}% "
+    },
+    "custom/cliphist": {
+        "format": "",
+        "tooltip-format": "Clipboard History",
+        "on-click": "$HOME/.config/cliphist/cliphist-wofi"
+    },
+    "custom/screenshot": {
+        "format": "",
+        "tooltip-format": "Screenshot area",
+        "on-click": "grim -g \"$(slurp)\" - | wl-copy && notify-send Screenshot \"Area copied to clipboard\""
     },
     "custom/power": {
         "format": "⏻",

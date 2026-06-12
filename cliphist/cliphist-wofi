@@ -1,0 +1,30 @@
+#!/bin/sh
+export GDK_BACKEND=wayland
+
+tmpf=$(mktemp)
+slurp -p -b 00000000 -c 00000000 -s 00000000 -f "%x %y" >"$tmpf" 2>/dev/null &
+slurp_pid=$!
+sleep 0.05
+kill "$slurp_pid" 2>/dev/null
+wait "$slurp_pid" 2>/dev/null
+
+read -r x y <"$tmpf"
+rm -f "$tmpf"
+
+if [ -n "$x" ]; then
+	geom="-l top_left -x $x -y $y"
+else
+	geom="-l center"
+fi
+
+cliphist list | wofi --dmenu \
+	-s /home/hkaku/.config/TWM/wofi/style-menu.css \
+	-c /dev/null \
+	$geom \
+	-W 360 \
+	-H 400 \
+	-p "" \
+	-b \
+	-i \
+	-I |
+	cliphist decode | wl-copy && wtype -M Ctrl v -m Ctrl

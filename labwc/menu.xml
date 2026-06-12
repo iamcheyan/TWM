@@ -23,13 +23,13 @@
     </item>
     <separator />
     <item label="Web Browser">
-      <action name="Execute" command="google-chrome" />
+      <action name="Execute" command="qutebrowser" />
     </item>
     <item label="File Manager">
-      <action name="Execute" command="nautilus" />
+      <action name="Execute" command="dolphin" />
     </item>
     <item label="Text Editor">
-      <action name="Execute" command="gedit" />
+      <action name="Execute" command="gvim" />
     </item>
     <item label="System Monitor">
       <action name="Execute" command="kitty htop" />

@@ -8,7 +8,7 @@
 
   <theme>
     <name>BL-Lithium-dark</name>
-    <cornerRadius>0</cornerRadius>
+    <cornerRadius>10</cornerRadius>
     <maximizedDecoration>none</maximizedDecoration>
     <!-- <font name="MesloLGS NF" size="12" /> -->
 	
@@ -146,7 +146,7 @@
 
     <!-- 剪贴板 -->
     <keybind key="A-v">
-      <action name="Execute" command="cliphist-rofi" />
+      <action name="Execute" command="/home/hkaku/.config/cliphist/cliphist-wofi" />
     </keybind>
 
   </keyboard>

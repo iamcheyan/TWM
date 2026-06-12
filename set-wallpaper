@@ -5,28 +5,28 @@ TWM_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 wallpaper="$TWM_DIR/background/background.png"
 
 is_wsl() {
-    [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
-    [ -n "${WSL_INTEROP:-}" ] && return 0
-    [ -n "${WSLENV:-}" ] && return 0
-    grep -qiE 'microsoft|wsl' /proc/sys/kernel/osrelease /proc/version 2>/dev/null
+	[ -n "${WSL_DISTRO_NAME:-}" ] && return 0
+	[ -n "${WSL_INTEROP:-}" ] && return 0
+	[ -n "${WSLENV:-}" ] && return 0
+	grep -qiE 'microsoft|wsl' /proc/sys/kernel/osrelease /proc/version 2>/dev/null
 }
 
 if is_wsl; then
-    wallpaper="$TWM_DIR/background/windows11.jpg"
+	wallpaper="$TWM_DIR/background/windows11.png"
 fi
 
 case "${1:-wayland}" in
-    --print)
-        printf '%s\n' "$wallpaper"
-        ;;
-    wayland)
-        exec swaybg -i "$wallpaper" -m fill
-        ;;
-    x11)
-        exec feh --bg-fill "$wallpaper"
-        ;;
-    *)
-        printf 'Usage: %s [wayland|x11|--print]\n' "$0" >&2
-        exit 2
-        ;;
+--print)
+	printf '%s\n' "$wallpaper"
+	;;
+wayland)
+	exec swaybg -i "$wallpaper" -m fill
+	;;
+x11)
+	exec feh --bg-fill "$wallpaper"
+	;;
+*)
+	printf 'Usage: %s [wayland|x11|--print]\n' "$0" >&2
+	exit 2
+	;;
 esac

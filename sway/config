@@ -10,7 +10,7 @@ bindsym XF86MonBrightnessDown exec command -v brightnessctl >/dev/null && bright
 # Input Configuration
 # 通用键盘布局
 input type:keyboard {
-    xkb_layout us
+    xkb_layout jp
 }
 
 # 通用触控板配置 (兼容所有笔记本)
