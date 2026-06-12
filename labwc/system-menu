@@ -38,6 +38,7 @@ if [ "$action" = "choose" ]; then
             "Reload Configuration" \
             "Exit labwc" \
             "Suspend" \
+            "Hibernate" \
             "Reboot" \
             "Power Off" |
             env GDK_BACKEND=x11 wofi --dmenu --prompt "System")"
@@ -47,6 +48,7 @@ if [ "$action" = "choose" ]; then
         "Reload Configuration") exec labwc -r ;;
         "Exit labwc") exec labwc -e ;;
         "Suspend") action="suspend" ;;
+        "Hibernate") action="hibernate" ;;
         "Reboot") action="reboot" ;;
         "Power Off") action="poweroff" ;;
         *) exit 0 ;;
@@ -55,7 +57,7 @@ fi
 
 # Guard power actions (also covers direct calls like system-menu suspend from menu.xml)
 case "$action" in
-    suspend|reboot|poweroff)
+    suspend|hibernate|reboot|poweroff)
         if is_wsl; then
             wsl_notice
             exit 0
@@ -69,6 +71,7 @@ esac
 label="$action"
 case "$action" in
     suspend) label="Suspend" ;;
+    hibernate) label="Hibernate" ;;
     reboot) label="Reboot" ;;
     poweroff) label="Power Off" ;;
 esac
