@@ -1,0 +1,78 @@
+#!/bin/sh
+
+set -eu
+
+config_dir="$HOME/.config/labwc"
+profile_file="$config_dir/environment.d/90-keyboard.env"
+state_file="$config_dir/.keyboard-profile"
+
+profile="${1:-status}"
+
+current_profile() {
+    if [ -r "$state_file" ]; then
+        cat "$state_file"
+    else
+        printf '%s\n' "mac-jis"
+    fi
+}
+
+case "$profile" in
+status)
+    current_profile
+    exit 0
+    ;;
+next)
+    case "$(current_profile)" in
+    mac-jis) profile="pc-jp" ;;
+    pc-jp) profile="pc-us" ;;
+    *) profile="mac-jis" ;;
+    esac
+    ;;
+mac-jis|pc-jp|pc-us) ;;
+*)
+    printf 'Unknown keyboard profile: %s\n' "$profile" >&2
+    exit 2
+    ;;
+esac
+
+case "$profile" in
+mac-jis)
+    label="Mac JIS"
+    layout="jp"
+    model="applealu_jis"
+    options="altwin:swap_alt_win,apple:jp_pc106"
+    ;;
+pc-jp)
+    label="PC Japanese"
+    layout="jp"
+    model="pc105"
+    options=""
+    ;;
+pc-us)
+    label="PC English (US)"
+    layout="us"
+    model="pc105"
+    options=""
+    ;;
+esac
+
+mkdir -p "$config_dir/environment.d"
+tmp_file="$profile_file.tmp.$$"
+trap 'rm -f "$tmp_file"' EXIT HUP INT TERM
+
+{
+    printf 'XKB_DEFAULT_LAYOUT=%s\n' "$layout"
+    printf 'XKB_DEFAULT_MODEL=%s\n' "$model"
+    printf 'XKB_DEFAULT_OPTIONS=%s\n' "$options"
+} >"$tmp_file"
+mv "$tmp_file" "$profile_file"
+trap - EXIT HUP INT TERM
+
+printf '%s\n' "$profile" >"$state_file"
+
+if pid="$(pgrep -n -x labwc 2>/dev/null)"; then
+    kill -HUP "$pid"
+fi
+
+command -v notify-send >/dev/null 2>&1 &&
+    notify-send "Keyboard profile" "$label" >/dev/null 2>&1 || true

@@ -17,11 +17,14 @@
     </item>
   </menu>
 
-  <menu id="applications-menu" label="Applications">
-    <item label="Browse All Applications...">
+  <menu id="apps-menu" label="Applications">
+    <item label="Browse All...">
       <action name="Execute" command="wofi --show drun --allow-images" />
     </item>
     <separator />
+    <item label="Terminal">
+      <action name="Execute" command="alacritty" />
+    </item>
     <item label="Web Browser">
       <action name="Execute" command="qutebrowser" />
     </item>
@@ -34,38 +37,57 @@
     <item label="System Monitor">
       <action name="Execute" command="alacritty -e htop" />
     </item>
+    <item label="Process Manager">
+      <action name="Execute" command="alacritty -e btop" />
+    </item>
+  </menu>
+
+  <menu id="tools-menu" label="Tools">
+    <item label="Clipboard History">
+      <action name="Execute" command="$HOME/.config/labwc/scripts/clipboard" />
+    </item>
+    <item label="Screenshot...">
+      <action name="Execute" command="$HOME/.config/labwc/scripts/screenshot" />
+    </item>
+    <separator />
+    <item label="Brightness...">
+      <action name="Execute" command="$HOME/.config/labwc/scripts/brightness" />
+    </item>
+    <item label="Audio...">
+      <action name="Execute" command="$HOME/.config/labwc/scripts/audio" />
+    </item>
   </menu>
 
   <menu id="display-menu" label="Display">
     <menu id="scale-menu" label="Scale"
       execute="/home/tetsuya/.config/labwc/scripts/scale-menu" />
-    <item label="Display Information">
-      <action name="Execute" command="~/.config/labwc/scripts/output-info" />
+    <item label="Display Info">
+      <action name="Execute" command="$HOME/.config/labwc/scripts/output-info" />
     </item>
   </menu>
+
+  <menu id="keyboard-menu" label="Keyboard"
+    execute="/home/tetsuya/.config/labwc/scripts/keyboard-menu" />
 
   <menu id="appearance-menu" label="Appearance">
     <item label="Wallpaper...">
-      <action name="Execute" command="~/.config/labwc/scripts/wallpaper" />
+      <action name="Execute" command="$HOME/.config/labwc/scripts/wallpaper" />
     </item>
     <item label="Theme...">
-      <action name="Execute" command="~/.config/labwc/theme-switch" />
+      <action name="Execute" command="$HOME/.config/labwc/theme-switch" />
     </item>
     <item label="Font Size...">
-      <action name="Execute" command="~/.config/labwc/scripts/font-size" />
+      <action name="Execute" command="$HOME/.config/labwc/scripts/font-size" />
     </item>
-  </menu>
-
-  <menu id="layout-menu" label="Window Layout">
     <item label="Window Gaps...">
-      <action name="Execute" command="~/.config/labwc/scripts/gaps" />
+      <action name="Execute" command="$HOME/.config/labwc/scripts/gaps" />
     </item>
   </menu>
 
   <menu id="settings-menu" label="Settings">
     <menu id="display-menu" />
+    <menu id="keyboard-menu" />
     <menu id="appearance-menu" />
-    <menu id="layout-menu" />
   </menu>
 
   <menu id="session-menu" label="Session">
@@ -74,16 +96,16 @@
     </item>
     <separator />
     <item label="Suspend">
-      <action name="Execute" command="~/.config/labwc/system-menu suspend" />
+      <action name="Execute" command="$HOME/.config/labwc/system-menu suspend" />
     </item>
     <item label="Hibernate">
-      <action name="Execute" command="~/.config/labwc/system-menu hibernate" />
+      <action name="Execute" command="$HOME/.config/labwc/system-menu hibernate" />
     </item>
     <item label="Reboot">
-      <action name="Execute" command="~/.config/labwc/system-menu reboot" />
+      <action name="Execute" command="$HOME/.config/labwc/system-menu reboot" />
     </item>
     <item label="Power Off">
-      <action name="Execute" command="~/.config/labwc/system-menu poweroff" />
+      <action name="Execute" command="$HOME/.config/labwc/system-menu poweroff" />
     </item>
   </menu>
 
@@ -94,19 +116,14 @@
     <item label="Run Application...">
       <action name="Execute" command="wofi --show drun --allow-images" />
     </item>
-    <item label="Files">
-      <action name="Execute" command="dolphin" />
-    </item>
-    <item label="Web Browser">
-      <action name="Execute" command="qutebrowser" />
-    </item>
     <separator />
-    <menu id="applications-menu" />
+    <menu id="apps-menu" />
+    <menu id="tools-menu" />
     <menu id="settings-menu" />
     <separator />
     <menu id="session-menu" />
     <item label="Reload Configuration">
-      <action name="Execute" command="/home/tetsuya/.config/labwc/reload" />
+      <action name="Execute" command="$HOME/.config/labwc/reload" />
     </item>
   </menu>
 </openbox_menu>

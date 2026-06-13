@@ -8,7 +8,7 @@
 
   <theme>
     <name>BL-Lithium-dark</name>
-    <cornerRadius>10</cornerRadius>
+    <cornerRadius>0</cornerRadius>
     <maximizedDecoration>none</maximizedDecoration>
     <!-- <font name="MesloLGS NF" size="12" /> -->
 	
@@ -25,17 +25,14 @@
   </theme>
 
   <desktops number="4">
-    <popupTime>0</popupTime>
+    <popupTime>800</popupTime>
   </desktops>
 
   <windowSwitcher>
-    <osd show="yes" preview="yes" outlines="yes" />
+    <osd show="yes" style="thumbnail" preview="yes" outlines="yes" />
     <fields>
-      <!-- 显示图标 + 类型 + 程序名 + 标题 -->
-      <field content="icon" width="5%" />
-      <field content="type" width="25%" />
-      <field content="trimmed_identifier" width="20%" />
-      <field content="title" width="50%" />
+      <field content="icon" width="15%" />
+      <field content="title" width="85%" />
     </fields>
   </windowSwitcher>
 
@@ -53,6 +50,14 @@
 
     <keybind key="A-space">
       <action name="ShowMenu" menu="root-menu" />
+    </keybind>
+
+    <keybind key="A-k">
+      <action name="ShowMenu" menu="keyboard-menu" />
+    </keybind>
+
+    <keybind key="A-S-k">
+      <action name="Execute" command="/home/tetsuya/.config/labwc/scripts/keyboard-profile next" />
     </keybind>
 
     <keybind key="A-q">

@@ -1,0 +1,39 @@
+#!/bin/sh
+# Audio control via wofi
+
+get_vol() {
+    pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null | grep -oP '\d+%' | head -1
+}
+
+get_mute() {
+    pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | grep -oP 'yes|no'
+}
+
+vol=$(get_vol)
+mute=$(get_mute)
+
+opts=$(printf '%s\n' \
+    "Set Volume 25%" \
+    "Set Volume 50%" \
+    "Set Volume 75%" \
+    "Set Volume 100%" \
+    "Volume -5%" \
+    "Volume +5%" \
+    "---" \
+    "Mute / Unmute")
+
+chosen=$(printf '%s\n' "$opts" | wofi --dmenu \
+    -p "Audio  vol:${vol}  mute:${mute}" \
+    -W 260 -H 300 -l 8 -i)
+
+[ -z "$chosen" ] && exit 0
+
+case "$chosen" in
+    "Set Volume 25%")  pactl set-sink-volume @DEFAULT_SINK@ 25% ;;
+    "Set Volume 50%")  pactl set-sink-volume @DEFAULT_SINK@ 50% ;;
+    "Set Volume 75%")  pactl set-sink-volume @DEFAULT_SINK@ 75% ;;
+    "Set Volume 100%") pactl set-sink-volume @DEFAULT_SINK@ 100% ;;
+    "Volume -5%")      pactl set-sink-volume @DEFAULT_SINK@ -5% ;;
+    "Volume +5%")      pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
+    "Mute / Unmute")   pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
+esac

@@ -1,0 +1,18 @@
+#!/bin/sh
+# Volume control — auto-install pavucontrol if missing
+
+if ! command -v pavucontrol >/dev/null 2>&1; then
+    notify-send "Volume" "Installing pavucontrol..." -t 3000
+    if command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y pavucontrol
+    elif command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get install -y pavucontrol
+    elif command -v pacman >/dev/null 2>&1; then
+        sudo pacman -S --noconfirm pavucontrol
+    else
+        notify-send "Volume" "Cannot install pavucontrol — unknown package manager" -t 5000
+        exit 1
+    fi
+fi
+
+exec pavucontrol

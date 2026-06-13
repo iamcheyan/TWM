@@ -107,6 +107,7 @@ CONFIG_DIRS=(
 	"$TWM_DIR/dolphin/qt5ct.conf:$HOME/.config/qt5ct/qt5ct.conf"
 	"$TWM_DIR/dolphin/qt6ct.conf:$HOME/.config/qt6ct/qt6ct.conf"
 	"$TWM_DIR/labwc/scripts:$HOME/.config/labwc/scripts"
+	"$TWM_DIR/waybar/scripts:$HOME/.config/waybar/scripts"
 )
 
 create_symlink() {
@@ -197,6 +198,8 @@ LABWC_DEPS=(
 	"qt5ct:Qt5 主题"
 	"qt6ct:Qt6 主题"
 	"kvantum:Qt 主题引擎"
+	"pavucontrol:音量控制"
+	"blueman:蓝牙管理"
 )
 
 # ========== i3 专属依赖 ==========

@@ -1,0 +1,10 @@
+@import url("../style.css");
+
+window#waybar {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+window#waybar.toplevel-maximized,
+window#waybar.toplevel-fullscreen {
+    background-color: rgba(0, 0, 0, 1);
+}

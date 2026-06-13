@@ -1,0 +1,21 @@
+#!/bin/sh
+# Brightness control via wofi
+
+cur=$(brightnessctl -m | awk -F, '{print $4}' | tr -d '%')
+
+opts=$(printf '%s\n' \
+    "10%" "25%" "50%" "75%" "100%" \
+    "Brightness -10" \
+    "Brightness +10")
+
+chosen=$(printf '%s\n' "$opts" | wofi --dmenu \
+    -p "Brightness (current: ${cur}%)" \
+    -W 240 -H 280 -l 7 -i)
+
+[ -z "$chosen" ] && exit 0
+
+case "$chosen" in
+    "Brightness -10") brightnessctl set 10%- ;;
+    "Brightness +10") brightnessctl set 10%+ ;;
+    *) brightnessctl set "${chosen}" ;;
+esac

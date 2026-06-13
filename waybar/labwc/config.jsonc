@@ -7,7 +7,8 @@
 
     "modules-left": [
         "custom/launcher",
-        "custom/workspace"
+        "ext/workspaces",
+        "wlr/taskbar"
     ],
     "modules-center": [
         "clock"
@@ -16,10 +17,17 @@
  		"tray",
         "custom/cliphist",
         "custom/screenshot",
+        "pulseaudio",
+        "bluetooth",
         "cpu",
         "memory",
         "custom/power"
     ],
+
+    "tray": {
+        "spacing": 8,
+        "icon-size": 18
+    },
 
     "custom/launcher": {
         "format": "Applicatioons",
@@ -35,10 +43,11 @@
     "custom/terminal": {
         "format": "Terminal",
         "tooltip-format": "Applications",
-        "on-click": "kitty",
+        "on-click": "alacritty",
         "on-click-right": "labwc -r"
     },
     "wlr/taskbar": {
+        "bar-css-states": true,
         "format": "{icon} {title}",
         "icon-size": 16,
         "max-length": 32,
@@ -52,14 +61,31 @@
         "all-outputs": true,
         "format": "{icon}",
         "format-icons": {
-            "active": "",
-            "default": "",
-            "urgent": ""
-        }
+            "active": "●",
+            "default": "○",
+            "urgent": "●"
+        },
+        "on-click": "activate"
     },
     "clock": {
         "format": "{:%Y-%m-%d %H:%M}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 Muted",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "scroll-step": 5,
+        "on-click": "$HOME/.config/waybar/scripts/volume",
+        "tooltip-format": "Volume: {volume}%\nSink: {desc}"
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "󰂲",
+        "tooltip-format": "{status}",
+        "on-click": "$HOME/.config/waybar/scripts/bluetooth"
     },
     "cpu": {
         "format": "{usage}% ",

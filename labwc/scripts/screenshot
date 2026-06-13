@@ -1,0 +1,32 @@
+#!/bin/sh
+# Screenshot helper — pick mode via wofi
+
+dir="${SCREENSHOT_DIR:-$HOME/Downloads}"
+mkdir -p "$dir"
+ts="$(date +%Y%m%d-%H%M%S)"
+
+notify() {
+    command -v notify-send >/dev/null 2>&1 && notify-send "$1" "$2" -t "${3:-2000}"
+}
+
+mode=$(printf '%s\n' \
+    "Full Screen (copy)" \
+    "Full Screen (save)" \
+    "Area (copy)" \
+    "Area (save)" |
+    wofi --dmenu -p "Screenshot" -W 280 -H 200 -l 4 -i)
+
+[ -z "$mode" ] && exit 0
+
+case "$mode" in
+    "Full Screen (copy)")
+        grim - | wl-copy && notify "Screenshot" "Fullscreen copied to clipboard" ;;
+    "Full Screen (save)")
+        file="$dir/screenshot-$ts.png"
+        grim "$file" && notify "Screenshot" "Saved to $file" 3000 ;;
+    "Area (copy)")
+        grim -g "$(slurp)" - | wl-copy && notify "Screenshot" "Area copied to clipboard" ;;
+    "Area (save)")
+        file="$dir/screenshot-$ts.png"
+        grim -g "$(slurp)" "$file" && notify "Screenshot" "Saved to $file" 3000 ;;
+esac

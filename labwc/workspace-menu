@@ -1,23 +1,42 @@
 #!/bin/sh
-# Workspace switcher menu via wofi
-# Uses existing keybindings (A-1..4, A-S-1..4) via wtype
+# Workspace switcher — shows windows per workspace
 
-SELECTED=$(printf "Desktop 1\nDesktop 2\nDesktop 3\nDesktop 4\n───\nMove to Desktop 1\nMove to Desktop 2\nMove to Desktop 3\nMove to Desktop 4" \
-    | wofi --dmenu \
-        -s "$HOME/.config/TWM/wofi/menu.css" \
-        -c /dev/null \
-        -l 8 \
-        -W 220 \
-        -p "Workspace" \
-        -b -i)
+separator="─────────────────────"
+
+get_windows() {
+    wlrctl toplevel list 2>/dev/null | sed 's/^[[:space:]]*//'
+}
+
+opts=""
+
+# Workspace switching section
+for i in 1 2 3 4; do
+    opts="${opts}  Workspace $i\n"
+done
+opts="${opts}${separator}\n"
+
+# Move window section
+for i in 1 2 3 4; do
+    opts="${opts} ↳ Send to Workspace $i\n"
+done
+
+SELECTED=$(printf '%b' "$opts" | wofi --dmenu \
+    -s "$HOME/.config/wofi/workspace.css" \
+    -c /dev/null \
+    -l 9 \
+    -W 300 \
+    -p "Workspaces" \
+    -b -i)
+
+[ -z "$SELECTED" ] && exit 0
 
 case "$SELECTED" in
-    "Desktop 1")         wtype -M Alt -k 1 -m Alt ;;
-    "Desktop 2")         wtype -M Alt -k 2 -m Alt ;;
-    "Desktop 3")         wtype -M Alt -k 3 -m Alt ;;
-    "Desktop 4")         wtype -M Alt -k 4 -m Alt ;;
-    "Move to Desktop 1") wtype -M Alt -M Shift -k 1 -m Shift -m Alt ;;
-    "Move to Desktop 2") wtype -M Alt -M Shift -k 2 -m Shift -m Alt ;;
-    "Move to Desktop 3") wtype -M Alt -M Shift -k 3 -m Shift -m Alt ;;
-    "Move to Desktop 4") wtype -M Alt -M Shift -k 4 -m Shift -m Alt ;;
+    *"Workspace 1")         wtype -M Alt -k 1 -m Alt ;;
+    *"Workspace 2")         wtype -M Alt -k 2 -m Alt ;;
+    *"Workspace 3")         wtype -M Alt -k 3 -m Alt ;;
+    *"Workspace 4")         wtype -M Alt -k 4 -m Alt ;;
+    *"Send to Workspace 1") wtype -M Alt -M Shift -k 1 -m Shift -m Alt ;;
+    *"Send to Workspace 2") wtype -M Alt -M Shift -k 2 -m Shift -m Alt ;;
+    *"Send to Workspace 3") wtype -M Alt -M Shift -k 3 -m Shift -m Alt ;;
+    *"Send to Workspace 4") wtype -M Alt -M Shift -k 4 -m Shift -m Alt ;;
 esac

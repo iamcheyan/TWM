@@ -1,0 +1,38 @@
+#!/bin/sh
+
+profile="$("$HOME/.config/labwc/scripts/keyboard-profile" status)"
+command="$HOME/.config/labwc/scripts/keyboard-profile"
+
+if [ "$profile" = "mac-jis" ]; then
+    cycle_shortcut="Command+Shift+K"
+else
+    cycle_shortcut="Alt+Shift+K"
+fi
+
+label() {
+    name="$1"
+    value="$2"
+    if [ "$profile" = "$value" ]; then
+        printf '%s  (current)' "$name"
+    else
+        printf '%s' "$name"
+    fi
+}
+
+cat <<EOF
+<openbox_pipe_menu>
+  <item label="$(label "Mac JIS - Command shortcuts" mac-jis)">
+    <action name="Execute" command="$command mac-jis" />
+  </item>
+  <item label="$(label "PC Japanese" pc-jp)">
+    <action name="Execute" command="$command pc-jp" />
+  </item>
+  <item label="$(label "PC English (US)" pc-us)">
+    <action name="Execute" command="$command pc-us" />
+  </item>
+  <separator />
+  <item label="Cycle profile  ($cycle_shortcut)">
+    <action name="Execute" command="$command next" />
+  </item>
+</openbox_pipe_menu>
+EOF

@@ -35,13 +35,14 @@ function add_output(    label, i, value) {
         label = label "  (current: " scale ")"
     }
 
-    printf "  <separator label=\"%s\" />\n", xml(label)
+    printf "  <menu id=\"scale-%s\" label=\"%s\">\n", xml(output), xml(label)
     split("1.0 1.25 1.5 2.0 2.5 3.0", values, " ")
     for (i = 1; i <= 6; i++) {
         value = values[i]
-        printf "  <item label=\"%s\"><action name=\"Execute\" command=\"%s %s %s\" /></item>\n",
+        printf "    <item label=\"%s\"><action name=\"Execute\" command=\"%s %s %s\" /></item>\n",
             value, xml(scale_command), value, xml(output)
     }
+    printf "  </menu>\n"
 }
 /^[^[:space:]]/ {
     add_output()

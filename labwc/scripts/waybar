@@ -1,0 +1,14 @@
+#!/bin/sh
+
+waybar_bin="$HOME/Development/Waybar/build-pr/waybar"
+
+if [ ! -x "$waybar_bin" ]; then
+    waybar_bin="$(command -v waybar 2>/dev/null)" || {
+        printf 'Waybar executable not found\n' >&2
+        exit 127
+    }
+fi
+
+exec "$waybar_bin" \
+    -c "$HOME/.config/waybar/labwc/config.jsonc" \
+    -s "$HOME/.config/waybar/labwc/style.css"

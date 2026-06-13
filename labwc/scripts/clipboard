@@ -1,0 +1,23 @@
+#!/bin/sh
+# Clipboard history via cliphist + wofi
+
+tmpf=$(mktemp)
+slurp -p -b 00000000 -c 00000000 -s 00000000 -f "%x %y" >"$tmpf" 2>/dev/null &
+slurp_pid=$!
+sleep 0.05
+kill "$slurp_pid" 2>/dev/null
+wait "$slurp_pid" 2>/dev/null
+
+read -r x y <"$tmpf"
+rm -f "$tmpf"
+
+if [ -n "$x" ]; then
+    geom="-l top_left -x $x -y $y"
+else
+    geom="-l center"
+fi
+
+cliphist list | wofi --dmenu \
+    -p "Clipboard" \
+    -W 360 -H 400 $geom -i -I |
+    cliphist decode | wl-copy && wtype -M Ctrl -m Ctrl v

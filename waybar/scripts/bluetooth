@@ -1,0 +1,18 @@
+#!/bin/sh
+# Bluetooth manager — auto-install blueman if missing
+
+if ! command -v blueman-manager >/dev/null 2>&1; then
+    notify-send "Bluetooth" "Installing blueman..." -t 3000
+    if command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y blueman
+    elif command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get install -y blueman
+    elif command -v pacman >/dev/null 2>&1; then
+        sudo pacman -S --noconfirm blueman
+    else
+        notify-send "Bluetooth" "Cannot install blueman — unknown package manager" -t 5000
+        exit 1
+    fi
+fi
+
+exec blueman-manager
