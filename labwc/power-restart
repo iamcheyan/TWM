@@ -1,0 +1,15 @@
+#!/bin/sh
+# Quick restart menu — fuzzel
+
+choice=$(printf "Restart labwc\nRestart waybar" | fuzzel --dmenu \
+    --hide-prompt \
+    --prompt "  Restart: " \
+    --anchor center \
+    --width 22 \
+    --lines 2)
+
+case "$choice" in
+    "Restart labwc")  labwc -r ;;
+    "Restart waybar") killall waybar; "$HOME/.config/labwc/scripts/waybar" & ;;
+    *)                exit 0 ;;
+esac

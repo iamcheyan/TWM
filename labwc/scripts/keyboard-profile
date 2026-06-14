@@ -40,7 +40,8 @@ mac-jis)
     label="Mac JIS"
     layout="jp"
     model="applealu_jis"
-    options="altwin:swap_alt_win,apple:jp_pc106"
+    # options="altwin:swap_alt_win,apple:jp_pc106"
+    options="apple:jp_pc106"
     ;;
 pc-jp)
     label="PC Japanese"

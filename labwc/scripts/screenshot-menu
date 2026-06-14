@@ -1,0 +1,30 @@
+#!/bin/sh
+# Screenshot menu — fuzzel
+
+ICO_AREA=''
+ICO_FULL=''
+ICO_WIN=''
+ICO_DELAY=''
+ICO_COLOR=''
+ICO_CLOSE=''
+
+choice=$(printf "%s     Area\n%s     Full Screen\n%s     Window\n%s     Delay 3s\n%s     Pick Color\n%s     Close" \
+    "$ICO_AREA" "$ICO_FULL" "$ICO_WIN" "$ICO_DELAY" "$ICO_COLOR" "$ICO_CLOSE" | fuzzel --dmenu \
+    --width 24 \
+    --lines 6 \
+    --hide-prompt \
+    --anchor top-right \
+    --y-margin 30 \
+    --x-margin 160)
+
+[ -z "$choice" ] && exit 0
+
+case "$choice" in
+    *"Area"*)        grim -g "$(slurp)" - | wl-copy && notify-send -i camera-photo Screenshot "Area copied to clipboard" ;;
+    *"Full Screen"*) grim - | wl-copy && notify-send -i camera-photo Screenshot "Full screen copied to clipboard" ;;
+    *"Window"*)      grim -g "$(slurp -f '%w x %h' -o)" - | wl-copy && notify-send -i camera-photo Screenshot "Window copied to clipboard" ;;
+    *"Delay 3s"*)    notify-send -i camera-photo Screenshot "Capturing in 3 seconds..."; sleep 3; grim - | wl-copy && notify-send -i camera-photo Screenshot "Full screen copied to clipboard" ;;
+    *"Pick Color"*)  hyprpicker -a -n -f hex ;;
+    *"Close"*)       exit 0 ;;
+    *)               exit 0 ;;
+esac

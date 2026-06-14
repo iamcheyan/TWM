@@ -1,0 +1,35 @@
+#!/bin/sh
+# Firefox with forced scale via about:config
+# Usage: firefox-scale [ratio]
+
+RATIO="${1:-2}"
+PROFILE_DIR=$(ls -d ~/.mozilla/firefox/*.default-release 2>/dev/null | head -1)
+
+if [ -z "$PROFILE_DIR" ]; then
+    echo "Firefox profile not found" >&2
+    exit 1
+fi
+
+# Set scale in prefs.js (overrides about:config on startup)
+PREFS="$PROFILE_DIR/prefs.js"
+if grep -q "devPixelsPerPx" "$PREFS" 2>/dev/null; then
+    sed -i "s/user_pref(\"layout.css.devPixelsPerPx\",.*);/user_pref(\"layout.css.devPixelsPerPx\", \"$RATIO\");/" "$PREFS"
+else
+    echo "user_pref(\"layout.css.devPixelsPerPx\", \"$RATIO\");" >> "$PREFS"
+fi
+
+# Also set in user.js as backup
+USERJS="$PROFILE_DIR/user.js"
+if [ -f "$USERJS" ]; then
+    if grep -q "devPixelsPerPx" "$USERJS" 2>/dev/null; then
+        sed -i "s/user_pref(\"layout.css.devPixelsPerPx\",.*);/user_pref(\"layout.css.devPixelsPerPx\", \"$RATIO\");/" "$USERJS"
+    else
+        echo "user_pref(\"layout.css.devPixelsPerPx\", \"$RATIO\");" >> "$USERJS"
+    fi
+fi
+
+echo "Scale set to ${RATIO}x in $PROFILE_DIR"
+echo "Restart Firefox to apply"
+
+# Launch Firefox
+exec env MOZ_ENABLE_WAYLAND=1 firefox "$@"

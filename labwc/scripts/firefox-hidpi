@@ -1,0 +1,16 @@
+#!/bin/sh
+# Firefox with forced HiDPI scale
+# Usage: firefox-hidpi [scale] [extra args...]
+# Example: firefox-hidpi 2
+#          firefox-hidpi 1.5
+
+SCALE="${1:-2}"
+shift 2>/dev/null
+
+exec env \
+    MOZ_ENABLE_WAYLAND=1 \
+    GDK_SCALE="$SCALE" \
+    GDK_DPI_SCALE="$(echo "1 / $SCALE" | bc -l)" \
+    QT_SCALE_FACTOR="$SCALE" \
+    XCURSOR_SIZE=24 \
+    firefox "$@"

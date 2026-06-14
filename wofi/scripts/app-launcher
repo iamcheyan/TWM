@@ -1,0 +1,38 @@
+#!/bin/sh
+# Raycast-style app launcher for wofi (uses shared entries generator for categories on the right)
+# Shows app name (bold) + category badge right-aligned via pango markup + icons
+
+# Prevent zsh "no matches found" errors when globs are empty
+[ -n "${ZSH_VERSION:-}" ] && setopt nullglob 2>/dev/null || true
+
+cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/wofi-apps-cache"
+entries="$(dirname "$0")/wofi-app-entries"
+
+# Get rich entries (name + right-aligned category via pango, + icon) from the shared generator
+# (the generator also ensures the cache is up-to-date)
+formatted=$("$entries")
+
+selection=$(printf "%s\n" "$formatted" | wofi \
+    --show dmenu \
+    --prompt "Search for apps and commands..." \
+    -W 680 -H 480 \
+    -l 10 \
+    --define dmenu-parse_action=false \
+    --define allow_images=true \
+    --define image_size=24 \
+    -I \
+    --allow-markup \
+    --cache-file /dev/null)
+
+[ -z "$selection" ] && exit 0
+
+# Recover plain app name (strip pango tags + html entities) to lookup exec_cmd
+plain_name=$(printf "%s" "$selection" | sed -E 's/<[^>]+>//g' | sed -E 's/&amp;/\&/g; s/&lt;/</g; s/&gt;/>/g; s/^[[:space:]]+//; s/[[:space:]]+$//')
+
+# Lookup the cached exec command (4th field)
+exec_cmd=$(awk -F'\t' -v n="$plain_name" '$1 == n { print $4; exit }' "$cache_file")
+
+if [ -n "$exec_cmd" ]; then
+    # Launch detached
+    nohup sh -c "$exec_cmd" >/dev/null 2>&1 &
+fi

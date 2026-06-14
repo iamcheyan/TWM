@@ -24,6 +24,9 @@ fcitx5 &
 "$HOME/.config/labwc/scripts/waybar" \
 	>"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &
 command -v cliphist >/dev/null && {
+	# Kill stale watchers from a previous labwc session first
+	pkill -f 'wl-paste.*--watch.*cliphist.*store' 2>/dev/null || true
+	sleep 0.2
 	wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 	wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
 }
@@ -63,4 +66,5 @@ fi
 if command -v gsettings >/dev/null 2>&1; then
     gsettings set org.gnome.desktop.interface gtk-theme 'BL-Lithium-dark' 2>/dev/null || true
     gsettings set org.gnome.desktop.interface icon-theme 'Adwaita' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
 fi

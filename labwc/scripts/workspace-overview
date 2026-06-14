@@ -1,0 +1,3 @@
+#!/bin/sh
+# Open workspace overview (show only, no toggle)
+wtype -M logo -P space -m logo
