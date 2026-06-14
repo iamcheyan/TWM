@@ -1,0 +1,13 @@
+#!/bin/sh
+# drun-popos
+# Pop!_OS / rounded style app launcher
+
+if pgrep -x wofi >/dev/null 2>&1; then
+    pkill -x wofi
+    exit 0
+fi
+
+exec wofi \
+    --conf "$HOME/.config/wofi/config-popos" \
+    --style "$HOME/.config/wofi/style-popos.css" \
+    --show drun

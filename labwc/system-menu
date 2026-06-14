@@ -1,83 +1,49 @@
 #!/bin/sh
-# labwc system-menu
-# WSL-aware: inside WSL (native distro or nested via wsl-boot) we hide/disable
-# real power actions because systemctl suspend/reboot/poweroff affect the WSL
-# layer, not the Windows host. User should use Windows Start menu / power button.
+# System Power Dialog — fuzzel
 set -eu
+
+ICO_POW=''
+ICO_EXIT=''
+ICO_MOON=''
+ICO_SLEEP=''
+ICO_REPEAT=''
+ICO_REFRESH=''
+
+FUZZEL="fuzzel --dmenu --hide-prompt --anchor center --width 24"
 
 is_wsl() {
     [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
     [ -n "${WSL_INTEROP:-}" ] && return 0
     [ -n "${WSLENV:-}" ] && return 0
-    if [ -r /proc/version ]; then
-        grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && return 0
-    fi
-    case "$(uname -r 2>/dev/null)" in
-        *microsoft*|*WSL*|*wsl*) return 0 ;;
-    esac
+    [ -r /proc/version ] && grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null && return 0
+    case "$(uname -r 2>/dev/null)" in *microsoft*|*WSL*|*wsl*) return 0 ;; esac
     return 1
 }
 
-wsl_notice() {
-    # Show a non-fatal notice. Prefer wofi (consistent with the rest of the UI).
-    msg="Power actions (suspend/reboot/shutdown) are handled by the Windows host.\n\nInside WSL use:\n  - Windows Start menu / power button for the PC\n  - wsl --terminate $WSL_DISTRO_NAME (from Windows cmd/pwsh) for this distro\n  - labwc -e or the Exit item to leave labwc"
-    printf '%s\n' "$msg" | wofi --dmenu --prompt "WSL Power Notice" --width 520 --height 220 || true
+confirm() {
+    local label="$1"
+    local answer
+    answer=$(printf "No\nYes, %s" "$label" | $FUZZEL --lines 2 --prompt "  Confirm: ")
+    [ "$answer" = "Yes, $label" ]
 }
 
 action="${1:-choose}"
 
 if [ "$action" = "choose" ]; then
     if is_wsl; then
-        # WSL: only safe actions that affect the current labwc session.
-        action="$(printf '%s\n' \
-            "Reload Configuration" \
-            "Exit labwc" |
-            wofi --dmenu --prompt "System (WSL)")"
+        action=$(printf "%-4sReload labwc\n%-4sExit labwc" "$ICO_REFRESH" "$ICO_EXIT" | $FUZZEL --lines 2)
     else
-        action="$(printf '%s\n' \
-            "Reload Configuration" \
-            "Exit labwc" \
-            "Suspend" \
-            "Hibernate" \
-            "Reboot" \
-            "Power Off" |
-            wofi --dmenu --prompt "System")"
+        action=$(printf "%-4sReload labwc\n%-4sExit labwc\n%-4sSuspend\n%-4sHibernate\n%-4sReboot\n%-4sPower Off" \
+            "$ICO_REFRESH" "$ICO_EXIT" "$ICO_MOON" "$ICO_SLEEP" "$ICO_REPEAT" "$ICO_POW" | $FUZZEL --lines 6)
     fi
-
-    case "$action" in
-        "Reload Configuration") exec labwc -r ;;
-        "Exit labwc") exec labwc -e ;;
-        "Suspend") action="suspend" ;;
-        "Hibernate") action="hibernate" ;;
-        "Reboot") action="reboot" ;;
-        "Power Off") action="poweroff" ;;
-        *) exit 0 ;;
-    esac
 fi
 
-# Guard power actions (also covers direct calls like system-menu suspend from menu.xml)
 case "$action" in
-    suspend|hibernate|reboot|poweroff)
-        if is_wsl; then
-            wsl_notice
-            exit 0
-        fi
-        ;;
-    *)
-        exit 1
-        ;;
+    *"Reload labwc"*)  exec labwc -r ;;
+    *"Exit labwc"*)    exec labwc -e ;;
+    *"Suspend"*)       confirm "Suspend" && exec systemctl suspend ;;
+    *"Hibernate"*)     confirm "Hibernate" && exec systemctl hibernate ;;
+    *"Reboot"*)        confirm "Reboot" && exec systemctl reboot ;;
+    *"Power Off"*)     confirm "Power Off" && exec systemctl poweroff ;;
+    *)                 exit 0 ;;
 esac
-
-label="$action"
-case "$action" in
-    suspend) label="Suspend" ;;
-    hibernate) label="Hibernate" ;;
-    reboot) label="Reboot" ;;
-    poweroff) label="Power Off" ;;
-esac
-
-answer="$(printf '%s\n' "Cancel" "Confirm $label" |
-    wofi --dmenu --prompt "Confirm System Action")"
-
-[ "$answer" = "Confirm $label" ] || exit 0
-exec systemctl "$action"

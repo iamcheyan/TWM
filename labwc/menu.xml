@@ -19,7 +19,7 @@
 
   <menu id="apps-menu" label="Applications">
     <item label="Browse All...">
-      <action name="Execute" command="wofi --show drun --allow-images" />
+      <action name="Execute" command="$HOME/.config/wofi/app-launcher" />
     </item>
     <separator />
     <item label="Terminal">
@@ -27,6 +27,9 @@
     </item>
     <item label="Web Browser">
       <action name="Execute" command="qutebrowser" />
+    </item>
+    <item label="Firefox (HiDPI 2x)">
+      <action name="Execute" command="$HOME/.config/TWM/labwc/scripts/firefox-hidpi 2" />
     </item>
     <item label="File Manager">
       <action name="Execute" command="dolphin" />
@@ -114,7 +117,10 @@
       <action name="Execute" command="alacritty" />
     </item>
     <item label="Run Application...">
-      <action name="Execute" command="wofi --show drun --allow-images" />
+      <action name="Execute" command="$HOME/.config/wofi/app-launcher" />
+    </item>
+    <item label="Workspace Overview">
+      <action name="ToggleWorkspaceOverview" />
     </item>
     <separator />
     <menu id="apps-menu" />

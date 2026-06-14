@@ -3,7 +3,7 @@
  * ========================= */
 * {
     font-family: 'MesloLGS NF', 'Ubuntu Nerd Font', 'Ubuntu', 'Noto Sans Mono', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     min-height: 0;
 }
 
@@ -128,6 +128,7 @@ button:hover {
 #custom-workspace,
 #custom-cliphist,
 #custom-screenshot,
+#custom-colorpicker,
 #custom-power {
     padding: 0 8px;
     margin: 0;
@@ -138,6 +139,7 @@ button:hover {
 #custom-workspace:hover,
 #custom-cliphist:hover,
 #custom-screenshot:hover,
+#custom-colorpicker:hover,
 #custom-power:hover {
     background: rgba(255, 255, 255, 0.1);
 }
@@ -155,7 +157,7 @@ button:hover {
     padding: 0 10px;
     margin-left: 6px;
     color: #d8dee9;
-    font-size: 13px;
+    font-size: 14px;
     opacity: 1;
     background: transparent;
 }

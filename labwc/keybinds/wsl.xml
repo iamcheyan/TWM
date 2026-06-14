@@ -1,0 +1,38 @@
+    <!-- WSL: 标准键位，无交换 -->
+
+    <!-- 基础启动 -->
+    <keybind key="A-Return">
+      <action name="Execute" command="alacritty" />
+    </keybind>
+
+    <keybind key="A-d">
+      <action name="Execute" command="~/.config/labwc/scripts/launcher" />
+    </keybind>
+
+    <keybind key="A-space">
+      <action name="ShowMenu" menu="root-menu" />
+    </keybind>
+
+    <keybind key="A-q">
+      <action name="Close" />
+    </keybind>
+
+    <keybind key="A-f">
+      <action name="ToggleFullscreen" />
+    </keybind>
+
+    <keybind key="A-m">
+      <action name="ToggleMaximize" />
+    </keybind>
+
+    <!-- 剪贴板 (Super+V) -->
+    <keybind key="W-v">
+      <action name="Execute" command="~/.config/cliphist/cliphist-fuzzel" />
+    </keybind>
+
+
+    <!-- Kazamo -->
+    <keybind key="A-a">
+      <action name="Execute" command="kazamo toggle" />
+    </keybind>
+    <!-- 截图 -->

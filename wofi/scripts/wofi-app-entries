@@ -1,0 +1,107 @@
+#!/bin/sh
+# wofi-app-entries
+# Outputs lines in the format: pango-markup-with-right-aligned-category \034 icon
+# Used by custom launchers (dmenu mode) to get app list + icons + categories on the right.
+# Rebuilds a shared cache when needed.
+
+# Prevent zsh "no matches found" errors on empty globs
+[ -n "${ZSH_VERSION:-}" ] && setopt nullglob 2>/dev/null || true
+
+cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/wofi-apps-cache"
+
+# Rebuild cache if missing, stale (>24h), or old format (missing the 5th "categories" field)
+if [ ! -f "$cache_file" ] || \
+   [ -n "$(find "$cache_file" -mmin +1440 2>/dev/null)" ] || \
+   [ "$(awk -F'\t' 'NR==1{print NF; exit}' "$cache_file" 2>/dev/null || echo 0)" -lt 5 ]; then
+    {
+        for dir in ${XDG_DATA_HOME:-$HOME/.local/share}/applications \
+                   /usr/share/applications \
+                   /usr/local/share/applications; do
+            [ -d "$dir" ] || continue
+            for f in "$dir"/*.desktop; do
+                [ -f "$f" ] || continue
+                grep -q "^NoDisplay=true" "$f" && continue
+                name=$(grep -m1 "^Name=" "$f" | cut -d= -f2-)
+                # generic kept in cache for potential future use / fallback
+                generic=$(grep -m1 "^GenericName=" "$f" | cut -d= -f2-)
+                icon=$(grep -m1 "^Icon=" "$f" | cut -d= -f2-)
+                exec_cmd=$(grep -m1 "^Exec=" "$f" | cut -d= -f2- \
+                           | sed -E 's/ *%[a-zA-Z]+//g' \
+                           | sed -E 's/  +/ /g; s/^ +//; s/ +$//')
+                categories=$(grep -m1 "^Categories=" "$f" | cut -d= -f2-)
+                [ -z "$name" ] && continue
+                [ -z "$exec_cmd" ] && continue
+                printf '%s\t%s\t%s\t%s\t%s\n' \
+                    "$name" "${generic:-}" "$icon" "$exec_cmd" "${categories:-}"
+            done
+        done
+    } | sort -t$'\t' -k1,1 -u > "$cache_file"
+fi
+
+# Emit pango + right-aligned category + \034 + icon
+awk -F'\t' '
+function get_category(cats,   arr, n, i, c) {
+    # Priority order (checked against the whole Categories= value)
+    if (cats ~ /WebBrowser/) return "浏览器";
+    if (cats ~ /TerminalEmulator|Terminal/) return "终端";
+    if (cats ~ /FileManager|FileTools/) return "文件";
+    if (cats ~ /Monitor/) return "系统";
+    if (cats ~ /System/) return "系统";
+    if (cats ~ /Security|Password|Crypt/) return "安全";
+    if (cats ~ /Utility|Utilities/) return "工具";
+    if (cats ~ /Development|IDE|Editor/) return "开发";
+    if (cats ~ /Office|Word|Spreadsheet|Presentation/) return "办公";
+    if (cats ~ /Graphics|2DGraphics|3DGraphics|Image|Vector|Photography/) return "图形";
+    if (cats ~ /AudioVideo|Audio|Video|Music|Player|Multimedia/) return "媒体";
+    if (cats ~ /Network|Email|Chat|IRC/) return "网络";
+    if (cats ~ /Game/) return "游戏";
+    if (cats ~ /Settings|Configuration/) return "设置";
+    if (cats ~ /Education/) return "教育";
+    if (cats ~ /Science/) return "科学";
+    # Fallback to first useful raw token
+    n = split(cats, arr, ";");
+    for (i = 1; i <= n; i++) {
+        c = arr[i];
+        gsub(/^[ \t]+|[ \t]+$/, "", c);
+        if (c == "" || c ~ /^X-/ || c == "GTK" || c == "Qt" || c == "KDE" || c == "GNOME" || c == "Application" || c == "Core") continue;
+        return c;
+    }
+    return "";
+}
+
+BEGIN {
+    # Explicit separator byte (0x1c) so wofi dmenu image mode can split display\034icon reliably
+    sep = sprintf("%c", 28);
+}
+
+{
+    name = $1;
+    icon = $3;
+    categories = $5;
+
+    gsub(/&/, "\\&amp;", name);
+    gsub(/</, "\\&lt;", name);
+    gsub(/>/, "\\&gt;", name);
+
+    cat = get_category(categories);
+    if (cat != "") {
+        gsub(/&/, "\\&amp;", cat);
+        gsub(/</, "\\&lt;", cat);
+        gsub(/>/, "\\&gt;", cat);
+
+        # Right-side category using wide em-spaces ( &emsp; = U+2003 ).
+        # This gives a much stronger and more consistent "push to the right"
+        # than regular spaces, especially with the proportional CJK font
+        # used in style-popos.css. Fixed large number of em-spaces makes the
+        # category sit near the right edge for typical app names.
+        # (If name is extremely long it will sit closer — acceptable tradeoff.)
+        em_pad = "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
+
+        # We still put the em-spaces inside a monospace span for any extra
+        # consistency the font provides.
+        printf "<span weight=\"bold\">%s</span><span font_family=\"monospace\">%s</span><span color=\"#888888\" size=\"small\">%s</span>%s%s\n",
+               name, em_pad, cat, sep, icon;
+    } else {
+        printf "<span weight=\"bold\">%s</span>%s%s\n", name, sep, icon;
+    }
+}' "$cache_file"

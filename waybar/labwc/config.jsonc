@@ -4,41 +4,39 @@
     "height": 28,
     "spacing": 0,
     "fixed-center": true,
-
     "modules-left": [
         "custom/launcher",
-        "ext/workspaces",
+        "custom/workspace",
         "wlr/taskbar"
     ],
     "modules-center": [
         "clock"
     ],
     "modules-right": [
- 		"tray",
+        "tray",
         "custom/cliphist",
         "custom/screenshot",
+        "custom/kazamo",
         "pulseaudio",
         "bluetooth",
         "cpu",
         "memory",
         "custom/power"
     ],
-
     "tray": {
         "spacing": 8,
-        "icon-size": 18
+        "icon-size": 14
     },
-
     "custom/launcher": {
-        "format": "Applicatioons",
+        "format": "Applications",
         "tooltip-format": "Applications",
-        "on-click": "wofi --conf /home/tetsuya/.config/wofi/config-launcher --show drun --allow-images",
+        "on-click": "$HOME/.config/labwc/scripts/launcher",
         "on-click-right": "labwc -r"
     },
     "custom/workspace": {
         "format": "Workspaces",
         "tooltip-format": "Workspaces",
-        "on-click": "$HOME/.config/labwc/workspace-menu"
+        "on-click": "$HOME/.config/labwc/scripts/workspace-overview"
     },
     "custom/terminal": {
         "format": "Terminal",
@@ -57,7 +55,7 @@
         "on-click": "minimize-raise",
         "on-click-middle": "close"
     },
-	"ext/workspaces": {
+    "ext/workspaces": {
         "all-outputs": true,
         "format": "{icon}",
         "format-icons": {
@@ -75,7 +73,11 @@
         "format": "{icon} {volume}%",
         "format-muted": "󰝟 Muted",
         "format-icons": {
-            "default": ["󰕿", "󰖀", "󰕾"]
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
         },
         "scroll-step": 5,
         "on-click": "$HOME/.config/waybar/scripts/volume",
@@ -96,17 +98,25 @@
     },
     "custom/cliphist": {
         "format": "",
-        "tooltip-format": "Clipboard History",
-        "on-click": "$HOME/.config/cliphist/cliphist-wofi"
+        "tooltip-format": "Left: Paste\nRight: History",
+        "on-click": "wl-paste | wl-copy && wtype -M Ctrl v -m Ctrl",
+        "on-click-right": "$HOME/.config/cliphist/cliphist-fuzzel"
     },
     "custom/screenshot": {
         "format": "",
-        "tooltip-format": "Screenshot area",
-        "on-click": "grim -g \"$(slurp)\" - | wl-copy && notify-send Screenshot \"Area copied to clipboard\""
+        "tooltip-format": "Left: Area\nRight: Menu",
+        "on-click": "grim -g \"$(slurp)\" - | wl-copy && notify-send -i camera-photo Screenshot \"Area copied to clipboard\"",
+        "on-click-right": "$HOME/.config/labwc/scripts/screenshot-menu"
+    },
+    "custom/kazamo": {
+        "format": "󰑋",
+        "tooltip": false,
+        "on-click": "kazamo toggle"
     },
     "custom/power": {
         "format": "⏻",
         "tooltip-format": "System Actions",
-        "on-click": "$HOME/.config/labwc/system-menu"
+        "on-click": "$HOME/.config/labwc/system-menu",
+        "on-click-right": "$HOME/.config/labwc/power-restart"
     }
 }

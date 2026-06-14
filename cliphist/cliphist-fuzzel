@@ -1,13 +1,11 @@
 #!/bin/sh
-# cliphist-wofi — clipboard history picker (toggle)
-# • Win+V: show/hide toggle
-# • Truncated text with … indicator
+# cliphist-fuzzel — clipboard history picker via fuzzel
 export GDK_BACKEND=wayland
 export PATH="${GOENV_ROOT:-$HOME/.goenv}/shims:$PATH"
 
 # Toggle
-if pgrep -f "wofi --dmenu.*Search clipboard" >/dev/null 2>&1; then
-	pkill -f "wofi --dmenu.*Search clipboard"
+if pgrep -f "fuzzel.*dmenu.*Clipboard" >/dev/null 2>&1; then
+	pkill -f "fuzzel.*dmenu.*Clipboard"
 	exit 0
 fi
 
@@ -43,16 +41,14 @@ echo "$entries" | awk -F'\t' -v FMT="$fmt_file" -v ORIG="$orig_file" -v MAX="$MA
 END { close(FMT); close(ORIG) }
 '
 
-# Position: center
-chosen=$(wofi --dmenu \
-	-s "$HOME/.config/TWM/wofi/cliphist.css" \
-	-c /dev/null \
-	-l center \
-	-W 800 \
-	-H 600 \
-	-p "  Search clipboard..." \
-	-i \
-	-I <"$fmt_file")
+chosen=$(fuzzel --dmenu \
+	--width 80 \
+	--lines 20 \
+	--prompt "  Search: " \
+	--anchor top-right \
+	--y-margin 10 \
+	--x-margin 10 \
+	<"$fmt_file")
 
 [ -z "$chosen" ] && rm -f "$fmt_file" "$orig_file" && exit 0
 

@@ -1,0 +1,141 @@
+/* ── Cliphist Wofi ── BL-Lithium-dark ──────────────────── */
+
+@define-color bg            #000000;
+@define-color bg_input      #1a1a1a;
+@define-color bg_entry      #1e1e1e;
+@define-color bg_hover      #333333;
+@define-color bg_selected   #4a4a4a;
+@define-color accent        #5d5d5d;
+@define-color frame         #49c9b7;
+@define-color border        #222222;
+@define-color border_focus  #333333;
+@define-color text          #ffffff;
+@define-color text_dim      #888888;
+
+/* ── Reset ─────────────────────────────────────────────── */
+* {
+    all:          unset;
+    font-family:  "MesloLGS NF", "Ubuntu Nerd Font", "Noto Sans CJK SC", sans-serif;
+    font-size:    13px;
+    color:        @text;
+    background-color: transparent;
+    outline:      none;
+    text-shadow:  none;
+}
+
+/* ── Window ────────────────────────────────────────────── */
+#window {
+    background-color: @frame;
+    border:           3px solid @frame;
+}
+
+/* ── Outer Box ─────────────────────────────────────────── */
+#outer-box {
+    padding:          8px 10px 6px 10px;
+    margin:           3px;
+    background-color: @bg;
+}
+
+/* ── Search Input ──────────────────────────────────────── */
+#input {
+    min-height:       18px;
+    margin:           0 0 6px 0;
+    padding:          7px 10px;
+    color:            @text;
+    background-color: @bg_input;
+    border:           1px solid @border;
+    caret-color:      @text;
+    font-size:        13px;
+}
+
+#input:focus {
+    border-color: @frame;
+}
+
+#input image {
+    min-width:   14px;
+    min-height:  14px;
+    margin-right: 8px;
+    color:       @text_dim;
+}
+
+/* ── Scroll ────────────────────────────────────────────── */
+#scroll {
+    border-top: 1px solid @border;
+    margin-top:  4px;
+    overflow-x:  hidden;
+}
+
+/* ── Inner Box ─────────────────────────────────────────── */
+#inner-box {
+    padding: 4px 0;
+}
+
+/* ── Entry ─────────────────────────────────────────────── */
+#entry {
+    min-height:       28px;
+    margin:           1px 2px;
+    padding:          4px 8px;
+    color:            @text;
+    background-color: transparent;
+    border-left:      3px solid transparent;
+    overflow-x:       hidden;
+}
+
+#entry:hover {
+    background-color: @bg_hover;
+    border-left-color: @frame;
+}
+
+#entry:selected {
+    background-color: @bg_selected;
+    border-left-color: @frame;
+}
+
+/* ── Entry Text ────────────────────────────────────────── */
+#text {
+    color:        @text;
+    -gtk-halign:  start;
+}
+
+#entry #text {
+    padding:    0 2px;
+    overflow-x: hidden;
+}
+
+#entry:hover #text,
+#entry:selected #text {
+    color: @text;
+}
+
+/* ── Arrow ─────────────────────────────────────────────── */
+#entry arrow {
+    color: @text_dim;
+}
+
+/* ── Kill horizontal scrollbar ─────────────────────────── */
+scrollbar.horizontal,
+scrollbar.horizontal slider {
+    min-height: 0;
+    max-height: 0;
+    margin:     0;
+    padding:    0;
+    opacity:    0;
+}
+
+/* ── Vertical scrollbar ────────────────────────────────── */
+scrollbar.vertical {
+    background-color: transparent;
+    border-left:      1px solid @border;
+    min-width:        4px;
+}
+
+scrollbar.vertical slider {
+    min-width:       3px;
+    min-height:      20px;
+    background-color: #444444;
+}
+
+scrollbar.vertical slider:hover {
+    background-color: #666666;
+}
