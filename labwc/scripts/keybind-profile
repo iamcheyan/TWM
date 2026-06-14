@@ -89,7 +89,7 @@ cat >> "$rc_file" << 'FOOTER'
       <action name="ShowMenu" menu="keyboard-menu" />
     </keybind>
     <keybind key="A-S-k">
-      <action name="Execute" command="/home/tetsuya/.config/labwc/scripts/keyboard-profile next" />
+      <action name="Execute" command="~/.config/labwc/scripts/keyboard-profile next" />
     </keybind>
 
     <!-- 通用: 窗口切换 -->
@@ -134,21 +134,21 @@ cat >> "$rc_file" << 'FOOTER'
 
     <!-- 通用: 截图 -->
     <keybind key="Print">
-      <action name="Execute" command="~/.config/labwc/screenshot full" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind full" />
     </keybind>
     <keybind key="A-Print">
-      <action name="Execute" command="~/.config/labwc/screenshot full-save" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind full-save" />
     </keybind>
     <keybind key="S-Print">
-      <action name="Execute" command="~/.config/labwc/screenshot area-save" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind area-save" />
     </keybind>
 
     <!-- 通用: 亮度 -->
     <keybind key="XF86MonBrightnessUp">
-      <action name="Execute" command="~/.config/labwc/brightness-control up" />
+      <action name="Execute" command="~/.config/labwc/scripts/brightness-control up" />
     </keybind>
     <keybind key="XF86MonBrightnessDown">
-      <action name="Execute" command="~/.config/labwc/brightness-control down" />
+      <action name="Execute" command="~/.config/labwc/scripts/brightness-control down" />
     </keybind>
 
   </keyboard>
@@ -175,6 +175,14 @@ cat >> "$rc_file" << 'FOOTER'
     </windowRule>
   </windowRules>
 
+  <hotCorner>
+    <topLeft x="1" y="1">
+      <action name="GoToDesktop" to="left" wrap="yes" />
+    </topLeft>
+    <topRight x="1" y="1">
+      <action name="ToggleWorkspaceOverview" />
+    </topRight>
+  </hotCorner>
 </labwc_config>
 FOOTER
 
@@ -182,7 +190,7 @@ echo "$env" > "$state_file"
 echo "Keybind profile: $env → $rc_file"
 
 # Reload labwc if running
-if pid="$(pgrep -n -x labwc 2>/dev/null)" || pid="$(pgrep -n -f '/labwc' 2>/dev/null)"; then
+if pid="$(pgrep -n -x labwc-dev 2>/dev/null)" || pid="$(pgrep -n -x labwc 2>/dev/null)"; then
     kill -HUP "$pid" 2>/dev/null && echo "labwc reloaded (PID $pid)"
 fi
 

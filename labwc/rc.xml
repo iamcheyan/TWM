@@ -69,15 +69,12 @@
       <action name="ToggleMaximize" />
     </keybind>
 
-    <!-- 工作区总览 (所有窗口列表) -->
+    <!-- 工作区总览 -->
     <keybind key="W-Space">
-      <action name="ShowMenu" menu="client-list-combined-menu" />
+      <action name="ToggleWorkspaceOverview" />
     </keybind>
 
     <!-- 编辑 (macOS 风格: Win → Ctrl) -->
-    <keybind key="W-a">
-      <action name="Execute" command="sh -c 'PATH=$HOME/.local/bin:$PATH kazamo toggle'" />
-    </keybind>
     <keybind key="W-c">
       <action name="Execute" command="wtype -M Ctrl c -m Ctrl" />
     </keybind>
@@ -101,7 +98,7 @@
 
     <!-- 截图 -->
     <keybind key="W-S-a">
-      <action name="Execute" command="~/.config/labwc/screenshot area" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind area" />
     </keybind>
 
     <!-- Kazamo (语音输入法) - 请在此文件修改，勿直接改 rc.xml -->
@@ -114,7 +111,7 @@
       <action name="ShowMenu" menu="keyboard-menu" />
     </keybind>
     <keybind key="A-S-k">
-      <action name="Execute" command="/home/tetsuya/.config/labwc/scripts/keyboard-profile next" />
+      <action name="Execute" command="~/.config/labwc/scripts/keyboard-profile next" />
     </keybind>
 
     <!-- 通用: 窗口切换 -->
@@ -159,21 +156,21 @@
 
     <!-- 通用: 截图 -->
     <keybind key="Print">
-      <action name="Execute" command="~/.config/labwc/screenshot full" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind full" />
     </keybind>
     <keybind key="A-Print">
-      <action name="Execute" command="~/.config/labwc/screenshot full-save" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind full-save" />
     </keybind>
     <keybind key="S-Print">
-      <action name="Execute" command="~/.config/labwc/screenshot area-save" />
+      <action name="Execute" command="~/.config/labwc/scripts/screenshot-keybind area-save" />
     </keybind>
 
     <!-- 通用: 亮度 -->
     <keybind key="XF86MonBrightnessUp">
-      <action name="Execute" command="~/.config/labwc/brightness-control up" />
+      <action name="Execute" command="~/.config/labwc/scripts/brightness-control up" />
     </keybind>
     <keybind key="XF86MonBrightnessDown">
-      <action name="Execute" command="~/.config/labwc/brightness-control down" />
+      <action name="Execute" command="~/.config/labwc/scripts/brightness-control down" />
     </keybind>
 
   </keyboard>
@@ -200,4 +197,12 @@
     </windowRule>
   </windowRules>
 
+  <hotCorner>
+    <topLeft x="1" y="1">
+      <action name="GoToDesktop" to="left" wrap="yes" />
+    </topLeft>
+    <topRight x="1" y="1">
+      <action name="ToggleWorkspaceOverview" />
+    </topRight>
+  </hotCorner>
 </labwc_config>

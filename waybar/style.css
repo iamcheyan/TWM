@@ -106,6 +106,13 @@ button:hover {
     color: #ffffff;
 }
 
+#bluetooth {
+    padding: 0 4px;
+    margin: 0 2px;
+    background: transparent;
+    color: #ffffff;
+}
+
 #custom-zmk-studio {
     color: #ffffff;
 }
@@ -128,10 +135,11 @@ button:hover {
 #custom-workspace,
 #custom-cliphist,
 #custom-screenshot,
+#custom-kazamo,
 #custom-colorpicker,
 #custom-power {
     padding: 0 8px;
-    margin: 0;
+    margin: 0 4px;
     color: #ffffff;
 }
 
@@ -139,9 +147,10 @@ button:hover {
 #custom-workspace:hover,
 #custom-cliphist:hover,
 #custom-screenshot:hover,
+#custom-kazamo:hover,
 #custom-colorpicker:hover,
 #custom-power:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: transparent;
 }
 
 #taskbar button {
@@ -177,20 +186,20 @@ button:hover {
  * ========================= */
 #modules-right>widget>* {
     padding: 0 6px;
-    margin: 0 4px;
+    margin: 0 3px;
 }
 
 /* =========================
  * Tray (most important)
  * ========================= */
 #tray {
-    padding: 0;
-    margin: 0;
+    padding: 0 4px;
+    margin: 0 2px;
     background: transparent;
 }
 
 #tray>.item {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: transparent;
     border-radius: 4px;
     padding: 0 2px;
     margin: 0 1px;

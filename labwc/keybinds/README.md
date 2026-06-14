@@ -136,6 +136,60 @@ nvim ~/.config/labwc/keybinds/mac-jis.xml
 </keybind>
 ```
 
+### 工作区总览
+
+```xml
+<keybind key="W-Space">
+  <action name="ToggleWorkspaceOverview" />
+</keybind>
+```
+
+注意：`ToggleWorkspaceOverview` 是 labwc 的内置动作，无法通过命令行直接调用。Waybar 的 `custom/workspace` 模块通过 `wtype -M logo -P space -m logo` 模拟 Win+Space 按键来触发此动作。
+
+## Apple 键盘 Fn 键行为（Asahi Linux）
+
+Mac 键盘的 F1～F12 默认是媒体/功能键（亮度、音量等），需要按 Fn 才能触发标准 F 键。
+
+如果你希望 F1～F12 直接作为标准功能键使用（配合 labwc 快捷键），需要修改 `hid_apple` 内核模块参数。
+
+### 查看当前状态
+
+```bash
+cat /sys/module/hid_apple/parameters/fnmode
+```
+
+| 值 | 行为 |
+| - | - |
+| 0 | F1～F12 直接是标准功能键 |
+| 1 | 默认苹果行为（亮度、音量等） |
+| 2 | Fn 键反转 |
+| 3 | 新版内核默认，类似 1 但更激进 |
+
+### 临时修改（重启后失效）
+
+```bash
+echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode
+```
+
+### 永久修改
+
+```bash
+echo "options hid_apple fnmode=0" | sudo tee /etc/modprobe.d/hid_apple.conf
+sudo dracut --force
+```
+
+重启生效。
+
+### 如果找不到 hid_apple 模块
+
+```bash
+lsmod | grep apple
+```
+
+如果没有输出，说明你的系统可能使用了新版 Asahi 键盘驱动，需要根据具体发行版和机型另外处理。
+
+---
+
 ## 踩坑记录
 
 ### 1. 改了 rc.xml 但没生效
