@@ -23,4 +23,12 @@ if [ -d /mnt/wslg/runtime-dir ] &&
     '
 fi
 
-exec ~/.local/opt/labwc-0.20/bin/labwc -C ~/.config/TWM/labwc
+labwc_bin="$HOME/.local/opt/labwc-0.20/bin/labwc"
+if [ ! -x "$labwc_bin" ]; then
+    labwc_bin="$(command -v labwc 2>/dev/null)" || {
+        printf 'labwc executable not found\n' >&2
+        exit 127
+    }
+fi
+
+exec "$labwc_bin" -C ~/.config/TWM/labwc

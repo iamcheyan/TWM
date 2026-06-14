@@ -25,7 +25,7 @@
     ],
     "tray": {
         "spacing": 8,
-        "icon-size": 14
+        "icon-size": 18
     },
     "custom/launcher": {
         "format": "Applications",
@@ -47,7 +47,7 @@
     "wlr/taskbar": {
         "bar-css-states": true,
         "format": "{icon} {title}",
-        "icon-size": 16,
+        "icon-size": 18,
         "max-length": 32,
         "tooltip-format": "{app_id}\n{title}",
         "active-first": true,
@@ -57,12 +57,7 @@
     },
     "ext/workspaces": {
         "all-outputs": true,
-        "format": "{icon}",
-        "format-icons": {
-            "active": "●",
-            "default": "○",
-            "urgent": "●"
-        },
+        "format": "{id}",
         "on-click": "activate"
     },
     "clock": {
@@ -70,8 +65,8 @@
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰝟 Muted",
+        "format": "<span font_size='14000'>{icon}</span> {volume}%",
+        "format-muted": "<span font_size='14000'>󰝟</span> Muted",
         "format-icons": {
             "default": [
                 "󰕿",
@@ -84,39 +79,40 @@
         "tooltip-format": "Volume: {volume}%\nSink: {desc}"
     },
     "bluetooth": {
-        "format": "󰂯",
-        "format-disabled": "󰂲",
+        "format": "<span font_size='14000'>󰂯</span>",
+        "format-disabled": "<span font_size='14000'>󰂲</span>",
+        "format-connected": "<span font_size='14000'>󰂯</span> {device_battery_percentage}%",
         "tooltip-format": "{status}",
         "on-click": "$HOME/.config/waybar/scripts/bluetooth"
     },
     "cpu": {
-        "format": "{usage}% ",
+        "format": "<span font_size='14000'></span> {usage}%",
         "tooltip": false
     },
     "memory": {
-        "format": "{}% "
+        "format": "<span font_size='14000'>󰘚</span> {}%"
     },
     "custom/cliphist": {
-        "format": "",
+        "format": "<span font_size='11000'></span>",
         "tooltip-format": "Left: Paste\nRight: History",
         "on-click": "wl-paste | wl-copy && wtype -M Ctrl v -m Ctrl",
         "on-click-right": "$HOME/.config/cliphist/cliphist-fuzzel"
     },
     "custom/screenshot": {
-        "format": "",
+        "format": "<span font_size='14000'></span>",
         "tooltip-format": "Left: Area\nRight: Menu",
         "on-click": "grim -g \"$(slurp)\" - | wl-copy && notify-send -i camera-photo Screenshot \"Area copied to clipboard\"",
         "on-click-right": "$HOME/.config/labwc/scripts/screenshot-menu"
     },
     "custom/kazamo": {
-        "format": "󰑋",
+        "format": "<span font_size='14000'>󰕮</span>",
         "tooltip": false,
         "on-click": "kazamo toggle"
     },
     "custom/power": {
-        "format": "⏻",
+        "format": "<span font_size='10000'></span>",
         "tooltip-format": "System Actions",
-        "on-click": "$HOME/.config/labwc/system-menu",
-        "on-click-right": "$HOME/.config/labwc/power-restart"
+        "on-click": "$HOME/.config/labwc/scripts/system-menu",
+        "on-click-right": "$HOME/.config/labwc/scripts/power-restart"
     }
 }

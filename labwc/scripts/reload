@@ -1,0 +1,55 @@
+#!/bin/sh
+# labwc reload — reconfigure + post-reload actions
+#
+# When multiple labwc instances are running (e.g. main + VNC nested),
+# we must reload the one that spawned this script, not just the first
+# process found by name.  Walk up the process tree to find it.
+
+LOG="${XDG_RUNTIME_DIR:-/tmp}/labwc-reload.log"
+
+find_labwc_ancestor() {
+    _pid=$$
+    while [ "$_pid" -gt 1 ] 2>/dev/null; do
+        _stat=$(cat "/proc/$_pid/stat" 2>/dev/null) || break
+        _rest="${_stat#*(}"; _comm="${_rest%%)*}"
+        _rest="${_stat#*) }"; _rest="${_rest#* }"; _ppid="${_rest%% *}"
+        echo "  walk: pid=$_pid comm=$_comm ppid=$_ppid" >> "$LOG"
+        case "$_comm" in
+            labwc|labwc-dev|labwc-nested)
+                printf '%s\n' "$_pid"
+                return 0 ;;
+        esac
+        [ -z "$_ppid" ] && break
+        _pid=$_ppid
+    done
+    return 1
+}
+
+find_labwc() {
+    _pid=$(find_labwc_ancestor) && { printf '%s\n' "$_pid"; return 0; }
+    if [ -n "${LABWC_PID:-}" ] && kill -0 "$LABWC_PID" 2>/dev/null; then
+        printf '%s\n' "$LABWC_PID"
+        return 0
+    fi
+    _pid=$(pgrep -n -x labwc-dev 2>/dev/null || pgrep -n -x labwc 2>/dev/null)
+    if [ -n "$_pid" ]; then
+        printf '%s\n' "$_pid"
+        return 0
+    fi
+    printf 'No running labwc process found\n' >&2
+    return 1
+}
+
+echo "--- $(date) ---" >> "$LOG"
+_pid=$(find_labwc) || { echo "  FAIL: no labwc found" >> "$LOG"; exit 1; }
+echo "  target pid=$_pid" >> "$LOG"
+kill -HUP "$_pid" && echo "  SIGHUP sent OK" >> "$LOG" || echo "  SIGHUP FAILED" >> "$LOG"
+
+# Restart wallpaper
+pkill -x swaybg 2>/dev/null || true
+"$HOME/.config/TWM/set-wallpaper" wayland &
+
+# Restart Waybar with the same configuration used by autostart.
+pkill -x waybar 2>/dev/null || true
+"$HOME/.config/labwc/scripts/waybar" \
+    >"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &

@@ -5,7 +5,7 @@ set -eu
 ICO_POW=''
 ICO_EXIT=''
 ICO_MOON=''
-ICO_SLEEP=''
+ICO_SLEEP='󰒲'
 ICO_REPEAT=''
 ICO_REFRESH=''
 
@@ -31,9 +31,9 @@ action="${1:-choose}"
 
 if [ "$action" = "choose" ]; then
     if is_wsl; then
-        action=$(printf "%-4sReload labwc\n%-4sExit labwc" "$ICO_REFRESH" "$ICO_EXIT" | $FUZZEL --lines 2)
+        action=$(printf "%s⠀⠀Reload labwc\n%s⠀⠀Exit labwc" "$ICO_REFRESH" "$ICO_EXIT" | $FUZZEL --lines 2)
     else
-        action=$(printf "%-4sReload labwc\n%-4sExit labwc\n%-4sSuspend\n%-4sHibernate\n%-4sReboot\n%-4sPower Off" \
+        action=$(printf "%s⠀⠀Reload labwc\n%s⠀⠀Exit labwc\n%s⠀⠀Suspend\n%s⠀⠀Hibernate\n%s⠀⠀Reboot\n%s⠀⠀Power Off" \
             "$ICO_REFRESH" "$ICO_EXIT" "$ICO_MOON" "$ICO_SLEEP" "$ICO_REPEAT" "$ICO_POW" | $FUZZEL --lines 6)
     fi
 fi

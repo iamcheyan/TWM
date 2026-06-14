@@ -1,12 +1,15 @@
 # Waybar 配置说明
 
-Waybar 是 Niri 窗口管理器使用的顶部状态栏。
+Waybar 是 Wayland 窗口管理器使用的顶部状态栏，支持 Niri、Sway、Labwc 等。
 
 ## 文件结构
 
-- `config.jsonc` - Waybar 配置文件（模块、位置、行为）
+- `niri/config.jsonc` - Niri 使用的配置
+- `labwc/config.jsonc` - Labwc 使用的配置
+- `sway/config.jsonc` - Sway 使用的配置
 - `sway-wsl/config.jsonc` - WSL 下测试 Sway 时使用的轻量配置
 - `style.css` - Waybar 样式文件（颜色、字体、间距等）
+- `scripts/` - 公共脚本（音量、蓝牙等）
 
 ## 常用操作
 
@@ -18,11 +21,16 @@ pkill waybar && waybar &
 
 ### 编辑配置
 ```bash
-# 编辑模块配置
-vim ~/.config/niri/waybar/config.jsonc
+# 编辑 Labwc 的 Waybar 配置
+vim ~/.config/waybar/labwc/config.jsonc
 
 # 编辑样式
-vim ~/.config/niri/waybar/style.css
+vim ~/.config/waybar/style.css
+
+# 编辑 Labwc 快捷键（影响 Workspace 模块）
+vim ~/.config/labwc/keybinds/mac-jis.xml
+# 修改后重新生成 rc.xml
+~/.config/labwc/scripts/keybind-profile
 ```
 
 ### 查看日志
@@ -31,21 +39,40 @@ vim ~/.config/niri/waybar/style.css
 waybar
 ```
 
-## 当前配置
+## Labwc 配置说明
+
+### 启动方式
+Labwc 通过 `~/.config/labwc/scripts/waybar` 脚本启动 Waybar，自动指定 labwc 的配置文件：
+```bash
+waybar -c ~/.config/waybar/labwc/config.jsonc -s ~/.config/waybar/labwc/style.css
+```
 
 ### 左侧模块
-- **workspaces** - 工作区切换器
+- **custom/launcher** - 应用启动器（点击打开 launcher 脚本）
+- **custom/workspace** - 工作区总览（点击触发 labwc 的 ToggleWorkspaceOverview）
+- **wlr/taskbar** - 窗口任务栏（显示当前打开的窗口）
+
+### Workspace 模块工作原理
+点击 "Workspaces" 文字时：
+1. 执行 `wtype -M logo -P space -m logo`（模拟 Win+Space 按键）
+2. labwc 的 `W-Space` 快捷键绑定的是 `ToggleWorkspaceOverview` 动作
+3. 打开工作区总览界面
+
+注意：`ToggleWorkspaceOverview` 是 labwc 的内置动作，无法通过命令行直接调用，需要通过模拟快捷键触发。
 
 ### 中间模块
-- **clock** - 时钟显示
+- **clock** - 时钟显示（格式：年-月-日 时:分）
 
 ### 右侧模块
 - **tray** - 系统托盘
+- **custom/cliphist** - 剪贴板历史（左键粘贴，右键打开历史）
+- **custom/screenshot** - 截图（左键区域截图，右键打开菜单）
+- **custom/kazamo** - Kazamo 语音输入法切换
 - **pulseaudio** - 音量控制
-- **network** - 网络状态
-- **battery** - 电池状态
+- **bluetooth** - 蓝牙状态
 - **cpu** - CPU 使用率
 - **memory** - 内存使用率
+- **custom/power** - 电源菜单（左键系统菜单，右键重启菜单）
 
 ## 样式自定义
 
@@ -87,3 +114,5 @@ window#waybar {
 
 - [Waybar Wiki](https://github.com/Alexays/Waybar/wiki)
 - [配置示例](https://github.com/Alexays/Waybar/wiki/Examples)
+- [Labwc Actions](https://labwc.github.io/labwc-actions.5.html) - ToggleWorkspaceOverview 等动作说明
+- [Labwc 快捷键配置](../labwc/keybinds/README.md) - 如何修改 W-Space 等快捷键
