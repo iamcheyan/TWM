@@ -189,6 +189,10 @@ FOOTER
 echo "$env" > "$state_file"
 echo "Keybind profile: $env → $rc_file"
 
+if [ "$env" = "wsl" ]; then
+    "$config_dir/scripts/wsl-config" >/dev/null
+fi
+
 # Reload labwc if running
 if pid="$(pgrep -n -x labwc-dev 2>/dev/null)" || pid="$(pgrep -n -x labwc 2>/dev/null)"; then
     kill -HUP "$pid" 2>/dev/null && echo "labwc reloaded (PID $pid)"

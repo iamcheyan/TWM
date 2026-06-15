@@ -98,6 +98,7 @@ CONFIG_DIRS=(
 	"$TWM_DIR/xterm:$HOME/.config/xterm"
 	"$TWM_DIR/mako:$HOME/.config/mako"
 	"$TWM_DIR/wofi:$HOME/.config/wofi"
+	"$TWM_DIR/fuzzel:$HOME/.config/fuzzel"
 	"$TWM_DIR/sway:$HOME/.config/sway"
 	"$TWM_DIR/labwc:$HOME/.config/labwc"
 	"$TWM_DIR/sfwbar:$HOME/.config/sfwbar"

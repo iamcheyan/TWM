@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+source_dir="$HOME/.config/TWM/labwc"
+runtime_dir="${XDG_RUNTIME_DIR:-/tmp}/labwc-wsl-config"
+
+mkdir -p "$runtime_dir"
+
+for entry in autostart environment environment.d scripts themes; do
+    ln -sfn "$source_dir/$entry" "$runtime_dir/$entry"
+done
+
+# The WSL labwc build currently predates ToggleWorkspaceOverview.
+# Keep the shared configuration intact and disable only that action here.
+sed 's|<action name="ToggleWorkspaceOverview" />|<action name="None" />|g' \
+    "$source_dir/rc.xml" >"$runtime_dir/rc.xml"
+sed 's|<action name="ToggleWorkspaceOverview" />|<action name="None" />|g' \
+    "$source_dir/menu.xml" >"$runtime_dir/menu.xml"
+
+printf '%s\n' "$runtime_dir"

@@ -50,7 +50,7 @@ if command -v wlr-randr >/dev/null 2>&1; then
             _w=$(printf '%s' "$_l" | grep -oE '[0-9]+x[0-9]+' | head -1 | cut -dx -f1)
             if [ -n "$_w" ]; then
                 _var="LABWC_SCALE_$(echo "$_cur_out" | tr '-' '_')"
-                _s="${!_var:-}"
+                eval "_s=\${$_var:-}"
                 [ -z "$_s" ] && [ "$_w" -ge 3840 ] && _s=2
                 [ -z "$_s" ] && [ "$_w" -ge 2560 ] && _s=1.5
                 [ -z "$_s" ] && _s=1

@@ -9,7 +9,17 @@ ICO_SLEEP='󰒲'
 ICO_REPEAT=''
 ICO_REFRESH=''
 
-FUZZEL="fuzzel --dmenu --hide-prompt --anchor center --width 24"
+# Check fuzzel version for compatibility
+FUZZEL_VERSION=$(fuzzel --version 2>/dev/null | sed -n 's/.*version: \([0-9]*\.[0-9]*\).*/\1/p')
+FUZZEL_MAJOR=$(echo "$FUZZEL_VERSION" | cut -d. -f1)
+FUZZEL_MINOR=$(echo "$FUZZEL_VERSION" | cut -d. -f2)
+
+# Build fuzzel options based on version (supports --hide-prompt and --anchor since 1.10)
+FUZZEL_BASE="fuzzel --dmenu --width 24"
+if [ "$FUZZEL_MAJOR" -gt 1 ] 2>/dev/null || { [ "$FUZZEL_MAJOR" -eq 1 ] 2>/dev/null && [ "$FUZZEL_MINOR" -ge 10 ] 2>/dev/null; }; then
+    FUZZEL_BASE="$FUZZEL_BASE --hide-prompt --anchor center"
+fi
+FUZZEL="$FUZZEL_BASE"
 
 is_wsl() {
     [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
@@ -23,7 +33,7 @@ is_wsl() {
 confirm() {
     local label="$1"
     local answer
-    answer=$(printf "No\nYes, %s" "$label" | $FUZZEL --lines 2 --prompt "  Confirm: ")
+    answer=$(printf "No\nYes, %s" "$label" | $FUZZEL_BASE --lines 2 --prompt "  Confirm: ")
     [ "$answer" = "Yes, $label" ]
 }
 

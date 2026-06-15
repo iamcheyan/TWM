@@ -43,6 +43,11 @@ find_labwc() {
 echo "--- $(date) ---" >> "$LOG"
 _pid=$(find_labwc) || { echo "  FAIL: no labwc found" >> "$LOG"; exit 1; }
 echo "  target pid=$_pid" >> "$LOG"
+
+if grep -qiE 'microsoft|wsl' /proc/sys/kernel/osrelease /proc/version 2>/dev/null; then
+    "$HOME/.config/TWM/labwc/scripts/wsl-config" >/dev/null
+fi
+
 kill -HUP "$_pid" && echo "  SIGHUP sent OK" >> "$LOG" || echo "  SIGHUP FAILED" >> "$LOG"
 
 # Restart wallpaper

@@ -8,14 +8,19 @@ ICO_DELAY='󰔚'
 ICO_COLOR='󰈋'
 ICO_CLOSE='󰅖'
 
+# Check fuzzel version for compatibility
+FUZZEL_VERSION=$(fuzzel --version 2>/dev/null | sed -n 's/.*version: \([0-9]*\.[0-9]*\).*/\1/p')
+FUZZEL_MAJOR=$(echo "$FUZZEL_VERSION" | cut -d. -f1)
+FUZZEL_MINOR=$(echo "$FUZZEL_VERSION" | cut -d. -f2)
+
+# Build fuzzel options based on version (supports --hide-prompt and --anchor since 1.10)
+FUZZEL_OPTS="--dmenu --width 24 --lines 6"
+if [ "$FUZZEL_MAJOR" -gt 1 ] 2>/dev/null || { [ "$FUZZEL_MAJOR" -eq 1 ] 2>/dev/null && [ "$FUZZEL_MINOR" -ge 10 ] 2>/dev/null; }; then
+    FUZZEL_OPTS="$FUZZEL_OPTS --hide-prompt --anchor top-right --y-margin 10 --x-margin 10"
+fi
+
 choice=$(printf "%s    Area\n%s    Full Screen\n%s    Window\n%s    Delay 3s\n%s    Pick Color\n%s    Close" \
-	"$ICO_AREA" "$ICO_FULL" "$ICO_WIN" "$ICO_DELAY" "$ICO_COLOR" "$ICO_CLOSE" | fuzzel --dmenu \
-	--width 24 \
-	--lines 6 \
-	--hide-prompt \
-	--anchor top-right \
-	--y-margin 10 \
-	--x-margin 10)
+	"$ICO_AREA" "$ICO_FULL" "$ICO_WIN" "$ICO_DELAY" "$ICO_COLOR" "$ICO_CLOSE" | fuzzel $FUZZEL_OPTS)
 
 [ -z "$choice" ] && exit 0
 

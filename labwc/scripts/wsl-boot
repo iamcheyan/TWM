@@ -31,4 +31,5 @@ if [ ! -x "$labwc_bin" ]; then
     }
 fi
 
-exec "$labwc_bin" -C ~/.config/TWM/labwc
+config_dir="$("$HOME/.config/TWM/labwc/scripts/wsl-config")"
+exec "$labwc_bin" -C "$config_dir"

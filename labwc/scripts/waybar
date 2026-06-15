@@ -1,6 +1,9 @@
 #!/bin/sh
+set -eu
 
-waybar_bin="$HOME/Development/Waybar/build-pr/waybar"
+waybar_bin="$HOME/.local/opt/waybar-0.15/bin/waybar"
+config="$HOME/.config/waybar/labwc/config.jsonc"
+style="$HOME/.config/waybar/labwc/style.css"
 
 if [ ! -x "$waybar_bin" ]; then
     waybar_bin="$(command -v waybar 2>/dev/null)" || {
@@ -9,6 +12,24 @@ if [ ! -x "$waybar_bin" ]; then
     }
 fi
 
+is_wsl() {
+    [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
+    [ -n "${WSL_INTEROP:-}" ] && return 0
+    [ -n "${WSLENV:-}" ] && return 0
+    grep -qiE 'microsoft|wsl' /proc/sys/kernel/osrelease /proc/version 2>/dev/null
+}
+
+if is_wsl; then
+    command -v jq >/dev/null 2>&1 || {
+        printf 'jq is required to prepare the Waybar WSL configuration\n' >&2
+        exit 127
+    }
+    runtime_config="${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc-wsl.json"
+    jq '."modules-right" |= map(select(. != "bluetooth"))' \
+        "$config" >"$runtime_config"
+    config="$runtime_config"
+fi
+
 exec "$waybar_bin" \
-    -c "$HOME/.config/waybar/labwc/config.jsonc" \
-    -s "$HOME/.config/waybar/labwc/style.css"
+    -c "$config" \
+    -s "$style"

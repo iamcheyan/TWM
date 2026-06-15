@@ -144,7 +144,7 @@ nvim ~/.config/labwc/keybinds/mac-jis.xml
 </keybind>
 ```
 
-注意：`ToggleWorkspaceOverview` 是 labwc 的内置动作，无法通过命令行直接调用。Waybar 的 `custom/workspace` 模块通过 `wtype -M logo -P space -m logo` 模拟 Win+Space 按键来触发此动作。
+注意：`ToggleWorkspaceOverview` 是新版 labwc 的内置动作，无法通过命令行直接调用。Waybar 的 `custom/workspace` 模块通过 `wtype -M logo -P space -m logo` 模拟 Win+Space 按键来触发此动作。WSL 启动脚本会为暂不支持该动作的旧版本生成兼容配置。
 
 ## Apple 键盘 Fn 键行为（Asahi Linux）
 
