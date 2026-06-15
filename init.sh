@@ -141,6 +141,90 @@ for theme_dir in "$TWM_DIR/labwc/themes"/*; do
 	create_symlink "$theme_dir" "$HOME/.themes/$(basename "$theme_dir")" "$(basename "$theme_dir") theme (~/.themes)"
 done
 
+# ========== 配置 Waybar 高清图标与系统图标主题 ==========
+echo ""
+echo "=== 配置 Waybar 图标与 GTK 图标主题 ==="
+
+# 1. 尝试安装系统包，若失败则通过 Git 克隆完整主题到用户本地目录
+echo "尝试通过系统包管理器安装 cosmic-icon-theme..."
+set +e
+pkg_install cosmic-icon-theme
+set -e
+
+COSMIC_LOCAL="/usr/share/icons/Cosmic/scalable"
+COSMIC_USER_THEME="$HOME/.local/share/icons/Cosmic"
+
+if [ ! -d "$COSMIC_LOCAL" ]; then
+    if [ ! -d "$COSMIC_USER_THEME" ]; then
+        echo "包管理器未成功安装且本地未检测到主题，正在从 GitHub 克隆完整 Cosmic 图标主题..."
+        mkdir -p "$HOME/.local/share/icons"
+        git clone --depth 1 https://github.com/pop-os/cosmic-icons.git "$COSMIC_USER_THEME"
+    else
+        echo "✓ 本地用户目录已存在 Cosmic 图标主题"
+    fi
+    COSMIC_LOCAL="$COSMIC_USER_THEME/scalable"
+fi
+
+# 2. 准备 waybar 的 icons 目录
+ICONS_DIR="$TWM_DIR/waybar/icons"
+mkdir -p "$ICONS_DIR"
+
+# 需要转换和拷贝的图标列表 (源路径:目标文件名)
+ICON_LIST=(
+    "status/audio-volume-high-symbolic.svg:volume-high.svg"
+    "status/audio-volume-muted-symbolic.svg:volume-muted.svg"
+    "status/bluetooth-active-symbolic.svg:bluetooth-active.svg"
+    "status/bluetooth-disabled-symbolic.svg:bluetooth-disabled.svg"
+    "apps/utilities-system-monitor-symbolic.svg:cpu.svg"
+    "apps/utilities-system-monitor-symbolic.svg:memory.svg"
+    "actions/edit-paste-symbolic.svg:cliphist.svg"
+    "apps/accessories-screenshot-symbolic.svg:screenshot.svg"
+    "devices/camera-video-symbolic.svg:kazamo.svg"
+    "actions/system-shutdown-symbolic.svg:power.svg"
+)
+
+for item in "${ICON_LIST[@]}"; do
+    IFS=':' read -r src_rel dest_name <<< "$item"
+    dest_path="$ICONS_DIR/$dest_name"
+    
+    # 此时必定能从系统或本地克隆的 Cosmic 目录中读取
+    if [ -f "$COSMIC_LOCAL/$src_rel" ]; then
+        cp "$COSMIC_LOCAL/$src_rel" "$dest_path"
+    else
+        # 极端的降级机制（防意外）
+        echo "本地未找到该图标，从 GitHub 下载: $dest_name..."
+        COSMIC_REMOTE="https://raw.githubusercontent.com/pop-os/cosmic-icons/master/scalable"
+        curl -fLo "$dest_path" "$COSMIC_REMOTE/$src_rel" || echo -e "${RED}下载 $dest_name 失败${NC}"
+    fi
+    
+    # 将颜色修改为白色并提升分辨率至 64x64 避免 HiDPI 模糊
+    if [ -f "$dest_path" ]; then
+        sed -i 's/fill="#232323"/fill="#ffffff"/g' "$dest_path"
+        sed -i 's/width="16" height="16"/width="64" height="64"/g' "$dest_path"
+    fi
+done
+
+# 3. 设置 GTK 全局图标主题为 Cosmic
+echo "设置 GTK 图标主题为 Cosmic..."
+mkdir -p "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"
+for version in 3.0 4.0; do
+    SETTINGS_FILE="$HOME/.config/gtk-$version/settings.ini"
+    if [ -f "$SETTINGS_FILE" ]; then
+        if grep -q "gtk-icon-theme-name" "$SETTINGS_FILE"; then
+            sed -i 's/gtk-icon-theme-name=.*/gtk-icon-theme-name=Cosmic/g' "$SETTINGS_FILE"
+        else
+            echo -e "\n[Settings]\ngtk-icon-theme-name=Cosmic" >> "$SETTINGS_FILE"
+        fi
+    else
+        echo -e "[Settings]\ngtk-icon-theme-name=Cosmic" > "$SETTINGS_FILE"
+    fi
+done
+
+if command -v gsettings &>/dev/null; then
+    gsettings set org.gnome.desktop.interface icon-theme "Cosmic" 2>/dev/null || true
+fi
+echo -e "${GREEN}✓ 图标主题与状态栏图标配置完成${NC}"
+
 # ========== 安装 Nerd Font ==========
 echo ""
 echo "=== 安装 Nerd Font ==="
@@ -160,6 +244,26 @@ else
 	done
 	fc-cache -f "$FONT_DIR"
 	echo -e "${GREEN}✓ MesloLGS Nerd Font 安装完成${NC}"
+fi
+
+# ========== 安装 Open Sans 字体 (COSMIC 默认 UI 字体) ==========
+echo ""
+echo "=== 安装 Open Sans 字体 ==="
+if fc-list : family | grep -qi "Open Sans"; then
+	echo "✓ Open Sans 字体已安装"
+else
+	echo "开始安装 Open Sans 字体..."
+	set +e
+	if is_fedora; then
+		sudo dnf install -y google-open-sans-fonts
+	elif is_ubuntu; then
+		sudo apt-get install -y fonts-open-sans
+	elif is_arch; then
+		sudo pacman -S --noconfirm ttf-opensans
+	fi
+	set -e
+	fc-cache -fv
+	echo -e "${GREEN}✓ Open Sans 字体安装完成${NC}"
 fi
 
 # ========== 询问 WM 选择 ==========

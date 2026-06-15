@@ -2,8 +2,8 @@
  * Global
  * ========================= */
 * {
-    font-family: 'MesloLGS NF', 'Ubuntu Nerd Font', 'Ubuntu', 'Noto Sans Mono', sans-serif;
-    font-size: 14px;
+    font-family: 'Open Sans', 'MesloLGS NF', 'Ubuntu Nerd Font', 'Ubuntu', 'Noto Sans Mono', sans-serif;
+    font-size: 12px;
     min-height: 0;
 }
 
@@ -166,7 +166,7 @@ button:hover {
     padding: 0 10px;
     margin-left: 6px;
     color: #d8dee9;
-    font-size: 14px;
+    font-size: 12px;
     opacity: 1;
     background: transparent;
 }

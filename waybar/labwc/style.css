@@ -8,3 +8,134 @@ window#waybar.toplevel-maximized,
 window#waybar.toplevel-fullscreen {
     background-color: rgba(0, 0, 0, 1);
 }
+
+/* =============================================================================
+ * Cosmic/Breeze SVG Icon Theme styling for Waybar modules
+ * ========================================================================== */
+
+/* Compact spacing for modules with text (Normal) */
+#pulseaudio,
+#bluetooth,
+#cpu,
+#memory {
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 13px 13px;
+    padding-left: 17px;
+    padding-right: 4px;
+    margin: 0 1px;
+}
+
+/* Compact spacing for modules with ONLY icons (Normal) */
+#custom-cliphist,
+#custom-screenshot,
+#custom-kazamo,
+#custom-power {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 13px 13px;
+    padding: 0;
+    margin: 0 3px;
+    min-width: 17px;
+}
+
+/* Ensure hover states maintain the exact same sizing, padding, and margin */
+#pulseaudio:hover,
+#bluetooth:hover,
+#cpu:hover,
+#memory:hover {
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 13px 13px;
+    padding-left: 17px;
+    padding-right: 4px;
+    margin: 0 1px;
+}
+
+#custom-cliphist:hover,
+#custom-screenshot:hover,
+#custom-kazamo:hover,
+#custom-power:hover {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 13px 13px;
+    padding: 0;
+    margin: 0 3px;
+    min-width: 17px;
+}
+
+/* Standard states */
+#pulseaudio {
+    background-image: url("../icons/volume-high.svg");
+}
+#pulseaudio.muted {
+    background-image: url("../icons/volume-muted.svg");
+}
+
+#bluetooth {
+    background-image: url("../icons/bluetooth-active.svg");
+}
+#bluetooth.disabled {
+    background-image: url("../icons/bluetooth-disabled.svg");
+}
+
+#cpu {
+    background-image: url("../icons/cpu.svg");
+}
+#memory {
+    background-image: url("../icons/memory.svg");
+}
+
+#custom-cliphist {
+    background-image: url("../icons/cliphist.svg");
+}
+
+#custom-screenshot {
+    background-image: url("../icons/screenshot.svg");
+}
+
+#custom-kazamo {
+    background-image: url("../icons/kazamo.svg");
+}
+
+#custom-power {
+    background-image: url("../icons/power.svg");
+}
+
+/* Hover states */
+#pulseaudio:hover {
+    background-image: url("../icons/volume-high.svg");
+}
+#pulseaudio.muted:hover {
+    background-image: url("../icons/volume-muted.svg");
+}
+
+#bluetooth:hover {
+    background-image: url("../icons/bluetooth-active.svg");
+}
+#bluetooth.disabled:hover {
+    background-image: url("../icons/bluetooth-disabled.svg");
+}
+
+#cpu:hover {
+    background-image: url("../icons/cpu.svg");
+}
+#memory:hover {
+    background-image: url("../icons/memory.svg");
+}
+
+#custom-cliphist:hover {
+    background-image: url("../icons/cliphist.svg");
+}
+
+#custom-screenshot:hover {
+    background-image: url("../icons/screenshot.svg");
+}
+
+#custom-kazamo:hover {
+    background-image: url("../icons/kazamo.svg");
+}
+
+#custom-power:hover {
+    background-image: url("../icons/power.svg");
+}

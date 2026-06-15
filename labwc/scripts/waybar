@@ -1,15 +1,23 @@
 #!/bin/sh
 set -eu
 
-waybar_bin="$HOME/.local/opt/waybar-0.15/bin/waybar"
 config="$HOME/.config/waybar/labwc/config.jsonc"
 style="$HOME/.config/waybar/labwc/style.css"
 
-if [ ! -x "$waybar_bin" ]; then
-    waybar_bin="$(command -v waybar 2>/dev/null)" || {
-        printf 'Waybar executable not found\n' >&2
-        exit 127
-    }
+waybar_bin=""
+for candidate in \
+    "$HOME/.local/opt/waybar-0.15/bin/waybar" \
+    "$HOME/Development/Waybar/build-pr/waybar" \
+    "$(command -v waybar 2>/dev/null || true)"; do
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+        waybar_bin="$candidate"
+        break
+    fi
+done
+
+if [ -z "$waybar_bin" ]; then
+    printf 'Waybar executable not found\n' >&2
+    exit 127
 fi
 
 is_wsl() {
