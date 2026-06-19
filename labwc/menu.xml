@@ -62,6 +62,10 @@
   </menu>
 
   <menu id="display-menu" label="Display">
+    <item label="Display Arrangement (wdisplays)">
+      <action name="Execute" command="wdisplays" />
+    </item>
+    <separator />
     <menu id="scale-menu" label="Scale"
       execute="~/.config/labwc/scripts/scale-menu" />
     <item label="Display Info">
@@ -73,6 +77,10 @@
     execute="~/.config/labwc/scripts/keyboard-menu" />
 
   <menu id="appearance-menu" label="Appearance">
+    <item label="Appearance (nwg-look)...">
+      <action name="Execute" command="nwg-look" />
+    </item>
+    <separator />
     <item label="Wallpaper...">
       <action name="Execute" command="~/.config/labwc/scripts/wallpaper" />
     </item>

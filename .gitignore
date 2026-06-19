@@ -61,6 +61,13 @@ AGENTS.md
 # Local i3 overrides
 i3/local.conf
 
+# Managed as its own public repository
+qs/
+
+# Git backups
+.git.bak.qs/
+*.bak
+
 # Package manager lock files (uncomment if needed)
 # package-lock.json
 # yarn.lock

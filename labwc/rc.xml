@@ -3,7 +3,7 @@
 <labwc_config>
 
   <core>
-    <gap>0</gap>
+    <gap>3</gap>
   </core>
 
   <theme>
@@ -28,7 +28,7 @@
   </desktops>
 
   <windowSwitcher>
-    <osd show="yes" style="thumbnail" preview="yes" outlines="yes" />
+    <osd show="yes" style="thumbnail" preview="yes" outlines="yes" output="cursor" />
     <fields>
       <field content="icon" width="15%" />
       <field content="title" width="85%" />
@@ -54,10 +54,10 @@
 
     <!-- 窗口管理 -->
     <keybind key="W-Tab">
-      <action name="NextWindow" />
+      <action name="NextWindow" output="cursor" />
     </keybind>
     <keybind key="W-S-Tab">
-      <action name="PreviousWindow" />
+      <action name="PreviousWindow" output="cursor" />
     </keybind>
     <keybind key="W-q">
       <action name="Close" />
@@ -102,7 +102,7 @@
     </keybind>
 
     <!-- Kazamo (语音输入法) - 请在此文件修改，勿直接改 rc.xml -->
-    <keybind key="W-a">
+    <keybind key="A-a">
       <action name="Execute" command="sh -c 'PATH=$HOME/.local/bin:$PATH kazamo toggle'" />
     </keybind>
 
@@ -173,6 +173,17 @@
       <action name="Execute" command="~/.config/labwc/scripts/brightness-control down" />
     </keybind>
 
+    <!-- 通用: 音量 -->
+    <keybind key="XF86AudioRaiseVolume">
+      <action name="Execute" command="sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2% &amp;&amp; quickshell -p ~/.config/quickshell/labwc ipc call volume-helper triggerUpdate'" />
+    </keybind>
+    <keybind key="XF86AudioLowerVolume">
+      <action name="Execute" command="sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2% &amp;&amp; quickshell -p ~/.config/quickshell/labwc ipc call volume-helper triggerUpdate'" />
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute" command="sh -c 'pactl set-sink-mute @DEFAULT_SINK@ toggle &amp;&amp; quickshell -p ~/.config/quickshell/labwc ipc call volume-helper triggerUpdate'" />
+    </keybind>
+
   </keyboard>
 
   <mouse>
@@ -194,6 +205,38 @@
       <action name="ToggleAlwaysOnTop" />
       <action name="Raise" />
       <action name="Focus" />
+    </windowRule>
+    <windowRule identifier="*kitty*">
+      <titlebarColor>#000000</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*alacritty*">
+      <titlebarColor>#000000</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*alacrtty*">
+      <titlebarColor>#000000</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*kwrite*">
+      <titlebarColor>#808080</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <!-- Test forced SSD on CSD apps -->
+    <windowRule identifier="*code*">
+      <serverDecoration>yes</serverDecoration>
+      <titlebarColor>#1e1e1e</titlebarColor>
+      <titlebarTextColor>#cccccc</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*firefox*">
+      <serverDecoration>yes</serverDecoration>
+      <titlebarColor>#1e1e1e</titlebarColor>
+      <titlebarTextColor>#cccccc</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*chrome*">
+      <serverDecoration>yes</serverDecoration>
+      <titlebarColor>#1e1e1e</titlebarColor>
+      <titlebarTextColor>#cccccc</titlebarTextColor>
     </windowRule>
   </windowRules>
 

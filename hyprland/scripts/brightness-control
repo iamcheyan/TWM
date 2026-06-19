@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+direction="${1:-up}"
+step="${2:-10%}"
+
+if [ -r /proc/version ] && grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null; then
+    exit 0
+fi
+
+command -v brightnessctl >/dev/null 2>&1 || exit 0
+
+case "$direction" in
+    up|+|increase) brightnessctl set "+${step}" >/dev/null 2>&1 || true ;;
+    down|-|decrease) brightnessctl set "${step}-" >/dev/null 2>&1 || true ;;
+    *) brightnessctl set "$direction" >/dev/null 2>&1 || true ;;
+esac

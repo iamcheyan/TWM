@@ -69,6 +69,7 @@ window.handle.width: 0
 window.client.padding.width: 0
 menu.overlap.x: -6
 menu.overlap.y: -6
+window.button.window-icon.size: 18
 
 !! Borders
 border.color: #000000

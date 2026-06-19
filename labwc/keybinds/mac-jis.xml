@@ -13,10 +13,10 @@
 
     <!-- 窗口管理 -->
     <keybind key="W-Tab">
-      <action name="NextWindow" />
+      <action name="NextWindow" output="cursor" />
     </keybind>
     <keybind key="W-S-Tab">
-      <action name="PreviousWindow" />
+      <action name="PreviousWindow" output="cursor" />
     </keybind>
     <keybind key="W-q">
       <action name="Close" />
@@ -61,6 +61,6 @@
     </keybind>
 
     <!-- Kazamo (语音输入法) - 请在此文件修改，勿直接改 rc.xml -->
-    <keybind key="W-a">
+    <keybind key="A-a">
       <action name="Execute" command="sh -c 'PATH=$HOME/.local/bin:$PATH kazamo toggle'" />
     </keybind>

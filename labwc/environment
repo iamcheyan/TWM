@@ -4,11 +4,9 @@ PATH=/home/tetsuya/.goenv/shims:$PATH
 MOZ_ENABLE_WAYLAND=1
 XCURSOR_SIZE=24
 GTK_THEME=BL-Lithium-dark
-QT_QPA_PLATFORMTHEME=qt6ct
-QT_STYLE_OVERRIDE=kvantum-dark
+QT_QPA_PLATFORMTHEME=kde
 XKB_DEFAULT_LAYOUT=jp
 
 # HiDPI — output scaling is handled by wlr-randr in autostart.
 # Do NOT set GDK_SCALE/GDK_DPI_SCALE/QT_SCALE_FACTOR here;
 # they multiply with the compositor scale and cause double sizing.
-

@@ -3,6 +3,22 @@
 # WSL detection added so native-only or host-specific daemons can be skipped
 # when running as nested compositor via wsl-boot (or inside WSL distro).
 
+# Make session environment visible to D-Bus/systemd activated apps as well.
+# This keeps KDE/Qt helpers on the same Breeze Dark theme when launched from
+# portals, services, or file associations.
+if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+    dbus-update-activation-environment --systemd \
+        WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+        QT_QPA_PLATFORMTHEME GTK_THEME XCURSOR_SIZE \
+        >/dev/null 2>&1 || true
+fi
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl --user import-environment \
+        WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+        QT_QPA_PLATFORMTHEME GTK_THEME XCURSOR_SIZE \
+        >/dev/null 2>&1 || true
+fi
+
 is_wsl() {
     [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
     [ -n "${WSL_INTEROP:-}" ] && return 0
@@ -19,9 +35,12 @@ is_wsl() {
 # Wallpaper, bar, notifications, clipboard history: useful for both native and
 # nested labwc (the inner session still wants its own UI).
 "$HOME/.config/TWM/set-wallpaper" wayland >/dev/null 2>&1 &
-mako >/dev/null 2>&1 &
-"$HOME/.config/labwc/scripts/waybar" \
-	>"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &
+swaync >/dev/null 2>&1 &
+nm-applet --indicator >/dev/null 2>&1 &
+kanshi >/dev/null 2>&1 &
+pkill -x waybar 2>/dev/null || true
+"$HOME/.config/labwc/scripts/quickshell" \
+    >"${XDG_RUNTIME_DIR:-/tmp}/quickshell-labwc.log" 2>&1 &
 command -v cliphist >/dev/null && {
 	# Kill stale watchers from a previous labwc session first
 	pkill -f 'wl-paste.*--watch.*cliphist.*store' 2>/dev/null || true
@@ -37,33 +56,72 @@ if ! is_wsl || [ "${LABWC_START_FCITX:-0}" = "1" ]; then
     fcitx5 >/dev/null 2>&1 &
 fi
 
-# HiDPI / output scaling — auto-detect per output resolution
-# 4K (>=3840) → scale 2, 1440p/retina (>=2560) → scale 1.5, 1080p and below → scale 1
-# Override per-output via env: LABWC_SCALE_HDMI_A_1=1.25 (output name, replace - with _)
-if command -v wlr-randr >/dev/null 2>&1; then
-    _cur_out=""
-    wlr-randr 2>/dev/null | while IFS= read -r _l; do
-        # output name line: starts with letter, contains dash + digit (e.g. HDMI-A-1)
-        if printf '%s' "$_l" | grep -qE '^[A-Za-z].*-[0-9]'; then
-            _cur_out=$(printf '%s' "$_l" | cut -d' ' -f1)
-        elif [ -n "$_cur_out" ] && printf '%s' "$_l" | grep -q 'current'; then
-            _w=$(printf '%s' "$_l" | grep -oE '[0-9]+x[0-9]+' | head -1 | cut -dx -f1)
-            if [ -n "$_w" ]; then
-                _var="LABWC_SCALE_$(echo "$_cur_out" | tr '-' '_')"
-                eval "_s=\${$_var:-}"
-                [ -z "$_s" ] && [ "$_w" -ge 3840 ] && _s=2
-                [ -z "$_s" ] && [ "$_w" -ge 2560 ] && _s=1.5
-                [ -z "$_s" ] && _s=1
-                [ "$_s" != "1" ] && wlr-randr --output "$_cur_out" --scale "$_s" 2>/dev/null
-            fi
-            _cur_out=""
-        fi
-    done
+# HiDPI / output scaling — persisted via kanshi config.
+# On first run (no kanshi config yet), auto-detect sensible defaults:
+#   4K (≥3840px wide) → scale 2,  ≥2560 → scale 1.5,  else → scale 1
+# After that, the 'scale' script keeps ~/.config/kanshi/config up-to-date
+# whenever the user changes scale from the right-click menu, and kanshi
+# restores those saved values automatically on every subsequent login.
+_kanshi_cfg="${XDG_CONFIG_HOME:-$HOME/.config}/kanshi/config"
+if command -v wlr-randr >/dev/null 2>&1 && [ ! -f "$_kanshi_cfg" ]; then
+    mkdir -p "$(dirname "$_kanshi_cfg")"
+    python3 - "$_kanshi_cfg" <<'PYEOF' 2>/dev/null || true
+import sys, subprocess
+
+cfg_path = sys.argv[1]
+info = subprocess.check_output(['wlr-randr']).decode()
+outputs = []
+cur = None
+for line in info.splitlines():
+    if not line.startswith(' '):
+        if cur:
+            outputs.append(cur)
+        cur = {'name': line.split()[0], 'mode': None, 'pos': None,
+               'scale': None, 'transform': 'normal', 'enabled': True}
+    else:
+        s = line.strip()
+        if s.startswith('Enabled: no'):
+            cur['enabled'] = False
+        elif s.startswith('Position:'):
+            cur['pos'] = s.split(': ', 1)[1]
+        elif s.startswith('Transform:'):
+            cur['transform'] = s.split(': ', 1)[1]
+        elif 'current' in s and cur['mode'] is None:
+            parts = s.split()
+            w = int(parts[0].split('x')[0])
+            cur['mode'] = f"{parts[0]}@{parts[2]}Hz"
+            if w >= 3840:
+                cur['scale'] = '2'
+            elif w >= 2560:
+                cur['scale'] = '1.5'
+if cur:
+    outputs.append(cur)
+
+with open(cfg_path, 'w') as f:
+    f.write("profile auto {\n")
+    for o in outputs:
+        if not o['enabled']:
+            f.write(f"    output {o['name']} disable\n")
+            continue
+        row = [f"    output {o['name']}"]
+        if o['mode']:
+            row.append(f"mode {o['mode']}")
+        if o['pos']:
+            row.append(f"position {o['pos']}")
+        if o['scale']:
+            row.append(f"scale {o['scale']}")
+        if o['transform'] and o['transform'] != 'normal':
+            row.append(f"transform {o['transform']}")
+        f.write(' '.join(row) + '\n')
+    f.write("}\n")
+PYEOF
+    # Give kanshi (started above) a moment to settle, then reload with new config
+    sleep 0.5 && kanshictl reload >/dev/null 2>&1 &
 fi
 
 # Apply GTK theme via gsettings for better client consistency (if schema exists)
 if command -v gsettings >/dev/null 2>&1; then
     gsettings set org.gnome.desktop.interface gtk-theme 'BL-Lithium-dark' 2>/dev/null || true
-    gsettings set org.gnome.desktop.interface icon-theme 'Adwaita' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface icon-theme 'breeze-dark' 2>/dev/null || true
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
 fi

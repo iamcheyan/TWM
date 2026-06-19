@@ -1,7 +1,7 @@
 #!/bin/sh
 # Quick restart menu — fuzzel
 
-choice=$(printf "Restart labwc\nRestart waybar" | fuzzel --dmenu \
+choice=$(printf "Restart labwc\nRestart quickshell" | fuzzel --dmenu \
     --hide-prompt \
     --prompt "  Restart: " \
     --anchor center \
@@ -10,6 +10,12 @@ choice=$(printf "Restart labwc\nRestart waybar" | fuzzel --dmenu \
 
 case "$choice" in
     "Restart labwc")  labwc -r ;;
-    "Restart waybar") killall waybar; "$HOME/.config/labwc/scripts/waybar" & ;;
+    "Restart quickshell")
+        pkill -x qs 2>/dev/null || true
+        pkill -x quickshell 2>/dev/null || true
+        pkill -x waybar 2>/dev/null || true
+        "$HOME/.config/labwc/scripts/quickshell" \
+            >"${XDG_RUNTIME_DIR:-/tmp}/quickshell-labwc.log" 2>&1 &
+        ;;
     *)                exit 0 ;;
 esac

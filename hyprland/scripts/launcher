@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+if pgrep -x wofi >/dev/null 2>&1; then
+    pkill -x wofi
+    exit 0
+fi
+
+if [ -x "$HOME/.config/wofi/app-launcher" ]; then
+    exec "$HOME/.config/wofi/app-launcher"
+fi
+
+exec wofi --show drun

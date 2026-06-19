@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+if hyprctl dispatch hyprexpo:expo toggle >/dev/null 2>&1; then
+    exit 0
+fi
+
+notify-send "Hyprland" "Workspace overview requires the hyprexpo plugin" 2>/dev/null || true

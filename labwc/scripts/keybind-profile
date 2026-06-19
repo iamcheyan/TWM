@@ -42,7 +42,7 @@ cat > "$rc_file" << HEADER
 <labwc_config>
 
   <core>
-    <gap>0</gap>
+    <gap>3</gap>
   </core>
 
   <theme>
@@ -67,7 +67,7 @@ cat > "$rc_file" << HEADER
   </desktops>
 
   <windowSwitcher>
-    <osd show="yes" style="thumbnail" preview="yes" outlines="yes" />
+    <osd show="yes" style="thumbnail" preview="yes" outlines="yes" output="cursor" />
     <fields>
       <field content="icon" width="15%" />
       <field content="title" width="85%" />
@@ -151,6 +151,17 @@ cat >> "$rc_file" << 'FOOTER'
       <action name="Execute" command="~/.config/labwc/scripts/brightness-control down" />
     </keybind>
 
+    <!-- 通用: 音量 -->
+    <keybind key="XF86AudioRaiseVolume">
+      <action name="Execute" command="sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2% &amp;&amp; quickshell -p ~/.config/quickshell/labwc ipc call volume-helper triggerUpdate'" />
+    </keybind>
+    <keybind key="XF86AudioLowerVolume">
+      <action name="Execute" command="sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2% &amp;&amp; quickshell -p ~/.config/quickshell/labwc ipc call volume-helper triggerUpdate'" />
+    </keybind>
+    <keybind key="XF86AudioMute">
+      <action name="Execute" command="sh -c 'pactl set-sink-mute @DEFAULT_SINK@ toggle &amp;&amp; quickshell -p ~/.config/quickshell/labwc ipc call volume-helper triggerUpdate'" />
+    </keybind>
+
   </keyboard>
 
   <mouse>
@@ -173,6 +184,38 @@ cat >> "$rc_file" << 'FOOTER'
       <action name="Raise" />
       <action name="Focus" />
     </windowRule>
+    <windowRule identifier="*kitty*">
+      <titlebarColor>#000000</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*alacritty*">
+      <titlebarColor>#000000</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*alacrtty*">
+      <titlebarColor>#000000</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*kwrite*">
+      <titlebarColor>#808080</titlebarColor>
+      <titlebarTextColor>#ffffff</titlebarTextColor>
+    </windowRule>
+    <!-- Test forced SSD on CSD apps -->
+    <windowRule identifier="*code*">
+      <serverDecoration>yes</serverDecoration>
+      <titlebarColor>#1e1e1e</titlebarColor>
+      <titlebarTextColor>#cccccc</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*firefox*">
+      <serverDecoration>yes</serverDecoration>
+      <titlebarColor>#1e1e1e</titlebarColor>
+      <titlebarTextColor>#cccccc</titlebarTextColor>
+    </windowRule>
+    <windowRule identifier="*chrome*">
+      <serverDecoration>yes</serverDecoration>
+      <titlebarColor>#1e1e1e</titlebarColor>
+      <titlebarTextColor>#cccccc</titlebarTextColor>
+    </windowRule>
   </windowRules>
 
   <hotCorner>
@@ -194,7 +237,7 @@ if [ "$env" = "wsl" ]; then
 fi
 
 # Reload labwc if running
-if pid="$(pgrep -n -x labwc-dev 2>/dev/null)" || pid="$(pgrep -n -x labwc 2>/dev/null)"; then
+if pid="$(pgrep -n -x labwc-dev 2>/dev/null)" || pid="$(pgrep -n -x labwc-plus 2>/dev/null)" || pid="$(pgrep -n -x labwc 2>/dev/null)"; then
     kill -HUP "$pid" 2>/dev/null && echo "labwc reloaded (PID $pid)"
 fi
 

@@ -1,14 +1,5 @@
 @import url("../style.css");
 
-window#waybar {
-    background-color: rgba(0, 0, 0, 0);
-}
-
-window#waybar.toplevel-maximized,
-window#waybar.toplevel-fullscreen {
-    background-color: rgba(0, 0, 0, 1);
-}
-
 /* =============================================================================
  * Cosmic/Breeze SVG Icon Theme styling for Waybar modules
  * ========================================================================== */
@@ -20,8 +11,9 @@ window#waybar.toplevel-fullscreen {
 #memory {
     background-repeat: no-repeat;
     background-position: left center;
-    background-size: 13px 13px;
-    padding-left: 17px;
+    background-size: 12px 12px;
+    min-height: 12px;
+    padding-left: 16px;
     padding-right: 4px;
     margin: 0 1px;
 }
@@ -33,10 +25,11 @@ window#waybar.toplevel-fullscreen {
 #custom-power {
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 13px 13px;
+    background-size: 12px 12px;
+    min-height: 12px;
     padding: 0;
-    margin: 0 3px;
-    min-width: 17px;
+    margin: 0 2px;
+    min-width: 16px;
 }
 
 /* Ensure hover states maintain the exact same sizing, padding, and margin */
@@ -46,8 +39,9 @@ window#waybar.toplevel-fullscreen {
 #memory:hover {
     background-repeat: no-repeat;
     background-position: left center;
-    background-size: 13px 13px;
-    padding-left: 17px;
+    background-size: 12px 12px;
+    min-height: 12px;
+    padding-left: 16px;
     padding-right: 4px;
     margin: 0 1px;
 }
@@ -58,10 +52,11 @@ window#waybar.toplevel-fullscreen {
 #custom-power:hover {
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 13px 13px;
+    background-size: 12px 12px;
+    min-height: 12px;
     padding: 0;
-    margin: 0 3px;
-    min-width: 17px;
+    margin: 0 2px;
+    min-width: 16px;
 }
 
 /* Standard states */

@@ -43,6 +43,6 @@ THEME="$theme" perl -0pi -e \
 
 if [ -n "${LABWC_PID:-}" ]; then
     labwc -r
-elif pid="$(pgrep -n -x labwc 2>/dev/null)"; then
+elif pid="$(pgrep -n -x labwc-plus 2>/dev/null)" || pid="$(pgrep -n -x labwc 2>/dev/null)"; then
     kill -HUP "$pid"
 fi

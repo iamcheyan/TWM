@@ -1,0 +1,169 @@
+/*
+ * SwayNC Flat Dark Theme (BL-Lithium-dark inspired)
+ */
+
+@define-color cc-bg #1a1a1a;
+@define-color noti-border-color #444444;
+@define-color noti-bg #222222;
+@define-color noti-bg-hover #2a2a2a;
+@define-color noti-bg-focus #333333;
+@define-color noti-close-bg rgba(255, 255, 255, 0.1);
+@define-color noti-close-bg-hover rgba(255, 255, 255, 0.2);
+@define-color text-color #eeeeee;
+@define-color text-color-disabled #888888;
+@define-color bg-selected #444444;
+
+* {
+  font-family: "Open Sans", "Ubuntu", sans-serif;
+  background-clip: padding-box;
+}
+
+/* Base side panel */
+.control-center {
+  background: @cc-bg;
+  border-left: 1px solid @noti-border-color;
+  color: @text-color;
+  border-radius: 0;
+}
+
+/* The popup notifications */
+.blank-window {
+  background: transparent;
+}
+.floating-notifications {
+  background: transparent;
+}
+.floating-notifications .notification {
+  box-shadow: none;
+}
+
+/* Individual Notification */
+.notification {
+  border-radius: 0;
+  margin: 4px;
+  background: @noti-bg;
+  border: 1px solid @noti-border-color;
+  padding: 0;
+}
+.notification-content {
+  background: transparent;
+  padding: 8px;
+  border-radius: 0;
+}
+.close-button {
+  background: @noti-close-bg;
+  color: @text-color;
+  text-shadow: none;
+  padding: 0;
+  border-radius: 0;
+  margin-top: 4px;
+  margin-right: 4px;
+  box-shadow: none;
+  border: none;
+  min-width: 20px;
+  min-height: 20px;
+}
+.close-button:hover {
+  box-shadow: none;
+  background: @noti-close-bg-hover;
+  transition: all 0.1s ease-in-out;
+  border: none;
+}
+.notification-default-action,
+.notification-action {
+  padding: 4px;
+  margin: 0;
+  box-shadow: none;
+  background: transparent;
+  border: 1px solid @noti-border-color;
+  color: @text-color;
+  border-radius: 0;
+}
+.notification-default-action:hover,
+.notification-action:hover {
+  -gtk-icon-effect: none;
+  background: @noti-bg-hover;
+}
+
+/* Control center widgets */
+.widget-title {
+  color: @text-color;
+  background: @noti-bg;
+  padding: 8px;
+  margin: 8px;
+  border: 1px solid @noti-border-color;
+  border-radius: 0;
+}
+.widget-title > button {
+  font-size: initial;
+  color: @text-color;
+  text-shadow: none;
+  background: @noti-bg;
+  border: 1px solid @noti-border-color;
+  box-shadow: none;
+  border-radius: 0;
+}
+.widget-title > button:hover {
+  background: @noti-bg-hover;
+}
+.widget-dnd {
+  color: @text-color;
+  margin: 8px;
+  background: @noti-bg;
+  padding: 8px;
+  border: 1px solid @noti-border-color;
+  border-radius: 0;
+}
+.widget-dnd > switch {
+  font-size: initial;
+  border-radius: 0;
+  background: @noti-bg;
+  border: 1px solid @noti-border-color;
+  box-shadow: none;
+}
+.widget-dnd > switch:checked {
+  background: @bg-selected;
+}
+.widget-dnd > switch slider {
+  background: @text-color;
+  border-radius: 0;
+}
+
+/* Sliders */
+.widget-volume,
+.widget-backlight {
+  background: @noti-bg;
+  padding: 8px;
+  margin: 8px;
+  border: 1px solid @noti-border-color;
+  border-radius: 0;
+}
+.widget-volume scale highlight,
+.widget-backlight scale highlight {
+  background: @bg-selected;
+}
+.widget-volume scale slider,
+.widget-backlight scale slider {
+  background: @text-color;
+  border-radius: 0;
+}
+
+/* Label styling */
+.notification-group-icon,
+.notification-group-stat,
+.notification-group-close {
+  color: @text-color;
+}
+.summary {
+  font-size: 14px;
+  font-weight: bold;
+}
+.time {
+  font-size: 12px;
+  font-weight: bold;
+  color: @text-color-disabled;
+}
+.body {
+  font-size: 13px;
+  font-weight: normal;
+}

@@ -1,0 +1,50 @@
+#!/bin/sh
+set -eu
+# Mostly a fallback now (Escape path + manual/debug).
+# Primary activation uses Hyprland global shortcuts -> Quickshell GlobalShortcut.
+
+direction="${1:-next}"
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/hyprland"
+
+qs_bin=""
+for candidate in \
+    "$HOME/.local/bin/quickshell" \
+    "$HOME/.local/bin/qs" \
+    "$(command -v quickshell 2>/dev/null || true)" \
+    "$(command -v qs 2>/dev/null || true)"; do
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+        qs_bin="$candidate"
+        break
+    fi
+done
+
+call_qs() {
+    [ -n "$qs_bin" ] || return 1
+    "$qs_bin" ipc -p "$config_dir" --any-display call window-switcher "$1" >/dev/null 2>&1
+}
+
+case "$direction" in
+    next)
+        if ! call_qs next; then
+            hyprctl dispatch cyclenext >/dev/null 2>&1 || true
+            hyprctl dispatch bringactivetotop >/dev/null 2>&1 || true
+        fi
+        ;;
+    prev)
+        if ! call_qs prev; then
+            hyprctl dispatch cyclenext prev >/dev/null 2>&1 || true
+            hyprctl dispatch bringactivetotop >/dev/null 2>&1 || true
+        fi
+        ;;
+    show)
+        call_qs show || true
+        ;;
+    hide)
+        call_qs hide || true
+        hyprctl dispatch submap reset >/dev/null 2>&1 || true
+        ;;
+    *)
+        printf 'Usage: %s [next|prev|show|hide]\n' "$0" >&2
+        exit 2
+        ;;
+esac

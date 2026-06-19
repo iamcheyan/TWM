@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+import subprocess
+import os
+
+def main():
+    try:
+        output = subprocess.check_output(['wlr-randr']).decode('utf-8')
+    except Exception as e:
+        print("Failed to run wlr-randr:", e)
+        return
+
+    outputs = []
+    current_output = None
+    
+    for line in output.splitlines():
+        if not line.startswith(' '):
+            if current_output:
+                outputs.append(current_output)
+            name = line.split()[0]
+            current_output = {'name': name, 'mode': None, 'position': None, 'scale': 1.0, 'transform': 'normal', 'enabled': True}
+        else:
+            line = line.strip()
+            if line.startswith('Enabled: no'):
+                current_output['enabled'] = False
+            elif line.startswith('Position:'):
+                current_output['position'] = line.split(': ')[1].strip()
+            elif line.startswith('Scale:'):
+                current_output['scale'] = line.split(': ')[1].strip()
+            elif line.startswith('Transform:'):
+                current_output['transform'] = line.split(': ')[1].strip()
+            elif 'current' in line and current_output['mode'] is None:
+                # e.g. "3840x2160 px, 60.000000 Hz (preferred, current)"
+                parts = line.split()
+                mode = parts[0]
+                hz = parts[2]
+                current_output['mode'] = f"{mode}@{hz}Hz"
+                
+    if current_output:
+        outputs.append(current_output)
+
+    kanshi_dir = os.path.expanduser('~/.config/kanshi')
+    os.makedirs(kanshi_dir, exist_ok=True)
+    
+    config_path = os.path.join(kanshi_dir, 'config')
+    with open(config_path, 'w') as f:
+        f.write("profile saved_layout {\n")
+        for out in outputs:
+            if not out['enabled']:
+                f.write(f"    output {out['name']} disable\n")
+            else:
+                s = f"    output {out['name']}"
+                if out['mode']:
+                    s += f" mode {out['mode']}"
+                if out['position']:
+                    s += f" position {out['position']}"
+                if out['scale'] and float(out['scale']) != 1.0:
+                    s += f" scale {out['scale']}"
+                if out['transform'] and out['transform'] != 'normal':
+                    s += f" transform {out['transform']}"
+                f.write(s + "\n")
+        f.write("}\n")
+        
+    print(f"Saved current display layout to {config_path}")
+
+if __name__ == '__main__':
+    main()

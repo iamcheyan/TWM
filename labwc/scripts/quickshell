@@ -1,0 +1,32 @@
+#!/bin/sh
+set -eu
+
+qs_bin=""
+for candidate in \
+    "$HOME/.local/bin/quickshell" \
+    "$HOME/.local/bin/qs" \
+    "$(command -v quickshell 2>/dev/null || true)" \
+    "$(command -v qs 2>/dev/null || true)"; do
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+        qs_bin="$candidate"
+        break
+    fi
+done
+
+if [ -z "$qs_bin" ]; then
+    printf 'Quickshell executable not found\n' >&2
+    exit 127
+fi
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/labwc"
+export QS_CONFIG_DIR="$config_dir"
+
+if [ -x "$config_dir/run" ]; then
+    exec "$config_dir/run"
+fi
+
+if "$qs_bin" --help 2>&1 | grep -q -- ' -p'; then
+    exec "$qs_bin" -p "$config_dir"
+fi
+
+exec "$qs_bin" "$config_dir/shell.qml"

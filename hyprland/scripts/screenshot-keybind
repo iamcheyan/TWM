@@ -1,0 +1,36 @@
+#!/bin/sh
+set -eu
+
+mode="${1:-full}"
+dir="${SCREENSHOT_DIR:-$HOME/Downloads}"
+mkdir -p "$dir"
+ts="$(date +%Y%m%d-%H%M%S)"
+
+notify() {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send "$1" "$2" -t "${3:-2000}"
+    else
+        printf '%s: %s\n' "$1" "$2" >&2
+    fi
+}
+
+case "$mode" in
+    full)
+        grim - | wl-copy && notify "Screenshot" "Fullscreen copied to clipboard" 2000
+        ;;
+    full-save)
+        file="$dir/screenshot-$ts.png"
+        grim "$file" && notify "Screenshot" "Saved to Downloads" 3000
+        ;;
+    area)
+        grim -g "$(slurp)" - | wl-copy && notify "Screenshot" "Area copied to clipboard" 2000
+        ;;
+    area-save)
+        file="$dir/screenshot-$ts.png"
+        grim -g "$(slurp)" "$file" && notify "Screenshot" "Area saved to Downloads" 3000
+        ;;
+    *)
+        printf 'screenshot: unknown mode %s\n' "$mode" >&2
+        exit 2
+        ;;
+esac

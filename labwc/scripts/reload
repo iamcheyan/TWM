@@ -31,7 +31,7 @@ find_labwc() {
         printf '%s\n' "$LABWC_PID"
         return 0
     fi
-    _pid=$(pgrep -n -x labwc-dev 2>/dev/null || pgrep -n -x labwc 2>/dev/null)
+    _pid=$(pgrep -n -x labwc-dev 2>/dev/null || pgrep -n -x labwc-plus 2>/dev/null || pgrep -n -x labwc 2>/dev/null)
     if [ -n "$_pid" ]; then
         printf '%s\n' "$_pid"
         return 0
@@ -54,7 +54,9 @@ kill -HUP "$_pid" && echo "  SIGHUP sent OK" >> "$LOG" || echo "  SIGHUP FAILED"
 pkill -x swaybg 2>/dev/null || true
 "$HOME/.config/TWM/set-wallpaper" wayland &
 
-# Restart Waybar with the same configuration used by autostart.
+# Restart Quickshell with the same configuration used by autostart.
+pkill -x qs 2>/dev/null || true
+pkill -x quickshell 2>/dev/null || true
 pkill -x waybar 2>/dev/null || true
-"$HOME/.config/labwc/scripts/waybar" \
-    >"${XDG_RUNTIME_DIR:-/tmp}/waybar-labwc.log" 2>&1 &
+"$HOME/.config/labwc/scripts/quickshell" \
+    >"${XDG_RUNTIME_DIR:-/tmp}/quickshell-labwc.log" 2>&1 &

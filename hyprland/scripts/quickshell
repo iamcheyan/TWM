@@ -1,0 +1,91 @@
+#!/bin/sh
+set -eu
+
+qs_bin=""
+for candidate in \
+    "$HOME/.local/bin/quickshell" \
+    "$HOME/.local/bin/qs" \
+    "$(command -v quickshell 2>/dev/null || true)" \
+    "$(command -v qs 2>/dev/null || true)"; do
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+        qs_bin="$candidate"
+        break
+    fi
+done
+
+if [ -z "$qs_bin" ]; then
+    printf 'Quickshell executable not found\n' >&2
+    exit 127
+fi
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/hyprland"
+export QS_CONFIG_DIR="$config_dir"
+export QS_COMPOSITOR=hyprland
+
+runtime_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+wayland_display="${WAYLAND_DISPLAY:-}"
+
+find_live_hyprland() {
+    lock_file=""
+    for candidate in "$runtime_dir"/hypr/*/hyprland.lock; do
+        [ -f "$candidate" ] || continue
+        pid="$(sed -n '1p' "$candidate" 2>/dev/null || true)"
+        display="$(sed -n '2p' "$candidate" 2>/dev/null || true)"
+        [ -n "$pid" ] || continue
+        kill -0 "$pid" 2>/dev/null || continue
+        lock_file="$candidate"
+        export HYPRLAND_INSTANCE_SIGNATURE="$(basename "$(dirname "$candidate")")"
+        [ -n "$display" ] && export WAYLAND_DISPLAY="$display"
+        return 0
+    done
+    return 1
+}
+
+if [ -z "$wayland_display" ] || [ ! -S "$runtime_dir/$wayland_display" ]; then
+    find_live_hyprland || true
+    wayland_display="${WAYLAND_DISPLAY:-}"
+fi
+
+if [ -z "$wayland_display" ] || [ ! -S "$runtime_dir/$wayland_display" ]; then
+    found_display=""
+    for socket in "$runtime_dir"/wayland-*; do
+        [ -S "$socket" ] || continue
+        found_display="$(basename "$socket")"
+        break
+    done
+
+    if [ -n "$found_display" ]; then
+        export WAYLAND_DISPLAY="$found_display"
+    else
+        printf 'No Wayland display socket found. Start this from inside Hyprland.\n' >&2
+        printf 'Checked: %s/%s\n' "$runtime_dir" "${wayland_display:-wayland-*}" >&2
+        exit 1
+    fi
+fi
+
+if command -v hyprctl >/dev/null 2>&1; then
+    attempts=0
+    while ! hyprctl monitors >/dev/null 2>&1; do
+        find_live_hyprland || true
+        attempts=$((attempts + 1))
+        [ "$attempts" -ge 20 ] && break
+        sleep 0.1
+    done
+fi
+
+if command -v hyprctl >/dev/null 2>&1 && ! hyprctl monitors >/dev/null 2>&1; then
+    printf 'Hyprland IPC is not available. Start this from the active Hyprland session.\n' >&2
+    printf 'WAYLAND_DISPLAY=%s HYPRLAND_INSTANCE_SIGNATURE=%s\n' \
+        "${WAYLAND_DISPLAY:-}" "${HYPRLAND_INSTANCE_SIGNATURE:-}" >&2
+    exit 1
+fi
+
+if [ -x "$config_dir/run" ]; then
+    exec "$config_dir/run"
+fi
+
+if "$qs_bin" --help 2>&1 | grep -q -- ' -p'; then
+    exec "$qs_bin" -p "$config_dir"
+fi
+
+exec "$qs_bin" "$config_dir/shell.qml"

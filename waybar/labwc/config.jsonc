@@ -6,11 +6,12 @@
     "fixed-center": true,
     "modules-left": [
         "custom/launcher",
-        "custom/workspace",
-        "wlr/taskbar"
+        "custom/workspace"
+        // "wlr/taskbar"
     ],
     "modules-center": [
-        "clock"
+        "clock",
+        "custom/notification"
     ],
     "modules-right": [
         "tray",
@@ -44,17 +45,17 @@
         "on-click": "alacritty",
         "on-click-right": "labwc -r"
     },
-    "wlr/taskbar": {
-        "bar-css-states": true,
-        "format": "{icon} {title}",
-        "icon-size": 15,
-        "max-length": 32,
-        "tooltip-format": "{app_id}\n{title}",
-        "active-first": true,
-        "active-only": true,
-        "on-click": "minimize-raise",
-        "on-click-middle": "close"
-    },
+    // "wlr/taskbar": {
+    //     "bar-css-states": true,
+    //     "format": "{icon} {title}",
+    //     "icon-size": 15,
+    //     "max-length": 32,
+    //     "tooltip-format": "{app_id}\n{title}",
+    //     "active-first": true,
+    //     "active-only": true,
+    //     "on-click": "minimize-raise",
+    //     "on-click-middle": "close"
+    // },
     "ext/workspaces": {
         "all-outputs": true,
         "format": "{id}",
@@ -76,6 +77,7 @@
         },
         "scroll-step": 5,
         "on-click": "$HOME/.config/waybar/scripts/volume",
+        "on-click-right": "pavucontrol",
         "tooltip-format": "Volume: {volume}%\nSink: {desc}"
     },
     "bluetooth": {
@@ -83,7 +85,8 @@
         "format-disabled": "Disabled",
         "format-connected": "{device_battery_percentage}%",
         "tooltip-format": "{status}",
-        "on-click": "$HOME/.config/waybar/scripts/bluetooth"
+        "on-click": "$HOME/.config/waybar/scripts/bluetooth",
+        "on-click-right": "blueman-manager"
     },
     "cpu": {
         "format": "{usage}%",
@@ -114,5 +117,21 @@
         "tooltip-format": "System Actions",
         "on-click": "$HOME/.config/labwc/scripts/system-menu",
         "on-click-right": "$HOME/.config/labwc/scripts/power-restart"
+    },
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
     }
 }

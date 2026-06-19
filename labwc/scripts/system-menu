@@ -38,13 +38,27 @@ confirm() {
 }
 
 action="${1:-choose}"
+[ "$action" != "choose" ] && action="$(echo "$action" | sed 's/./\U&/')"
+
+can_hibernate() {
+    grep -q disk /sys/power/state 2>/dev/null
+}
 
 if [ "$action" = "choose" ]; then
     if is_wsl; then
         action=$(printf "%s⠀⠀Reload labwc\n%s⠀⠀Exit labwc" "$ICO_REFRESH" "$ICO_EXIT" | $FUZZEL --lines 2)
     else
-        action=$(printf "%s⠀⠀Reload labwc\n%s⠀⠀Exit labwc\n%s⠀⠀Suspend\n%s⠀⠀Hibernate\n%s⠀⠀Reboot\n%s⠀⠀Power Off" \
-            "$ICO_REFRESH" "$ICO_EXIT" "$ICO_MOON" "$ICO_SLEEP" "$ICO_REPEAT" "$ICO_POW" | $FUZZEL --lines 6)
+        menu_items="$(printf "%s⠀⠀Reload labwc\n%s⠀⠀Exit labwc\n%s⠀⠀Suspend" \
+            "$ICO_REFRESH" "$ICO_EXIT" "$ICO_MOON")"
+        n=3
+        if can_hibernate; then
+            menu_items="$menu_items$(printf "\n%s⠀⠀Hibernate" "$ICO_SLEEP")"
+            n=$((n + 1))
+        fi
+        menu_items="$menu_items$(printf "\n%s⠀⠀Reboot\n%s⠀⠀Power Off" \
+            "$ICO_REPEAT" "$ICO_POW")"
+        n=$((n + 2))
+        action=$(printf '%s' "$menu_items" | $FUZZEL --lines "$n")
     fi
 fi
 

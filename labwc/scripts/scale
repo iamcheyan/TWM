@@ -1,6 +1,8 @@
 #!/bin/sh
-# Usage: scale [value] [output]  - apply directly
-#        scale                   - pick a value for the first output via wofi
+# Usage: scale [value] [output]  - apply directly and persist to kanshi config
+#        scale                   - pick a value via wofi, then persist
+
+_KANSHI_CFG="${XDG_CONFIG_HOME:-$HOME/.config}/kanshi/config"
 
 log="${XDG_RUNTIME_DIR:-/tmp}/labwc-scale.log"
 if ! (: >"$log") 2>/dev/null; then
@@ -63,9 +65,85 @@ case "$scale" in
     *) fail "Unsupported scale: $scale" ;;
 esac
 
+# Apply immediately via wlr-randr
 if ! wlr-randr --output "$cur_out" --scale "$scale" 2>"$log"; then
     fail "$(cat "$log")"
 fi
 
 printf '%s applied: output=%s scale=%s\n' \
     "$(date '+%F %T')" "$cur_out" "$scale" >>"$log"
+
+# ---- Persist to kanshi config (survives reboot / session reload) ----
+# Rebuilds the kanshi profile from current wlr-randr state, overriding only
+# the target output's scale. All other outputs keep their current settings.
+mkdir -p "$(dirname "$_KANSHI_CFG")"
+python3 - "$_KANSHI_CFG" "$cur_out" "$scale" <<'PYEOF'
+import sys, subprocess
+
+cfg_path, target_out, target_scale = sys.argv[1], sys.argv[2], sys.argv[3]
+
+def fmt_scale(v):
+    """Normalize scale: strip trailing zeros (2.000000 → 2, 1.500000 → 1.5)."""
+    try:
+        f = float(v)
+        return str(int(f)) if f == int(f) else '{:g}'.format(f)
+    except Exception:
+        return v
+
+info = subprocess.check_output(['wlr-randr']).decode()
+outputs = []
+cur = None
+for line in info.splitlines():
+    if not line.startswith(' '):
+        if cur:
+            outputs.append(cur)
+        cur = {
+            'name':      line.split()[0],
+            'mode':      None,
+            'pos':       None,
+            'scale':     None,
+            'transform': 'normal',
+            'enabled':   True,
+        }
+    else:
+        s = line.strip()
+        if s.startswith('Enabled: no'):
+            cur['enabled'] = False
+        elif s.startswith('Position:'):
+            cur['pos'] = s.split(': ', 1)[1]
+        elif s.startswith('Scale:'):
+            cur['scale'] = fmt_scale(s.split(': ', 1)[1])
+        elif s.startswith('Transform:'):
+            cur['transform'] = s.split(': ', 1)[1]
+        elif 'current' in s and cur['mode'] is None:
+            parts = s.split()
+            cur['mode'] = f"{parts[0]}@{parts[2]}Hz"
+if cur:
+    outputs.append(cur)
+
+# Override only the target output's scale with the user-chosen value
+for o in outputs:
+    if o['name'] == target_out:
+        o['scale'] = fmt_scale(target_scale)
+
+with open(cfg_path, 'w') as f:
+    f.write("profile auto {\n")
+    for o in outputs:
+        if not o['enabled']:
+            f.write(f"    output {o['name']} disable\n")
+            continue
+        row = [f"    output {o['name']}"]
+        if o['mode']:
+            row.append(f"mode {o['mode']}")
+        if o['pos']:
+            row.append(f"position {o['pos']}")
+        if o['scale']:
+            row.append(f"scale {o['scale']}")
+        if o['transform'] and o['transform'] != 'normal':
+            row.append(f"transform {o['transform']}")
+        f.write(' '.join(row) + '\n')
+    f.write("}\n")
+PYEOF
+
+printf '%s persisted: output=%s scale=%s → %s\n' \
+    "$(date '+%F %T')" "$cur_out" "$scale" "$_KANSHI_CFG" >>"$log"
