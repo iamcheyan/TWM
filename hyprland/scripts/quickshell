@@ -18,7 +18,7 @@ if [ -z "$qs_bin" ]; then
     exit 127
 fi
 
-config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/hyprland"
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/ii"
 export QS_CONFIG_DIR="$config_dir"
 export QS_COMPOSITOR=hyprland
 

@@ -8,7 +8,7 @@ export QT_QPA_PLATFORMTHEME=kde
 export GTK_THEME=BL-Lithium-dark
 export XCURSOR_SIZE="${XCURSOR_SIZE:-24}"
 export QS_COMPOSITOR=hyprland
-export QS_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/hyprland"
+export QS_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/ii"
 
 if command -v dbus-update-activation-environment >/dev/null 2>&1; then
     dbus-update-activation-environment --systemd \
