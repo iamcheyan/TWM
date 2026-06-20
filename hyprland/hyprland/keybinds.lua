@@ -20,7 +20,10 @@ hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"),
     { ignore_mods = true, transparent = true, release = true })
 hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"),
     { ignore_mods = true, transparent = true, release = true })
-hl.bind("SUPER + Tab", hl.dsp.global("quickshell:overviewWorkspacesToggle"), { description = "Shell: Toggle overview" })
+hl.bind("SUPER + Tab", hl.dsp.global("quickshell:overviewNext"), { description = "Shell: Workspace switcher next" })
+hl.bind("SUPER + SHIFT + Tab", hl.dsp.global("quickshell:overviewPrev"))
+hl.bind("SUPER_L", hl.dsp.global("quickshell:overviewCommit"), { release = true, ignore_mods = true })
+hl.bind("SUPER_R", hl.dsp.global("quickshell:overviewCommit"), { release = true, ignore_mods = true })
 hl.bind("SUPER + V", hl.dsp.global("quickshell:overviewClipboardToggle"))
 hl.bind("SUPER + Period", hl.dsp.global("quickshell:overviewEmojiToggle"))
 hl.bind("SUPER + A", hl.dsp.global("quickshell:sidebarLeftToggle"), { description = "Shell: Toggle left sidebar" })
@@ -149,9 +152,9 @@ hl.bind("SUPER + ALT + M", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ togg
 --#!
 --##! Window
 --# Focusing
-hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true, description = "Window: Move" })
-hl.bind("SUPER + mouse:274", hl.dsp.window.drag(), { mouse = true })
-hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true, description = "Window: Resize" })
+hl.bind("ALT + mouse:272", hl.dsp.window.drag(), { mouse = true, description = "Window: Move" })
+hl.bind("ALT + mouse:274", hl.dsp.window.drag(), { mouse = true })
+hl.bind("ALT + mouse:273", hl.dsp.window.resize(), { mouse = true, description = "Window: Resize" })
 --#/# bind = SUPER + ←/↑/→/↓,, -- Focus in direction
 for i = 1, 4 do
     local arrowkey = { "Left", "Right", "Up", "Down" }
